@@ -1,0 +1,17 @@
+.container{
+    > .label{
+        font-size: 18px;
+        margin: 0 0 16px;
+        font-weight: 600;
+    }
+
+    .slide{
+        height: 360px;
+        margin: -20px;
+        width: calc(100% + 40px);
+
+        .list{
+            padding: 20px;
+        }
+    }
+}

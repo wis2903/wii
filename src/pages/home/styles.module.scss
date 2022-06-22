@@ -1,0 +1,34 @@
+.container{
+    .head{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .tab{
+            padding-top: 12px;
+        }
+
+        .actions{
+            display: inline-flex;
+            align-items: center;
+            justify-content: flex-end;
+
+            > button {
+                height: 44px;
+                margin-left: 12px;
+            }
+        }
+    }
+
+    .filter{
+        margin: 12px -12px 0;
+    }
+
+    .slideIndicatorRight{
+        right: -10px !important;
+    }
+
+    .slideIndicatorLeft{
+        left: -10px !important;
+    }
+}

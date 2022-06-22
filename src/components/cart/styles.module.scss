@@ -1,0 +1,33 @@
+.container {
+    padding: 12px 0 8px 0;
+    background-color: #ffffff;
+
+    .icon {
+        position: relative;
+        display: inline-block;
+        padding: 0 12px 0 0;
+
+        .indicator {
+            position: absolute;
+            right: 0;
+            top: -10px;
+            background: #de3b3b;
+            color: #ffffff;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 500;
+            display: inline-flex;
+            width: 16px;
+            height: 16px;
+            justify-content: center;
+            align-items: center;
+            padding: 2px 0 0;
+        }
+    }
+
+    .label{
+        font-weight: 500;
+        margin: 0 0 0 2px;
+        text-transform: uppercase;
+    }
+}

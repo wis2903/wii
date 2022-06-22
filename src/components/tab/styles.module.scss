@@ -1,0 +1,32 @@
+.container {
+    position: relative;
+    padding: 0 0 8px;
+
+    > button {
+        color: #666666;
+        font-weight: 500;
+        background: 0;
+        font-size: 16px;
+        padding-top: 4px;
+
+        &:not(:first-child) {
+            margin-left: 20px;
+        }
+
+        &.active,
+        &:hover {
+            color: #000000;
+        }
+    }
+
+    .indicator {
+        position: absolute;
+        min-width: 10px;
+        height: 2px;
+        border-radius: 25px;
+        background: #de3b3b;
+        left: 0;
+        bottom: 0;
+        transition: all linear 0.2s;
+    }
+}

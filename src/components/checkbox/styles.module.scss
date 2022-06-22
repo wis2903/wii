@@ -1,0 +1,38 @@
+.container {
+    border: 0;
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    .checkbox {
+        width: 20px;
+        height: 20px;
+        border: 1px solid #b7b7b7;
+        display: inline-flex;
+        border-radius: 2px;
+        position: relative;
+    }
+
+    .label {
+        padding-top: 4px;
+        padding-left: 8px;
+    }
+
+    &.checked {
+        .checkbox {
+            border-color: #de3b3b;
+
+            &::after {
+                content: "";
+                position: absolute;
+                border-bottom: 2px solid #de3b3b;
+                border-left: 2px solid #de3b3b;
+                height: 4px;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -76%) rotate(-45deg);
+                width: 7px;
+            }
+        }
+    }
+}

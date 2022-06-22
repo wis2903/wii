@@ -1,0 +1,55 @@
+.container {
+    position: fixed;
+    left: 20px;
+    top: 160px;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+
+    .item {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #b7b7b7;
+        position: relative;
+        z-index: 2;
+        transition: height linear 0.2s;
+    }
+
+    button {
+        width: 20px;
+        height: 16px;
+        padding: 0;
+        margin: 8px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: visible;
+        border: 0;
+        border: 0;
+        background: 0;
+        position: relative;
+        transform: none !important;
+
+        &:not(:first-child) {
+            &::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                width: 1px;
+                height: 30px;
+                background: #d0d0d0;
+                bottom: 8px;
+                transform: translateX(-50%);
+            }
+        }
+
+        &.active {
+            .item {
+                background: #de3b3b;
+                height: 16px;
+                border-radius: 25px;
+            }
+        }
+    }
+}

@@ -1,0 +1,108 @@
+.container {
+    background-color: #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 6px 16px;
+    position: relative;
+    z-index: 10;
+    overflow: hidden;
+
+    > img {
+        position: absolute;
+        width: 300px;
+        bottom: -40px;
+        left: -100px;
+        transform: rotate(-10deg);
+
+        &.image1{
+            left: auto;
+            bottom: auto;
+            top: -40px;
+            right: -100px;
+            height: auto;
+            transform: rotate(-180deg);
+        }
+    }
+
+    .wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 60px 28px;
+        position: relative;
+        z-index: 2;
+        background: 0;
+
+        .buttons {
+            display: flex;
+            align-items: flex-start;
+            flex-wrap: wrap;
+
+            button {
+                border: 0;
+                padding: 0 12px 0 0;
+                font-weight: 400;
+                width: 100%;
+                text-align: left;
+                height: 34px;
+                background-color: #ffffff;
+            }
+        }
+
+        .com {
+            width: 25%;
+
+            .logo {
+                margin: -20px 0 20px;
+            }
+
+            .links{
+                margin: 20px 0 0;
+
+                button{
+                    width: 40px;
+
+                    &:not(:first-child){
+                        margin-left: 10px;
+                    }
+                }
+            }
+        }
+
+        .menu {
+            width: 25%;
+
+            .search{
+                min-width: 0;
+                width: 80%;
+                margin: 16px 0 12px;
+            }
+
+            .searchButton{
+                width: 80%;
+            }
+
+            > h3 {
+                font-size: 18px;
+                margin: 0 0 20px;
+                color: #de3b3b;
+            }
+
+            .form{
+                margin: 0 0 32px;
+
+                .input{
+                    min-width: 0;
+                    width: 80%;
+                }
+
+                button{
+                    width: 80%;
+                    margin: 10px 0 0;
+                }
+            }
+        }
+
+        .contact {
+            width: calc(50% - 12px);
+        }
+    }
+}

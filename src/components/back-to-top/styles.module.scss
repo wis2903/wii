@@ -1,0 +1,21 @@
+.container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+    width: 36px;
+    height: 36px;
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 54%;
+        left: 50%;
+        border-bottom: 2px solid #ffffff;
+        border-left: 2px solid #ffffff;
+        height: 7px;
+        width: 7px;
+        transform-origin: 50% 50%;
+        transform: translate(-50%, -50%) rotate(135deg);
+    }
+}
