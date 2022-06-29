@@ -1,10 +1,10 @@
 import React from 'react';
-import Button from '../button';
-import Contact from '../contact';
-import Wrapper from '../wrapper';
+import Button from '../../components/button';
+import Contact from '../../components/contact';
+import Wrapper from '../../components/wrapper';
 import styles from './styles.module.scss';
 import SakuraImage from '../../resources/images/sakura.png';
-import Logo from '../logo';
+import Logo from '../../components/logo';
 
 interface IProps {
     reference?: React.LegacyRef<HTMLDivElement>,
@@ -20,7 +20,9 @@ const Footer = ({ reference }: IProps): JSX.Element => {
                     <Logo className={styles.logo} />
                     <div className={styles.buttons}>
                         <Button label='Trang chủ' />
-                        <Button label='Kiểm tra đơn hàng' />
+                        <Button label='Giới thiệu' />
+                        <Button label='Hỏi đáp' />
+                        <Button label='Giỏ hàng' />
                     </div>
 
                     <div className={styles.links}>
@@ -35,6 +37,7 @@ const Footer = ({ reference }: IProps): JSX.Element => {
                     <div className={styles.buttons}>
                         <Button label='Túi xách' />
                         <Button label='Giầy dép' />
+                        <Button label='Mẹ và bé' />
                         <Button label='Đồng hồ' />
                     </div>
                 </div>

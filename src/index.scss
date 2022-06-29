@@ -36,5 +36,6 @@ button {
 
 .app{
   padding-top: 78px;
-  min-height: calc(100vh - 78px);
+  min-height: 100vh;
+  min-width: 960px;
 }

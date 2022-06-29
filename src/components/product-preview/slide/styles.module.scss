@@ -1,0 +1,14 @@
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .item{
+        width: calc(25% - 8px);
+        background-color: #e5e5e5;
+        border-radius: 4px;
+        padding: 0;
+        padding-top: 22%;
+        border: 0;
+    }
+}

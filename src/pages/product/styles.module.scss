@@ -1,0 +1,136 @@
+.container {
+    .mainContent {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .info {
+        width: 44%;
+        padding-left: 28px;
+        padding-bottom: 12px;
+
+        .name {
+            font-weight: 600;
+            font-size: 24px;
+            margin: 0 0 12px;
+            line-height: 34px;
+        }
+
+        .description {
+            font-size: 16px;
+            color: #666666;
+            line-height: 20px;
+        }
+
+        .extra {
+            font-weight: 500;
+            margin: 24px 0 0;
+
+            * {
+                font-size: 16px;
+            }
+
+            .label {
+                color: #666666;
+                margin: 0 8px 0 0;
+            }
+
+            a {
+                color: #de3b3b;
+            }
+        }
+
+        .rating {
+            margin: 20px 0 0;
+            display: flex;
+            align-items: center;
+
+            .extra {
+                color: #666666;
+                font-size: 14px;
+                padding-top: 3px;
+                margin: 0 0 0 10px;
+            }
+        }
+
+        .price {
+            font-weight: 600;
+            color: #de3b3b;
+            margin: 30px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            font-size: 22px;
+            border-top: 1px solid #b7b7b7;
+            padding-top: 30px;
+
+            .linethrough {
+                position: relative;
+                font-size: 22px;
+                color: #999999;
+                font-weight: 500;
+                text-decoration: line-through;
+                margin: 0 0 0 20px;
+            }
+
+            .discount {
+                font-weight: 400;
+                font-size: 12px;
+                margin: 0 0 0 4px;
+                color: red;
+            }
+        }
+
+        .inputs {
+            margin: 20px 0 0;
+            display: flex;
+            align-items: center;
+
+            .input {
+                width: 80px;
+                min-width: 0;
+                margin: 0 0 0 12px;
+            }
+        }
+
+        .buttons {
+            margin: 32px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            button {
+                width: calc(50% - 6px);
+                height: 44px;
+                font-size: 17px;
+
+                &:not(:first-child) {
+                    margin: 0 0 0 10px;
+                }
+
+                &.orange {
+                    border: 0;
+                    background: orange;
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+
+    .label {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0 0 16px;
+    }
+
+    .imagePreview {
+        padding-top: 80%;
+        background: #e5e5e5;
+        border-radius: 4px;
+
+        &:not(:first-child) {
+            margin: 28px 0;
+        }
+    }
+}

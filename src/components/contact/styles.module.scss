@@ -1,14 +1,28 @@
 .container {
     .label{
         font-size: 18px;
-        margin: 0 0 20px;
+        margin: 0 0 12px;
         color: #de3b3b;
+    }
+
+    .item{
+        font-size: 16px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+
+        span{
+            font-weight: 500;
+            margin: 0 0 0 8px;
+            font-size: 17px;
+        }
     }
 
     .form {
         display: flex;
         flex-direction: column;
         width: 100%;
+        margin: 30px 0 0;
 
         .input {
             &:not(:first-child) {
