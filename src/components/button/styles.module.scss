@@ -1,6 +1,6 @@
 .container {
     height: 40px;
-    padding: 2px 12px 0;
+    padding: 0 12px 0;
     border-radius: 4px;
     font-weight: 500;
     position: relative;
@@ -12,23 +12,23 @@
         background: #de3b3b;
         color: #ffffff;
         border-color: #de3b3b;
-    }
 
-    &::before {
-        content: "";
-        position: absolute;
-        width: 20%;
-        height: 150%;
-        top: 50%;
-        left: -150%;
-        background: rgba($color: #ffffff, $alpha: 0.2);
-        transform: translateY(-50%) rotate(30deg);
-        transition: left linear 0.3s;
-    }
-
-    &:hover {
         &::before {
-            left: 150%;
+            content: "";
+            position: absolute;
+            width: 20%;
+            height: 150%;
+            top: 50%;
+            left: -150%;
+            background: rgba($color: #ffffff, $alpha: 0.2);
+            transform: translateY(-50%) rotate(30deg);
+            transition: left linear 0.3s;
+        }
+
+        &:hover {
+            &::before {
+                left: 150%;
+            }
         }
     }
 

@@ -4,15 +4,15 @@ import { useNavigate } from 'react-router-dom';
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     className?: string,
-    id: string,
+    productId: IObjectId,
 }
 
-const ProductWrapper = ({ id, className, children }: IProps): JSX.Element => {
+const ProductWrapper = ({ productId, className, children }: IProps): JSX.Element => {
     const navigate = useNavigate();
 
     return (
         <Button className={className} label="" onClick={(): void => {
-            navigate(`/product/${id}`);
+            navigate(`/product/${productId}`);
         }}>
             {children}
         </Button>

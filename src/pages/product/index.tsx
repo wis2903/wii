@@ -94,24 +94,6 @@ const Product = (): JSX.Element => {
                 <br />
 
                 <MostPopular title='Sản phẩm tương tự' />
-
-                <br />
-                <br />
-
-                <h3 className={styles.label}>Chi tiết sản phẩm</h3>
-
-                <div>
-                    <div className={styles.imagePreview} />
-                    <div className={styles.imagePreview} />
-                    <div className={styles.imagePreview} />
-                    <div className={styles.imagePreview} />
-                    <div className={styles.imagePreview} />
-                </div>
-
-                <br />
-                <br />
-
-                <MostPopular title='Có thể bạn quan tâm' />
             </Wrapper>
         </Layout>
     );

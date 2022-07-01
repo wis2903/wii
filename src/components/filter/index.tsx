@@ -14,7 +14,7 @@ const Filter = ({ className, onClose }: IProps): JSX.Element => {
     return (
         <div className={classname([styles.container, className])}>
             <div className={styles.mainContent}>
-                <div className={styles.multiCheck}>
+                {/* <div className={styles.multiCheck}>
                     <h3 className={styles.label}>Màu sắc</h3>
                     <div className={styles.checkboxs}>
                         <Checkbox label='Trắng' />
@@ -25,7 +25,7 @@ const Filter = ({ className, onClose }: IProps): JSX.Element => {
                         <Checkbox label='Xanh' />
                         <Checkbox label='Nâu' />
                     </div>
-                </div>
+                </div> */}
 
                 <Select className={styles.select} label='Giá' options={[
                     {

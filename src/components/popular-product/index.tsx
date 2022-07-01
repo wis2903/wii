@@ -12,7 +12,7 @@ interface IProps {
 
 const BestSellerProduct = ({ className, data, disableShadow }: IProps): JSX.Element => {
     return (
-        <ProductWrapper id={data.id} className={classname([styles.container, className, disableShadow && styles.noShadow])}>
+        <ProductWrapper productId={data.id} className={classname([styles.container, className, disableShadow && styles.noShadow])}>
             <div className={styles.info}>
                 <h3 className={styles.name}>{data.name}</h3>
                 <div className={styles.rating}>

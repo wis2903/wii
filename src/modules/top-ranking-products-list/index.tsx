@@ -9,8 +9,12 @@ const TopRankingProductList = (): JSX.Element => {
                 title='Bán chạy nhất tuần qua'
                 data={{
                     id: 'abc',
-                    name: 'Túi Handbag cầm tay đơn giản nữ tính',
-                    price: 199000
+                    name: 'Túi Handbag cầm tay đơn giản',
+                    price: 199000,
+                    categoryId: '',
+                    buyersNumber: 10,
+                    rating: 4 / 5,
+                    imageUrls: [],
                 }}
             />
             <br />
@@ -19,8 +23,12 @@ const TopRankingProductList = (): JSX.Element => {
                 title='Giảm giá nhiều nhất'
                 data={{
                     id: 'abc',
-                    name: 'Túi Handbag cầm tay đơn giản nữ tính',
-                    price: 199000
+                    name: 'Túi Handbag cầm tay đơn giản',
+                    price: 199000,
+                    categoryId: '',
+                    buyersNumber: 10,
+                    rating: 4 / 5,
+                    imageUrls: [],
                 }}
             />
         </div>

@@ -1,3 +1,20 @@
+.placeholder{
+    display: flex;
+    align-items: center;
+
+    div{
+        width: 100px;
+        height: 28px;
+        border-radius: 4px;
+        background: #e5e5e5;
+
+        &:not(:first-child){
+            margin: 0 0 0 30px;
+        }
+    }
+}
+
+
 .container {
     position: relative;
     padding: 0 0 8px;
@@ -10,7 +27,7 @@
         padding-top: 4px;
 
         &:not(:first-child) {
-            margin-left: 20px;
+            margin-left: 30px;
         }
 
         &.active,

@@ -5,7 +5,7 @@
         margin: -10px;
 
         &.hasPadding {
-            padding-top: 68px;
+            padding-top: 52px;
 
             &.hasFilter {
                 padding-top: 144px;
@@ -36,9 +36,13 @@
             top: 76px;
             left: 50%;
             transform: translateX(-50%);
-            width: 904px;
+            width: 1024px;
             z-index: 88;
             background-color: #ffffff;
+
+            .head{
+                padding: 12px 28px;
+            }
         }
     }
 
@@ -46,15 +50,17 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 12px;
-        border-radius: 4px;
+        padding: 16px;
         box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
         background: #ffffff;
         height: 68px;
-        margin: 0 -12px;
 
         .tab {
             padding-top: 12px;
+
+            button{
+                text-transform: uppercase;
+            }
         }
 
         .actions {

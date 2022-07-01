@@ -5,9 +5,10 @@ import styles from './styles.module.scss';
 interface IProps {
     className?: string,
     items: ITabItem[],
+    onChange?: (tab: ITabItem) => void,
 }
 
-const Tab = ({ className, items }: IProps): JSX.Element => {
+const Tab = ({ className, items, onChange }: IProps): JSX.Element => {
     const [selectedItem, setSelectedItem] = React.useState<ITabItem | undefined>(items.find(item => item.selected));
     const [activeItemHTMLElement, setActiveItemHTMLElement] = React.useState<HTMLButtonElement | undefined>();
     const containerRef = React.useRef<HTMLDivElement>(null);
@@ -37,6 +38,7 @@ const Tab = ({ className, items }: IProps): JSX.Element => {
                     <button key={item.value} data-active={selectedItem?.value === item.value ? 1 : 0} className={classname([(selectedItem?.value === item.value) && styles.active])} onClick={(e): void => {
                         setSelectedItem(item);
                         setActiveItemHTMLElement(e.target as HTMLButtonElement);
+                        if(onChange && selectedItem?.value !== item.value) onChange(item);
                     }}>
                         {item.label}
                     </button>

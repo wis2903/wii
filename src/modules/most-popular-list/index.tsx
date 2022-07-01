@@ -21,7 +21,11 @@ const MostPopular = ({ title, reference }: IProps): JSX.Element => {
                         products={Array.from({ length: 4 }).map((item, i) => ({
                             id: String(i),
                             name: 'Túi Handbag cầm tay đơn giản',
-                            price: 199000
+                            price: 199000,
+                            categoryId: '',
+                            buyersNumber: 10,
+                            rating: 4 / 5,
+                            imageUrls: [],
                         }))}
                     />,
                     <BestSellerList
@@ -30,18 +34,13 @@ const MostPopular = ({ title, reference }: IProps): JSX.Element => {
                         products={Array.from({ length: 4 }).map((item, i) => ({
                             id: String(i),
                             name: 'Túi Handbag cầm tay đơn giản',
-                            price: 199000
+                            price: 199000,
+                            categoryId: '',
+                            buyersNumber: 10,
+                            rating: 4 / 5,
+                            imageUrls: [],
                         }))}
                     />,
-                    <BestSellerList
-                        key={3}
-                        className={styles.list}
-                        products={Array.from({ length: 2 }).map((item, i) => ({
-                            id: String(i),
-                            name: 'Túi Handbag cầm tay đơn giản',
-                            price: 199000
-                        }))}
-                    />
                 ]} />
         </div>
     );
