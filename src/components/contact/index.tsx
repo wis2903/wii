@@ -1,8 +1,8 @@
 import React from 'react';
 import { classname } from '../../helpers/utils.helper';
-import Button from '../button';
-import Input from '../input';
-import Textbox from '../textbox';
+import Button from '../basic/button';
+import Input from '../basic/input';
+import Textbox from '../basic/textbox';
 import styles from './styles.module.scss';
 
 interface IProps {

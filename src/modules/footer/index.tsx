@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../../components/button';
+import Button from '../../components/basic/button';
 import Contact from '../../components/contact';
 import Wrapper from '../../components/wrapper';
 import styles from './styles.module.scss';

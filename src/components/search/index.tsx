@@ -1,5 +1,5 @@
 import React from 'react';
-import Input from '../input';
+import Input from '../basic/input';
 import SearchIcon from '../../resources/images/search.png';
 
 interface IProps extends Partial<IInputComponentProps> {

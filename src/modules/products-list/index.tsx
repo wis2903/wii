@@ -1,8 +1,8 @@
 import React from 'react';
 import { classname } from '../../helpers/utils.helper';
-import Button from '../../components/button';
+import Button from '../../components/basic/button';
 import Product from '../../components/product/normal-product';
-import Select from '../../components/select';
+import Select from '../../components/basic/select';
 import Tab from '../../components/tab';
 import styles from './styles.module.scss';
 import CategoryService from '../../services/category.service';
@@ -10,7 +10,7 @@ import TabPlaceholder from '../../components/tab/placeholder';
 import ProductService from '../../services/product.service';
 import NormalProductPlaceholder from '../../components/product/normal-product/placeholder';
 import { animateScroll } from '../../helpers/dom.helpers';
-import SelectPlaceholder from '../../components/select/placeholder';
+import SelectPlaceholder from '../../components/basic/select/placeholder';
 
 interface IProps {
     className?: string,

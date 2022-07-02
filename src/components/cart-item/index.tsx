@@ -1,7 +1,7 @@
 import React from 'react';
 import { classname } from '../../helpers/utils.helper';
 import AmountPicker from '../amount-picker';
-import Button from '../button';
+import Button from '../basic/button';
 import Price from '../price';
 import styles from './styles.module.scss';
 

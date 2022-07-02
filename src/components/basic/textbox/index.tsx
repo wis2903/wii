@@ -1,5 +1,5 @@
 import React from 'react';
-import { classname } from '../../helpers/utils.helper';
+import { classname } from '../../../helpers/utils.helper';
 import styles from './styles.module.scss';
 
 interface IProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {

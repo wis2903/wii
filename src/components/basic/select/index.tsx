@@ -1,6 +1,6 @@
 import React from 'react';
-import { isDescendant } from '../../helpers/dom.helpers';
-import { classname } from '../../helpers/utils.helper';
+import { isDescendant } from '../../../helpers/dom.helpers';
+import { classname } from '../../../helpers/utils.helper';
 import styles from './styles.module.scss';
 
 interface IProps {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { classname, formatNumber } from '../../../helpers/utils.helper';
-import Button from '../../button';
+import Button from '../../basic/button';
 import Stars from '../../stars';
 import styles from './styles.module.scss';
 

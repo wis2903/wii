@@ -3,7 +3,7 @@ import PopupWrapper from '../../components/popup/popup-wrapper';
 import { classname } from '../../helpers/utils.helper';
 import CartItem from '../../components/cart-item';
 import styles from './styles.module.scss';
-import Button from '../../components/button';
+import Button from '../../components/basic/button';
 
 interface IProps {
     className?: string,

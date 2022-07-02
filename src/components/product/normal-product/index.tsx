@@ -1,8 +1,8 @@
 import React from 'react';
 import { classname } from '../../../helpers/utils.helper';
-import Button from '../../button';
+import Button from '../../basic/button';
 import Price from '../../price';
-import ProductWrapper from '../product-wrapper';
+import ProductWrapper from '../../../modules/product-wrapper';
 import Stars from '../../stars';
 import styles from './styles.module.scss';
 

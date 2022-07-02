@@ -1,5 +1,5 @@
 import React from 'react';
-import { classname } from '../../helpers/utils.helper';
+import { classname } from '../../../helpers/utils.helper';
 import styles from './styles.module.scss';
 
 interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -7,9 +7,10 @@ interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     label: string,
     primary?: boolean,
     icon?: IComponentIconInfo,
+    disableClickTransform?: boolean,
 }
 
-const Button = ({ className, primary, label, icon, ...rest }: IProps): JSX.Element => {
+const Button = ({ className, primary, label, icon, disableClickTransform, ...rest }: IProps): JSX.Element => {
     const [isClicked, setIsClicked] = React.useState<boolean>(false);
     const [isBlocking, setIsBlocking] = React.useState<boolean>(false);
     const clickDebounceTimeout = React.useRef<ReturnType<typeof setTimeout>>();
@@ -22,7 +23,7 @@ const Button = ({ className, primary, label, icon, ...rest }: IProps): JSX.Eleme
         }
         if (rest.onClick) rest.onClick(e);
         setIsBlocking(true);
-        setIsClicked(true);
+        setIsClicked(disableClickTransform ? false : true);
         clickAnimationTimeout.current = setTimeout(() => {
             setIsClicked(false);
         }, 200);
@@ -39,7 +40,11 @@ const Button = ({ className, primary, label, icon, ...rest }: IProps): JSX.Eleme
     }, []);
 
     return (
-        <button {...rest} className={classname([styles.container, primary && styles.primary, className, isClicked && styles.active])} onClick={handleOnClick}>
+        <button 
+            {...rest}
+            className={classname([styles.container, primary && styles.primary, className, isClicked && styles.active])}
+            onClick={handleOnClick}
+        >
             {
                 icon?.type === 'image'
                 &&

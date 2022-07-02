@@ -1,6 +1,6 @@
 import React from 'react';
 import { classname, formatNumber } from '../../../helpers/utils.helper';
-import ProductWrapper from '../product-wrapper';
+import ProductWrapper from '../../../modules/product-wrapper';
 import Stars from '../../stars';
 import styles from './styles.module.scss';
 

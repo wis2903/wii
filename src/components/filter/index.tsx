@@ -1,8 +1,8 @@
 import React from 'react';
 import { classname } from '../../helpers/utils.helper';
-import Checkbox from '../checkbox';
+import Checkbox from '../basic/checkbox';
 import CloseButton from '../close-button';
-import Select from '../select';
+import Select from '../basic/select';
 import styles from './styles.module.scss';
 
 interface IProps {

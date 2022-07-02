@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Breadcrumb from '../../components/breadcrumb';
-import Button from '../../components/button';
-import Input from '../../components/input';
+import Button from '../../components/basic/button';
+import Input from '../../components/basic/input';
 import Layout from '../../components/layout';
 import ProductPreview from '../../components/product/product-preview';
-import Select from '../../components/select';
+import Select from '../../components/basic/select';
 import Stars from '../../components/stars';
 import Wrapper from '../../components/wrapper';
 import { formatNumber } from '../../helpers/utils.helper';
