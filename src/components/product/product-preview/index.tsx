@@ -1,5 +1,5 @@
 import React from 'react';
-import Slide from '../slide';
+import Slide from '../../slide';
 import ProductSlide from './slide';
 import styles from './styles.module.scss';
 

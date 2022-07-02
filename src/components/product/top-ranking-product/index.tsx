@@ -1,7 +1,7 @@
 import React from 'react';
-import { classname, formatNumber } from '../../helpers/utils.helper';
-import Button from '../button';
-import Stars from '../stars';
+import { classname, formatNumber } from '../../../helpers/utils.helper';
+import Button from '../../button';
+import Stars from '../../stars';
 import styles from './styles.module.scss';
 
 interface IProps {

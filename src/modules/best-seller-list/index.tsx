@@ -1,5 +1,5 @@
 import React from 'react';
-import BestSellerProduct from '../../components/popular-product';
+import BestSellerProduct from '../../components/product/popular-product';
 import { classname } from '../../helpers/utils.helper';
 import styles from './styles.module.scss';
 

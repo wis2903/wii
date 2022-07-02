@@ -7,6 +7,7 @@
     transition: transform linear 0.1s;
     border: 1px solid #b7b7b7;
     font-size: 16px;
+    background: #ffffff;
 
     &.primary {
         background: #de3b3b;
@@ -16,8 +17,8 @@
         &::before {
             content: "";
             position: absolute;
-            width: 20%;
-            height: 150%;
+            width: 20px;
+            height: 200%;
             top: 50%;
             left: -150%;
             background: rgba($color: #ffffff, $alpha: 0.2);
@@ -38,6 +39,11 @@
 
     img {
         width: 16px;
-        margin: 0 0 -2px 12px;
+        margin: 0 12px 0 0;
+    }
+
+
+    .icon{
+        margin: 0 8px 0 0;
     }
 }

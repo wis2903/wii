@@ -1,5 +1,5 @@
 import React from 'react';
-import TopRankingProduct from '../../components/top-ranking-product';
+import TopRankingProduct from '../../components/product/top-ranking-product';
 import styles from './styles.module.scss';
 
 const TopRankingProductList = (): JSX.Element => {

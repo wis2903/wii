@@ -6,7 +6,7 @@ interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string,
     label: string,
     primary?: boolean,
-    icon?: string,
+    icon?: IComponentIconInfo,
 }
 
 const Button = ({ className, primary, label, icon, ...rest }: IProps): JSX.Element => {
@@ -40,13 +40,19 @@ const Button = ({ className, primary, label, icon, ...rest }: IProps): JSX.Eleme
 
     return (
         <button {...rest} className={classname([styles.container, primary && styles.primary, className, isClicked && styles.active])} onClick={handleOnClick}>
-            {label}
+            {
+                icon?.type === 'image'
+                &&
+                <img src={icon.value} alt="icon" />
+            }
 
             {
-                !!icon
+                icon?.type === 'fa'
                 &&
-                <img src={icon} alt="icon" />
+                <span className={classname([styles.icon, icon.value])} />
             }
+
+            {label}
 
             {rest.children}
         </button>

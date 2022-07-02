@@ -4,7 +4,7 @@ import Breadcrumb from '../../components/breadcrumb';
 import Button from '../../components/button';
 import Input from '../../components/input';
 import Layout from '../../components/layout';
-import ProductPreview from '../../components/product-preview';
+import ProductPreview from '../../components/product/product-preview';
 import Select from '../../components/select';
 import Stars from '../../components/stars';
 import Wrapper from '../../components/wrapper';
