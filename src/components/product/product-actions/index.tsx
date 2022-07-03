@@ -18,7 +18,7 @@ const ProductActions = ({ className }: IProps): JSX.Element => {
             <div className={styles.head}>
                 <h3 className={styles.label}>Đặt hàng</h3>
                 <div className={styles.shipping}>Miễn phí vận chuyển toàn quốc</div>
-                <div className={styles.shipping}>Hỗ trợ thanh toán khi nhận hàng</div>
+                <div className={styles.shipping}>Thanh toán khi nhận hàng</div>
             </div>
 
             <div className={styles.colorWrapper}>
@@ -35,6 +35,14 @@ const ProductActions = ({ className }: IProps): JSX.Element => {
                     {
                         label: 'Cam',
                         value: 'orange',
+                    },
+                    {
+                        label: 'Vàng',
+                        value: 'yellow',
+                    },
+                    {
+                        label: 'Xám',
+                        value: 'grey',
                     },
                 ]} />
             </div>

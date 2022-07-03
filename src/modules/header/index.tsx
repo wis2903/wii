@@ -5,10 +5,10 @@ import Search from '../../components/search';
 import Wrapper from '../../components/wrapper';
 import styles from './styles.module.scss';
 import SakuraImage from '../../resources/images/sakura.png';
-import Cart from '../cart';
+import NotificationButton from './notification-button';
+import CartService from '../../services/cart.service';
 
 const Header = (): JSX.Element => {
-    const [isShowCartPopup, setIsShowCartPopup] = React.useState<boolean>(false);
 
     return (
         <>
@@ -24,18 +24,12 @@ const Header = (): JSX.Element => {
                     <div className={styles.right}>
                         <Search className={styles.search} label="Tìm kiếm sản phẩm ..." />
                         <CartButton className={styles.cart} onClick={(): void => {
-                            setIsShowCartPopup(true);
+                            CartService.instance.requestShowPopup();
                         }} />
+                        <NotificationButton />
                     </div>
                 </Wrapper>
             </div>
-            {
-                isShowCartPopup
-                &&
-                <Cart onClose={(): void => {
-                    setIsShowCartPopup(false);
-                }} />
-            }
         </>
     );
 };

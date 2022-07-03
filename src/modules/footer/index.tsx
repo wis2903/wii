@@ -5,12 +5,32 @@ import Wrapper from '../../components/wrapper';
 import styles from './styles.module.scss';
 import SakuraImage from '../../resources/images/sakura.png';
 import Logo from '../../components/logo';
+import CartService from '../../services/cart.service';
+import CategoryService from '../../services/category.service';
 
 interface IProps {
     reference?: React.LegacyRef<HTMLDivElement>,
 }
 
 const Footer = ({ reference }: IProps): JSX.Element => {
+    const [categories, setCategories] = React.useState<ICategory[]>([]);
+
+    const handleShowCartPopup = (): void => {
+        CartService.instance.requestShowPopup();
+    };
+
+    const handleOnCategoriesLoaded = (): void => {
+        setCategories(CategoryService.instance.categories);
+    };
+
+    React.useEffect(() => {
+        CategoryService.instance.addLoadedCategoriesListener(handleOnCategoriesLoaded);
+
+        return (): void => {
+            CategoryService.instance.removeLoadedCategoriesListener(handleOnCategoriesLoaded);
+        };
+    }, []);
+
     return (
         <div className={styles.container} ref={reference}>
             <img src={SakuraImage} alt="sakura" />
@@ -19,26 +39,20 @@ const Footer = ({ reference }: IProps): JSX.Element => {
                 <div className={styles.com}>
                     <Logo className={styles.logo} />
                     <div className={styles.buttons}>
-                        <Button label='Trang chủ' />
-                        <Button label='Giới thiệu' />
-                        <Button label='Hỏi đáp' />
-                        <Button label='Giỏ hàng' />
-                    </div>
-
-                    <div className={styles.links}>
-                        <Button label='' />
-                        <Button label='' />
+                        <Button label='Giới thiệu về chúng tôi' />
+                        <Button label='Giỏ hàng của bạn' onClick={handleShowCartPopup} />
+                        <Button label='Tra cứu đơn hàng' />
+                        <Button label='Dành cho quản trị viên' />
                     </div>
                 </div>
 
                 <div className={styles.menu}>
-                    <h3>Danh mục</h3>
+                    <h3>Danh mục sản phẩm</h3>
 
                     <div className={styles.buttons}>
-                        <Button label='Túi xách' />
-                        <Button label='Giầy dép' />
-                        <Button label='Mẹ và bé' />
-                        <Button label='Đồng hồ' />
+                        {categories.map(item =>
+                            <Button key={item.id} label={item.name} />
+                        )}
                     </div>
                 </div>
                 <Contact className={styles.contact} />

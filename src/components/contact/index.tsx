@@ -26,7 +26,7 @@ const Contact = ({ className }: IProps): JSX.Element => {
                 <h3 className={styles.label}>Gửi ý kiến của bạn</h3>
                 <Input className={styles.input} label='Địa chỉ email của bạn' />
                 <Textbox className={styles.input} label='Nội dung liên hệ' />
-                <Button primary label='Gửi thông tin liên hệ' />
+                <Button primary label='Gửi ý kiến' />
             </div>
         </div>
     );

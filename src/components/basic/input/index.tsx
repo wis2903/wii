@@ -2,7 +2,7 @@ import React from 'react';
 import { classname } from '../../../helpers/utils.helper';
 import styles from './styles.module.scss';
 
-const Input = ({ className, label, icon, ...rest }: IInputComponentProps): JSX.Element => {
+const Input = ({ className, label, icon, required, ...rest }: IInputComponentProps): JSX.Element => {
     const [value, setValue] = React.useState<string>(rest.defaultValue ? String(rest.defaultValue) : '');
     const [isFocusing, setIsFocusing] = React.useState<boolean>(false);
 
@@ -23,7 +23,14 @@ const Input = ({ className, label, icon, ...rest }: IInputComponentProps): JSX.E
 
     return (
         <div className={classname([styles.container, className, (value || isFocusing) && styles.focus, isFocusing && styles.focusing])}>
-            <span className={styles.label}>{label}</span>
+            <span className={styles.label}>
+                {label}
+                {
+                    required
+                    &&
+                    <i>*</i>
+                }
+            </span>
             <input {...rest} value={value} onFocus={handleOnInputFocus} onBlur={handleOnInputBlur} onChange={handleInputChange} />
             {
                 !!icon

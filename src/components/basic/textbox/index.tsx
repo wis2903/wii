@@ -4,10 +4,11 @@ import styles from './styles.module.scss';
 
 interface IProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
     className?: string,
+    required?: boolean,
     label: string,
 }
 
-const Textbox = ({ className, label, ...rest }: IProps): JSX.Element => {
+const Textbox = ({ className, label, required, ...rest }: IProps): JSX.Element => {
     const [value, setValue] = React.useState<string>(rest.defaultValue ? String(rest.defaultValue) : '');
     const [isFocusing, setIsFocusing] = React.useState<boolean>(false);
 
@@ -28,7 +29,14 @@ const Textbox = ({ className, label, ...rest }: IProps): JSX.Element => {
 
     return (
         <div className={classname([styles.container, className, (isFocusing || value) && styles.focus])}>
-            <span className={styles.label}>{label}</span>
+            <span className={styles.label}>
+                {label}
+                {
+                    required
+                    &&
+                    <i>*</i>
+                }
+            </span>
             <textarea {...rest} value={value} rows={4} onChange={handleOnChange} onFocus={handleOnFocus} onBlur={handleOnBlur} />
         </div>
     );

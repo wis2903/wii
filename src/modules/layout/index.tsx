@@ -4,6 +4,8 @@ import { animateScroll } from '../../helpers/dom.helpers';
 import { classname } from '../../helpers/utils.helper';
 import Payment from '../payment';
 import PaymentService from '../../services/payment.service';
+import Cart from '../cart';
+import CartService from '../../services/cart.service';
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     className?: string,
@@ -11,9 +13,13 @@ interface IProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Layout = ({ children, className, ...rest }: IProps): JSX.Element => {
     const [isShowPaymentPopup, setIsShowPaymentPopup] = React.useState<boolean>(false);
+    const [isShowCartPopup, setIsShowCartPopup] = React.useState<boolean>(false);
 
     const handleOnRequestShowPaymentPopup = (): void => {
         setIsShowPaymentPopup(true);
+    };
+    const handleOnRequestShowCartPopup = (): void => {
+        setIsShowCartPopup(true);
     };
 
     React.useEffect(() => {
@@ -24,9 +30,11 @@ const Layout = ({ children, className, ...rest }: IProps): JSX.Element => {
         });
 
         PaymentService.instance.addRequestShowPopupListener(handleOnRequestShowPaymentPopup);
+        CartService.instance.addRequestShowPopupListener(handleOnRequestShowCartPopup);
 
         return (): void => {
             PaymentService.instance.removeRequestShowPopupListener(handleOnRequestShowPaymentPopup);
+            CartService.instance.removeRequestShowPopupListener(handleOnRequestShowCartPopup);
         };
     }, []);
 
@@ -40,6 +48,13 @@ const Layout = ({ children, className, ...rest }: IProps): JSX.Element => {
                 &&
                 <Payment onClose={(): void => {
                     setIsShowPaymentPopup(false);
+                }} />
+            }
+            {
+                isShowCartPopup
+                &&
+                <Cart onClose={(): void => {
+                    setIsShowCartPopup(false);
                 }} />
             }
         </>

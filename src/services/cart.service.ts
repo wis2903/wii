@@ -2,9 +2,11 @@ class CartService {
     private static inst?: CartService;
 
     private productAddedListeners: VoidFunction[];
+    private requestShowPopupListeners: VoidFunction[];
 
     constructor() {
         this.productAddedListeners = [];
+        this.requestShowPopupListeners = [];
     }
 
     public static get instance(): CartService {
@@ -22,6 +24,18 @@ class CartService {
 
     public requestShowCartNotification = (): void => {
         this.productAddedListeners.forEach(callback => { callback(); });
+    }
+
+    public addRequestShowPopupListener = (callback: VoidFunction): void => {
+        this.requestShowPopupListeners.push(callback);
+    }
+
+    public removeRequestShowPopupListener = (callback: VoidFunction): void => {
+        this.requestShowPopupListeners = this.productAddedListeners.filter(item => item !== callback);
+    }
+
+    public requestShowPopup = (): void => {
+        this.requestShowPopupListeners.forEach(callback => { callback(); });
     }
 }
 

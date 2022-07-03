@@ -83,4 +83,21 @@
             }
         }
     }
+
+    &.bottom{
+        .tooltip {
+            top: calc(100% + 8px);
+            bottom: auto;
+            right: 0;
+            left: auto;
+
+            &::before {
+                left: auto;
+                right: 16px;
+                top: 0;
+                bottom: auto;
+                transform: translate(0, -3px) rotate(-45deg);
+            }
+        }
+    }
 }

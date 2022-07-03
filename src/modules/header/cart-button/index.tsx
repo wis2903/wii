@@ -1,4 +1,5 @@
 import React from 'react';
+import Tooltip from '../../../components/tooltip';
 import { classname } from '../../../helpers/utils.helper';
 import CartService from '../../../services/cart.service';
 import styles from './styles.module.scss';
@@ -31,21 +32,19 @@ const Cart = ({ className, onClick }: IProps): JSX.Element => {
 
     return (
         <div className={classname([styles.container, className])}>
-            <button onClick={onClick}>
-                <span className={styles.icon}>
-                    <span className='fa fa-cart-shopping' />
-                    <span className={styles.indicator}>0</span>
-                </span>
-                <span className={styles.label}>Giỏ hàng</span>
-            </button>
+            <Tooltip text='Giỏ hàng' dir='bottom'>
+                <button onClick={onClick}>
+                    <span className={styles.icon}>
+                        <span className='fa fa-cart-shopping' />
+                        <span className={styles.indicator}>0</span>
+                    </span>
+                </button>
+            </Tooltip>
 
             {
                 isShowNotification
                 &&
-                <>
-                    <div className={styles.overlay} />
-                    <span className={styles.notification}>Đã thêm sản phẩm vào giỏ hàng</span>
-                </>
+                <span className={styles.notification}>Đã thêm sản phẩm vào giỏ hàng</span>
             }
         </div>
     );

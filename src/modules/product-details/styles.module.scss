@@ -1,6 +1,6 @@
 .container{
     .body{
-        max-width: 1024px;
+        max-width: 1200px;
         position: relative;
 
         .wrapper{
@@ -9,7 +9,7 @@
             justify-content: space-between;
 
             .left{
-                width: 60%;
+                width: 55%;
 
                 .label{
                     font-size: 18px;
@@ -19,8 +19,8 @@
             }
 
             .right{
-                width: 40%;
-                padding-left: 30px;
+                width: 45%;
+                padding-left: 40px;
             }
 
             .images{
@@ -42,7 +42,7 @@
 
                 .name{
                     font-weight: 600;
-                    font-size: 23px;
+                    font-size: 24px;
                     margin: 0 0 6px;
                 }
 

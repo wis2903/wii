@@ -3,6 +3,7 @@ import Button from '../../components/basic/button';
 import CartItem from '../../components/cart-item';
 import PopupWrapper from '../../components/popup/popup-wrapper';
 import { formatNumber } from '../../helpers/utils.helper';
+import NotificationService from '../../services/notification.service';
 import ShippingInfo from './shipping-info';
 import styles from './styles.module.scss';
 
@@ -20,7 +21,7 @@ const Payment = ({ onClose, className }: IProps): JSX.Element => {
                 text: 'Xác nhận thông tin đặt hàng',
                 icon: {
                     type: 'fa',
-                    value: 'fa fa-truck-fast',
+                    value: 'fa fa-truck',
                 }
             }}
             onClose={onClose}
@@ -56,11 +57,7 @@ const Payment = ({ onClose, className }: IProps): JSX.Element => {
                         }}
                         defaultAmount={1}
                     />
-                </div>
-
-                <div className={styles.right}>
-                    <h3 className={styles.title}>Thông tin người nhận hàng</h3>
-                    <ShippingInfo />
+                    <br />
                     <br />
                     <div>
                         <h3 className={styles.title}>Tóm tắt đơn hàng</h3>
@@ -85,8 +82,17 @@ const Payment = ({ onClose, className }: IProps): JSX.Element => {
                             <span className={styles.value}>{formatNumber(199000 * 2)} VND</span>
                         </div>
                     </div>
+                    <br />
+                </div>
+
+                <div className={styles.right}>
+                    <h3 className={styles.title}>Thông tin người nhận hàng</h3>
+                    <ShippingInfo />
                     <div className={styles.action}>
-                        <Button primary label='Tiến hành đặt hàng' />
+                        <Button primary label='Tiến hành đặt hàng' onClick={(): void => {
+                            if(onClose) onClose();
+                            NotificationService.instance.requestShowNotification();
+                        }} />
                     </div>
                 </div>
             </div>

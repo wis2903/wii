@@ -7,6 +7,7 @@ declare global {
     }
     interface IInputComponentProps extends React.InputHTMLAttributes<HTMLInputElement> {
         className?: string,
+        required?: boolean,
         icon?: string,
         label: string,
     }
