@@ -1,6 +1,6 @@
 import React from 'react';
 import Wrapper from '../../components/wrapper';
-import Layout from '../../components/layout';
+import Layout from '../../modules/layout';
 import ProductList from '../../modules/products-list';
 import styles from './styles.module.scss';
 

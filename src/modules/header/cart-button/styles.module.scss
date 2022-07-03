@@ -1,33 +1,71 @@
 .container {
-    padding: 12px 0 8px 0;
-    background-color: #ffffff;
+    position: relative;
 
-    .icon {
-        position: relative;
-        display: inline-block;
-        padding: 0 12px 0 0;
+    .notification {
+        position: absolute;
+        top: 100%;
+        min-width: max-content;
+        font-weight: 500;
+        background: #de3b3b;
+        color: #ffffff;
+        padding:8px 12px 8px;
+        border-radius: 4px;
+        right: 0;
+        z-index: 11;
 
-        .indicator {
+        &::before {
+            content: '';
             position: absolute;
-            right: 0;
-            top: -10px;
+            right: 16px;
+            bottom: 100%;
+            width: 10px;
+            height: 10px;
             background: #de3b3b;
-            color: #ffffff;
-            border-radius: 50%;
-            font-size: 11px;
-            font-weight: 500;
-            display: inline-flex;
-            width: 16px;
-            height: 16px;
-            justify-content: center;
-            align-items: center;
-            padding: 0 0 0;
+            transform: translate(0, 7px) rotate(-45deg);
         }
     }
 
-    .label{
-        font-weight: 500;
-        margin: 0 0 0 2px;
-        text-transform: uppercase;
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: rgba($color: #000000, $alpha: .85);
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+    }
+
+    button {
+        padding: 12px 0 8px 0;
+        background-color: #ffffff;
+
+        .icon {
+            position: relative;
+            display: inline-block;
+            padding: 0 12px 0 0;
+
+            .indicator {
+                position: absolute;
+                right: 0;
+                top: -10px;
+                background: #de3b3b;
+                color: #ffffff;
+                border-radius: 50%;
+                font-size: 11px;
+                font-weight: 500;
+                display: inline-flex;
+                width: 16px;
+                height: 16px;
+                justify-content: center;
+                align-items: center;
+                padding: 0 0 0;
+            }
+        }
+
+        .label {
+            font-weight: 500;
+            margin: 0 0 0 2px;
+            text-transform: uppercase;
+        }
     }
 }

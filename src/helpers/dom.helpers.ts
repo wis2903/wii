@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isChrome } from 'react-device-detect';
 
 const pow = Math.pow;
 
@@ -58,34 +57,10 @@ export const animateScroll = ({ targetPosition, initialPosition, duration }: { t
     animationFrame = requestAnimationFrame(step);
 };
 
-const preventDefault = (e: any): void => {
-    e.preventDefault();
-};
-
-const preventDefaultForScrollKeys = (e: any): boolean => {
-    const keyCode = Number(e.keyCode);
-    if (keyCode === 37 || keyCode === 38 || keyCode === 39 || keyCode === 40) {
-        preventDefault(e);
-        return false;
-    }
-
-    return true;
-};
-
-
-const wheelOpt = isChrome ? { passive: false } : false;
-const wheelEvent = 'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel';
-
 export const disableScroll = (): void => {
-    document.addEventListener('DOMMouseScroll', preventDefault, false);
-    document.addEventListener(wheelEvent, preventDefault, wheelOpt);
-    document.addEventListener('touchmove', preventDefault, wheelOpt);
-    document.addEventListener('keydown', preventDefaultForScrollKeys, false);
+    document.getElementsByTagName('body')[0].style.overflow = 'hidden';
 };
 
 export const enableScroll = (): void => {
-    document.removeEventListener('DOMMouseScroll', preventDefault, false);
-    document.removeEventListener(wheelEvent, preventDefault);
-    document.removeEventListener('touchmove', preventDefault);
-    document.removeEventListener('keydown', preventDefaultForScrollKeys, false);
+    document.getElementsByTagName('body')[0].style.overflow = 'auto';    
 };

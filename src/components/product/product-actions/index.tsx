@@ -1,7 +1,10 @@
 import React from 'react';
 import { classname } from '../../../helpers/utils.helper';
+import CartService from '../../../services/cart.service';
+import PaymentService from '../../../services/payment.service';
 import AmountPicker from '../../amount-picker';
 import Button from '../../basic/button';
+import ColorPicker from '../../color-picker';
 import Price from '../../price';
 import styles from './styles.module.scss';
 
@@ -14,20 +17,42 @@ const ProductActions = ({ className }: IProps): JSX.Element => {
         <div className={classname([styles.container, className])}>
             <div className={styles.head}>
                 <h3 className={styles.label}>Đặt hàng</h3>
-                <div className={styles.shipping}>Miễn phí ship toàn quốc</div>
+                <div className={styles.shipping}>Miễn phí vận chuyển toàn quốc</div>
+                <div className={styles.shipping}>Hỗ trợ thanh toán khi nhận hàng</div>
             </div>
 
+            <div className={styles.colorWrapper}>
+                <h4 className={styles.catLabel}>Màu sắc sản phẩm: Trắng</h4>
+                <ColorPicker colors={[
+                    {
+                        label: 'Đen',
+                        value: 'black',
+                    },
+                    {
+                        label: 'Trắng',
+                        value: '#ffffff',
+                    },
+                    {
+                        label: 'Cam',
+                        value: 'orange',
+                    },
+                ]} />
+            </div>
+
+            <h4 className={styles.catLabel}>Số lượng sản phẩm</h4>
             <div className={styles.amountWrapper}>
                 <AmountPicker className={styles.amountPicker} defaultValue={1} />
                 <Price className={styles.price} value={199000} />
             </div>
 
             <div className={styles.buttons}>
-                <Button primary label='Thêm vào giỏ hàng' />
-                <Button primary label='Mua ngay' />
+                <Button primary label='Thêm vào giỏ hàng' onClick={(): void => {
+                    CartService.instance.requestShowCartNotification();
+                }}/>
+                <Button primary label='Mua ngay' onClick={(): void => {
+                    PaymentService.instance.requestShowPoup();
+                }} />
             </div>
-
-            <div className={styles.payment}>Hỗ trợ thanh toán khi nhận hàng, cho phép kiểm tra hàng trước khi thanh toán.</div>
         </div>
     );
 };

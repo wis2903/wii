@@ -4,6 +4,10 @@
         position: relative;
 
         .wrapper{
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+
             .left{
                 width: 60%;
 
@@ -16,10 +20,7 @@
 
             .right{
                 width: 40%;
-                position: absolute;
-                top: 0;
-                right: 0;
-                padding: 30px 30px 30px 16px;
+                padding-left: 30px;
             }
 
             .images{
@@ -38,12 +39,10 @@
 
             .info{
                 margin: 0 0 24px;
-                padding-bottom: 24px;
-                border-bottom: 1px solid #e5e5e5;
 
                 .name{
                     font-weight: 600;
-                    font-size: 24px;
+                    font-size: 23px;
                     margin: 0 0 6px;
                 }
 

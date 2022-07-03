@@ -13,7 +13,9 @@ const Header = (): JSX.Element => {
     return (
         <>
             <div className={styles.container}>
-                <img className={styles.image2} src={SakuraImage} alt="sakura" />
+                <div className={styles.decoration}>
+                    <img className={styles.image2} src={SakuraImage} alt="sakura" />
+                </div>
 
                 <Wrapper className={styles.wrapper}>
                     <div className={styles.left}>
@@ -23,7 +25,7 @@ const Header = (): JSX.Element => {
                         <Search className={styles.search} label="Tìm kiếm sản phẩm ..." />
                         <CartButton className={styles.cart} onClick={(): void => {
                             setIsShowCartPopup(true);
-                        }}/>
+                        }} />
                     </div>
                 </Wrapper>
             </div>
@@ -32,7 +34,7 @@ const Header = (): JSX.Element => {
                 &&
                 <Cart onClose={(): void => {
                     setIsShowCartPopup(false);
-                }}/>
+                }} />
             }
         </>
     );

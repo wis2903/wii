@@ -12,4 +12,8 @@ declare global {
         value: string | number;
         selected?: boolean;
     };
+    type IColor = {
+        label: string,
+        value: string,
+    }
 }

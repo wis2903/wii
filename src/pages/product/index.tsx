@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Breadcrumb from '../../components/breadcrumb';
 import Button from '../../components/basic/button';
 import Input from '../../components/basic/input';
-import Layout from '../../components/layout';
+import Layout from '../../modules/layout';
 import ProductPreview from '../../components/product/product-images-slideshow';
 import Select from '../../components/basic/select';
 import Stars from '../../components/stars';

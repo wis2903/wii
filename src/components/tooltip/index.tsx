@@ -2,7 +2,7 @@ import React from 'react';
 import { classname } from '../../helpers/utils.helper';
 import styles from './styles.module.scss';
 
-type ITooltipDir = 'left' | 'right' | 'top' | 'bottom';
+type ITooltipDir = 'left' | 'right' | 'top' | 'bottom' | 'center';
 interface IProps extends React.HTMLAttributes<HTMLElement> {
     className?: string,
     dir?: ITooltipDir,

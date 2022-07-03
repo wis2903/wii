@@ -4,13 +4,27 @@ import { classname } from '../../helpers/utils.helper';
 import CartItem from '../../components/cart-item';
 import styles from './styles.module.scss';
 import Button from '../../components/basic/button';
+import PaymentService from '../../services/payment.service';
 
 interface IProps {
     className?: string,
-    onClose?: () => void,
+    onClose?: VoidFunction,
 }
 
 const Cart = ({ className, onClose }: IProps): JSX.Element => {
+    const handleOnShowPaymentPopup = (): void => {
+        if (onClose) onClose();
+    };
+
+    React.useEffect(() => {
+        PaymentService.instance.addRequestShowPopupListener(handleOnShowPaymentPopup);
+
+        return (): void => {
+            PaymentService.instance.removeRequestShowPopupListener(handleOnShowPaymentPopup);
+        };
+    }, []);
+
+
     return (
         <PopupWrapper
             className={classname([styles.container, className])}
@@ -43,7 +57,9 @@ const Cart = ({ className, onClose }: IProps): JSX.Element => {
             />
 
             <div className={styles.action}>
-                <Button label='Xác nhận đặt hàng' primary />
+                <Button label='Xác nhận đặt hàng' primary onClick={(): void => {
+                    PaymentService.instance.requestShowPoup();
+                }} />
             </div>
         </PopupWrapper>
     );

@@ -4,6 +4,8 @@ import ProductActions from '../../components/product/product-actions';
 import ProductImagesSlideShow from '../../components/product/product-images-slideshow';
 import Stars from '../../components/stars';
 import { classname } from '../../helpers/utils.helper';
+import CartService from '../../services/cart.service';
+import PaymentService from '../../services/payment.service';
 import styles from './styles.module.scss';
 
 interface IProps {
@@ -12,6 +14,24 @@ interface IProps {
 }
 
 const ProductDetails = ({ className, onClose }: IProps): JSX.Element => {
+    const handleOnShowPaymentPopup = (): void => {
+        if (onClose) onClose();
+    };
+
+    const handleOnShowCartNotification = (): void => {
+        if (onClose) onClose();
+    };
+
+    React.useEffect(() => {
+        PaymentService.instance.addRequestShowPopupListener(handleOnShowPaymentPopup);
+        CartService.instance.addProductAddedListener(handleOnShowCartNotification);
+
+        return (): void => {
+            PaymentService.instance.removeRequestShowPopupListener(handleOnShowPaymentPopup);
+            CartService.instance.removeProductAddedListener(handleOnShowCartNotification);
+        };
+    }, []);
+
     return (
         <PopupWrapper className={classname([styles.container, className])} bodyClassName={styles.body} onClose={onClose}>
             <div className={styles.wrapper}>

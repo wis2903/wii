@@ -8,7 +8,7 @@ import styles from './styles.module.scss';
 interface IProps {
     className?: string,
     bodyClassName?: string,
-    onClose?: () => void,
+    onClose?: VoidFunction,
     children: React.ReactNode,
     title?: IPopupTitleComponentProps,
 }

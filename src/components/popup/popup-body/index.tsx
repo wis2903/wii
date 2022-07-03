@@ -5,7 +5,7 @@ import styles from './styles.module.scss';
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement>{
     className?: string,
-    onClose?: () => void,
+    onClose?: VoidFunction,
 }
 
 const PopupBody = ({className, children, onClose}: IProps): JSX.Element => {

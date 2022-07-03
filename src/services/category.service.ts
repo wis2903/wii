@@ -18,10 +18,6 @@ class CategoryService {
                         id: 'accessories',
                         name: 'Phụ kiện',
                     },
-                    {
-                        id: 'frankincense',
-                        name: 'Trầm hương',
-                    }
                 ]);
             }, 1000);
         });

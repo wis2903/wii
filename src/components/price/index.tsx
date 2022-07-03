@@ -10,7 +10,7 @@ interface IProps {
 const Price = ({ className, value }: IProps): JSX.Element => {
     return (
         <div className={classname([className, styles.container])}>
-            {formatNumber(value)} đ
+            {formatNumber(value)} VND
         </div>
     );
 };

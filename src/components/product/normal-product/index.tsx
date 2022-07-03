@@ -6,6 +6,7 @@ import ProductWrapper from '../../../modules/product-wrapper';
 import Stars from '../../stars';
 import styles from './styles.module.scss';
 import Tooltip from '../../tooltip';
+import CartService from '../../../services/cart.service';
 
 interface IProps {
     className?: string,
@@ -18,7 +19,9 @@ const Product = ({ data, className }: IProps): JSX.Element => {
             <div className={styles.thumbnailWrapper}>
                 <ProductWrapper productId={data.id} className={styles.thumbnail} />
                 <Tooltip dir='left' text='Thêm vào giỏ hàng' className={styles.cartButton}>
-                    <Button enableColorTransformOnHover icon={{type: 'fa', value: 'fa fa-cart-plus'}}/>
+                    <Button primary icon={{ type: 'fa', value: 'fa fa-cart-plus' }} onClick={(): void => {
+                        CartService.instance.requestShowCartNotification();
+                    }} />
                 </Tooltip>
             </div>
             <div className={styles.info}>
