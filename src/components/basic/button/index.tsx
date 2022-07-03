@@ -4,13 +4,14 @@ import styles from './styles.module.scss';
 
 interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string,
-    label: string,
+    label?: string,
     primary?: boolean,
     icon?: IComponentIconInfo,
     disableClickTransform?: boolean,
+    enableColorTransformOnHover?: boolean,
 }
 
-const Button = ({ className, primary, label, icon, disableClickTransform, ...rest }: IProps): JSX.Element => {
+const Button = ({ className, primary, label, icon, disableClickTransform, enableColorTransformOnHover, ...rest }: IProps): JSX.Element => {
     const [isClicked, setIsClicked] = React.useState<boolean>(false);
     const [isBlocking, setIsBlocking] = React.useState<boolean>(false);
     const clickDebounceTimeout = React.useRef<ReturnType<typeof setTimeout>>();
@@ -42,7 +43,14 @@ const Button = ({ className, primary, label, icon, disableClickTransform, ...res
     return (
         <button 
             {...rest}
-            className={classname([styles.container, primary && styles.primary, className, isClicked && styles.active])}
+            className={classname([
+                styles.container,
+                className,
+                primary && styles.primary,
+                isClicked && styles.active,
+                enableColorTransformOnHover && styles.enableColorTransformOnHover,
+                !label && styles.noLabel,
+            ])}
             onClick={handleOnClick}
         >
             {

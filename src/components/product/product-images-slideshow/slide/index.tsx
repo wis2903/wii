@@ -9,6 +9,7 @@ const ProductSlide = (): JSX.Element => {
             <Button className={styles.item} label=""/>
             <Button className={styles.item} label=""/>
             <Button className={styles.item} label=""/>
+            <Button className={styles.item} label=""/>
         </div>
     );
 };

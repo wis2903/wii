@@ -1,14 +1,18 @@
 .container{
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
 
     .item{
-        width: calc(25% - 8px);
+        width: calc(20% - 9.6px);
         background-color: #e5e5e5;
         border-radius: 4px;
         padding: 0;
-        padding-top: 22%;
+        padding-top: 16%;
         border: 0;
+
+        &:not(:first-child){
+            margin: 0 0 0 12px;
+        }
     }
 }

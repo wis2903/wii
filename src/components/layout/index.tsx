@@ -17,7 +17,7 @@ const Layout = ({ children, className, ...rest }: IProps): JSX.Element => {
     }, []);
 
     return (
-        <div className={classname([className, styles.container])} {...rest}>
+        <div className={classname([className, styles.container, 'layout'])} {...rest}>
             {children}
         </div>
     );

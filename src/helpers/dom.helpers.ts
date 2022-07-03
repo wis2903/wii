@@ -4,7 +4,7 @@ import { isChrome } from 'react-device-detect';
 const pow = Math.pow;
 
 export const isDescendant = function (parent: HTMLElement, child: HTMLElement): boolean {
-    if(child === parent) return true;
+    if (child === parent) return true;
     let node = child.parentNode;
     while (node) {
         if (node === parent) return true;
@@ -59,35 +59,33 @@ export const animateScroll = ({ targetPosition, initialPosition, duration }: { t
 };
 
 const preventDefault = (e: any): void => {
-  e.preventDefault();
+    e.preventDefault();
 };
 
 const preventDefaultForScrollKeys = (e: any): boolean => {
     const keyCode = Number(e.keyCode);
-  if (keyCode === 37 || keyCode === 38 || keyCode === 39 || keyCode === 40) {
-    preventDefault(e);
-    return false;
-  }
+    if (keyCode === 37 || keyCode === 38 || keyCode === 39 || keyCode === 40) {
+        preventDefault(e);
+        return false;
+    }
 
-  return true;
+    return true;
 };
 
 
 const wheelOpt = isChrome ? { passive: false } : false;
 const wheelEvent = 'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel';
 
-// call this to Disable
 export const disableScroll = (): void => {
-  window.addEventListener('DOMMouseScroll', preventDefault, false); // older FF
-  window.addEventListener(wheelEvent, preventDefault, wheelOpt); // modern desktop
-  window.addEventListener('touchmove', preventDefault, wheelOpt); // mobile
-  window.addEventListener('keydown', preventDefaultForScrollKeys, false);
+    document.addEventListener('DOMMouseScroll', preventDefault, false);
+    document.addEventListener(wheelEvent, preventDefault, wheelOpt);
+    document.addEventListener('touchmove', preventDefault, wheelOpt);
+    document.addEventListener('keydown', preventDefaultForScrollKeys, false);
 };
 
-// call this to Enable
 export const enableScroll = (): void => {
-  window.removeEventListener('DOMMouseScroll', preventDefault, false);
-  window.removeEventListener(wheelEvent, preventDefault);
-  window.removeEventListener('touchmove', preventDefault);
-  window.removeEventListener('keydown', preventDefaultForScrollKeys, false);
+    document.removeEventListener('DOMMouseScroll', preventDefault, false);
+    document.removeEventListener(wheelEvent, preventDefault);
+    document.removeEventListener('touchmove', preventDefault);
+    document.removeEventListener('keydown', preventDefaultForScrollKeys, false);
 };

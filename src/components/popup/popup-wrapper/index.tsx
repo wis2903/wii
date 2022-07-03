@@ -31,7 +31,7 @@ const PopupWrapper = ({ className, bodyClassName, children, onClose, title }: IP
                     &&
                     <PopupTitle data={title} />
                 }
-                <div className={styles.mainContent}>
+                <div className={classname(['popup-body-main-content', styles.mainContent])}>
                     {children}
                 </div>
             </PopupBody>

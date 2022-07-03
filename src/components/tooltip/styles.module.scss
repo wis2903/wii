@@ -9,13 +9,13 @@
         font-weight: 500;
         background: #de3b3b;
         color: #ffffff;
-        padding: 10px 10px 7px;
+        padding: 7px 10px 7px;
         border-radius: 4px;
         left: 0;
         z-index: 10;
         display: none;
 
-        &::before{
+        &::before {
             content: '';
             position: absolute;
             left: 10px;
@@ -33,17 +33,34 @@
         }
     }
 
-    &.right{
-        .tooltip{
+    &.right {
+        .tooltip {
             bottom: auto;
             top: 50%;
             left: calc(100% + 10px);
             transform: translateY(-50%);
 
-            &::before{
+            &::before {
                 left: 0;
                 top: 50%;
                 transform: translate(-2px, -50%) rotate(-45deg);
+            }
+        }
+    }
+
+    &.left {
+        .tooltip {
+            bottom: auto;
+            top: 50%;
+            left: auto;
+            right: calc(100% + 10px);
+            transform: translateY(-50%);
+
+            &::before {
+                left: auto;
+                right: 0;
+                top: 50%;
+                transform: translate(2px, -50%) rotate(-45deg);
             }
         }
     }

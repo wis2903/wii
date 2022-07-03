@@ -1,0 +1,57 @@
+.container {
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: rgb(0 0 0 / 12%) 0px 6px 16px;
+    border: 1px solid #e5e5e5;
+
+    .buttons {
+        button {
+            width: 100%;
+            height: 44px;
+
+            &:not(:first-child) {
+                margin: 12px 0 0;
+            }
+        }
+    }
+
+    .amountWrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 0 20px;
+
+        .amountPicker {
+            height: 40px;
+        }
+
+        .price {
+            font-size: 18px;
+        }
+    }
+
+    .head {
+        margin: -20px -20px 20px;
+        padding: 16px 20px;
+        background-color: #f8f8f8;
+        box-shadow: rgba(0, 0, 0, 0.06) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+
+        .shipping {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .label{
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 4px;
+        }
+    }
+
+    .payment{
+        font-size: 15px;
+        margin: 16px 0 0;
+        color: #666666;
+        line-height: 22px;
+    }
+}

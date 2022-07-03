@@ -5,6 +5,7 @@ import Price from '../../price';
 import ProductWrapper from '../../../modules/product-wrapper';
 import Stars from '../../stars';
 import styles from './styles.module.scss';
+import Tooltip from '../../tooltip';
 
 interface IProps {
     className?: string,
@@ -16,7 +17,9 @@ const Product = ({ data, className }: IProps): JSX.Element => {
         <div className={classname([styles.container, className])}>
             <div className={styles.thumbnailWrapper}>
                 <ProductWrapper productId={data.id} className={styles.thumbnail} />
-                <Button className={styles.cartButton} label='Thêm vào giỏ hàng' icon={{type: 'fa', value: 'fa fa-cart-shopping'}}/>
+                <Tooltip dir='left' text='Thêm vào giỏ hàng' className={styles.cartButton}>
+                    <Button enableColorTransformOnHover icon={{type: 'fa', value: 'fa fa-cart-plus'}}/>
+                </Tooltip>
             </div>
             <div className={styles.info}>
                 <ProductWrapper productId={data.id} className={styles.name}>{data.name}</ProductWrapper>

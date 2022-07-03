@@ -1,5 +1,76 @@
 .container{
     .body{
         max-width: 1024px;
+        position: relative;
+
+        .wrapper{
+            .left{
+                width: 60%;
+
+                .label{
+                    font-size: 18px;
+                    margin: 30px 0 20px;
+                    font-weight: 600;
+                }
+            }
+
+            .right{
+                width: 40%;
+                position: absolute;
+                top: 0;
+                right: 0;
+                padding: 30px 30px 30px 16px;
+            }
+
+            .images{
+                margin: 0 0 0;
+
+                > div{
+                    border-radius: 4px;
+                    background: #e5e5e5;
+                    padding-top: 80%;
+
+                    &:not(:first-child){
+                        margin: 20px 0 0;
+                    }
+                }
+            }
+
+            .info{
+                margin: 0 0 24px;
+                padding-bottom: 24px;
+                border-bottom: 1px solid #e5e5e5;
+
+                .name{
+                    font-weight: 600;
+                    font-size: 24px;
+                    margin: 0 0 6px;
+                }
+
+                .description{
+                    font-size: 16px;
+                    margin: 0 0 10px;
+                    line-height: 22px;
+                    color: #666666;
+                }
+
+                .rating{
+                    display: flex;
+                    align-items: center;
+
+                    .buyers{
+                        font-size: 14px;
+                        margin: 2px 0 0 12px;
+                        color: #666666;
+                    }
+                }
+
+                .category{
+                    font-size: 15px;
+                    margin: 16px 0 0;
+                    color: #666666;
+                }
+            }
+        }
     }
 }
