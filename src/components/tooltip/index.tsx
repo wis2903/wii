@@ -7,11 +7,12 @@ interface IProps extends React.HTMLAttributes<HTMLElement> {
     className?: string,
     dir?: ITooltipDir,
     text: string,
+    theme?: 'light' | 'dark',
 }
 
-const Tooltip = ({ className, children, text, dir }: IProps): JSX.Element => {
+const Tooltip = ({ className, children, text, dir, theme }: IProps): JSX.Element => {
     return (
-        <div className={classname([styles.container, className, dir && styles[dir]])}>
+        <div className={classname([styles.container, className, dir && styles[dir], theme && styles[theme]])}>
             <span className={styles.tooltip}>{text}</span>
             {children}
         </div>

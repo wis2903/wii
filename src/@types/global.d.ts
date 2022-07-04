@@ -15,5 +15,6 @@ declare global {
     type IColor = {
         label: string,
         value: string,
-    }
+    };
+    type IStorageItemValue = Record<string, unknown> | Array | undefined;
 }

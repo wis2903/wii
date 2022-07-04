@@ -3,6 +3,7 @@ import Button from '../../components/basic/button';
 import CartItem from '../../components/cart-item';
 import PopupWrapper from '../../components/popup/popup-wrapper';
 import { formatNumber } from '../../helpers/utils.helper';
+import { colors } from '../../resources/constants/color';
 import NotificationService from '../../services/notification.service';
 import ShippingInfo from './shipping-info';
 import styles from './styles.module.scss';
@@ -30,32 +31,19 @@ const Payment = ({ onClose, className }: IProps): JSX.Element => {
                 <div className={styles.left}>
                     <h3 className={styles.title}>Chi tiết đơn hàng (2)</h3>
                     <CartItem
-                        className={styles.cartItem}
-                        smallProductTitle
-                        productData={{
-                            id: String(Math.random()),
-                            name: 'Túi Handbag cầm tay đơn giản',
-                            price: 199000,
-                            categoryId: '',
-                            buyersNumber: 10,
-                            rating: 4 / 5,
-                            imageUrls: [],
+                        data={{
+                            amount: 1,
+                            product: {
+                                id: String(Math.random()),
+                                name: 'Túi Handbag cầm tay đơn giản',
+                                price: 199000,
+                                categoryId: '',
+                                buyersNumber: 10,
+                                rating: 4 / 5,
+                                imageUrls: [],
+                            },
+                            color: colors.white,
                         }}
-                        defaultAmount={1}
-                    />
-                    <CartItem
-                        className={styles.cartItem}
-                        smallProductTitle
-                        productData={{
-                            id: String(Math.random()),
-                            name: 'Túi Handbag cầm tay đơn giản',
-                            price: 199000,
-                            categoryId: '',
-                            buyersNumber: 10,
-                            rating: 4 / 5,
-                            imageUrls: [],
-                        }}
-                        defaultAmount={1}
                     />
                     <br />
                     <br />
@@ -90,7 +78,7 @@ const Payment = ({ onClose, className }: IProps): JSX.Element => {
                     <ShippingInfo />
                     <div className={styles.action}>
                         <Button primary label='Tiến hành đặt hàng' onClick={(): void => {
-                            if(onClose) onClose();
+                            if (onClose) onClose();
                             NotificationService.instance.requestShowNotification();
                         }} />
                     </div>

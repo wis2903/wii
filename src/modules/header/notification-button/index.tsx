@@ -20,7 +20,7 @@ const NotificationButton = ({ className }: IProps): JSX.Element => {
 
         timeoutHandler.current = setTimeout(() => {
             setIsShowNotification(false);
-        }, 2000);
+        }, 3000);
     };
 
     React.useEffect(() => {

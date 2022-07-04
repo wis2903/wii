@@ -4,6 +4,7 @@ import ProductActions from '../../components/product/product-actions';
 import ProductImagesSlideShow from '../../components/product/product-images-slideshow';
 import Stars from '../../components/stars';
 import { classname } from '../../helpers/utils.helper';
+import { mockUpProduct } from '../../mockup/product.mockup';
 import CartService from '../../services/cart.service';
 import PaymentService from '../../services/payment.service';
 import styles from './styles.module.scss';
@@ -24,11 +25,11 @@ const ProductDetails = ({ className, onClose }: IProps): JSX.Element => {
 
     React.useEffect(() => {
         PaymentService.instance.addRequestShowPopupListener(handleOnShowPaymentPopup);
-        CartService.instance.addProductAddedListener(handleOnShowCartNotification);
+        CartService.instance.addProductsUpdatedListener(handleOnShowCartNotification);
 
         return (): void => {
             PaymentService.instance.removeRequestShowPopupListener(handleOnShowPaymentPopup);
-            CartService.instance.removeProductAddedListener(handleOnShowCartNotification);
+            CartService.instance.removeProductsUpdatedListener(handleOnShowCartNotification);
         };
     }, []);
 
@@ -56,7 +57,7 @@ const ProductDetails = ({ className, onClose }: IProps): JSX.Element => {
                         </div>
                         <div className={styles.category}>Sản phẩm thuộc danh mục Phụ kiện</div>
                     </div>
-                    <ProductActions className={styles.productActions}/>
+                    <ProductActions className={styles.productActions} product={mockUpProduct} />
                 </div>
             </div>
         </PopupWrapper>

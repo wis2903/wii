@@ -7,6 +7,7 @@ import Stars from '../../stars';
 import styles from './styles.module.scss';
 import Tooltip from '../../tooltip';
 import CartService from '../../../services/cart.service';
+import { colors } from '../../../resources/constants/color';
 
 interface IProps {
     className?: string,
@@ -14,14 +15,20 @@ interface IProps {
 }
 
 const Product = ({ data, className }: IProps): JSX.Element => {
+    const handleAddProductToCart = async (): Promise<void> => {
+        CartService.instance.add({
+            product: data,
+            color: colors.white,
+            amount: 1,
+        });
+    };
+
     return (
         <div className={classname([styles.container, className])}>
             <div className={styles.thumbnailWrapper}>
                 <ProductWrapper productId={data.id} className={styles.thumbnail} />
-                <Tooltip dir='left' text='Thêm vào giỏ hàng' className={styles.cartButton}>
-                    <Button primary icon={{ type: 'fa', value: 'fa fa-cart-plus' }} onClick={(): void => {
-                        CartService.instance.requestShowCartNotification();
-                    }} />
+                <Tooltip dir='left' theme='light' text='Thêm vào giỏ hàng' className={styles.cartButton}>
+                    <Button primary icon={{ type: 'fa', value: 'fa fa-cart-plus' }} onClick={handleAddProductToCart} />
                 </Tooltip>
             </div>
             <div className={styles.info}>

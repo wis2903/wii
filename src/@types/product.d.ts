@@ -20,4 +20,10 @@ declare global {
         name: string,
         products?: Iproduct[],
     }
+
+    interface ICartItem {
+        amount: number,
+        product: IProduct,
+        color: IColor,
+    }
 }

@@ -26,5 +26,9 @@
         max-height: 90vh;
         overflow: auto;
         @include disable-scrollbar;
+
+        &.hasTitle{
+            max-height: calc(90vh - 70px);
+        }
     }
 }

@@ -1,35 +1,44 @@
 import React from 'react';
 import { classname } from '../../helpers/utils.helper';
+import CartService from '../../services/cart.service';
 import AmountPicker from '../amount-picker';
 import Button from '../basic/button';
 import Price from '../price';
+import Tooltip from '../tooltip';
 import styles from './styles.module.scss';
 
 interface IProps {
     className?: string,
-    productData: IProduct,
-    defaultAmount: number,
+    data: ICartItem,
     smallProductTitle?: boolean,
 }
 
-const CartItem = ({ className, productData, defaultAmount, smallProductTitle }: IProps): JSX.Element => {
-    const [amount, setAmount] = React.useState<number>(defaultAmount);
+const CartItem = ({ className, data, smallProductTitle }: IProps): JSX.Element => {
+    const handleRemoveItemFromCart = async (): Promise<void> => {
+        CartService.instance.remove({productId: data.product.id, color: data.color.value});
+    };
+    const handleUpdateItemFromCart = async (value: number): Promise<void> => {
+        CartService.instance.update({
+            ...data,
+            amount: value,
+        });
+    };
 
     return (
         <div className={classname([styles.container, className])}>
             <div className={styles.thumbnail} />
             <div className={styles.info}>
-                <h3 className={classname([styles.name, smallProductTitle && styles.small])}>{productData.name}</h3>
+                <h3 className={classname([styles.name, smallProductTitle && styles.small])}>{data.product.name}</h3>
                 <div className={styles.color}>Trắng</div>
 
                 <div className={styles.amountWrapper}>
-                    <AmountPicker defaultValue={amount} onChange={(value): void => {
-                        setAmount(value);
-                    }} />
-                    <Price className={styles.price} value={productData.price * amount} />
+                    <AmountPicker defaultValue={data.amount} onChange={handleUpdateItemFromCart} />
+                    <Price className={styles.price} value={data.product.price * data.amount} />
                 </div>
 
-                <Button className={styles.removeButton} label='' />
+                <Tooltip text='Bỏ khỏi giỏ hàng' dir='left' className={styles.removeButtonWrapper}>
+                    <Button className={styles.removeButton} onClick={handleRemoveItemFromCart}/>
+                </Tooltip>
             </div>
         </div>
     );
