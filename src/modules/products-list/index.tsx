@@ -32,6 +32,7 @@ const ProductList = ({ className }: IProps): JSX.Element => {
     const [searchParams] = useSearchParams();
     const [categories, setCategories] = React.useState<ICategoriesState>({ isLoading: true, cat: [], activeId: searchParams.get('category-id') || defaultCategoryId });
     const [isLoadingMoreProducts, setIsLoadingMoreProducts] = React.useState<boolean>(false);
+    const [sort, setSort] = React.useState<string>('newest');
     const containerRef = React.useRef<HTMLDivElement>(null);
     const categoriesRef = React.useRef<ICategoriesState>(categories);
 
@@ -128,7 +129,17 @@ const ProductList = ({ className }: IProps): JSX.Element => {
         setIsLoadingMoreProducts(true);
         await getProducts(categories.activeId);
         setIsLoadingMoreProducts(false);
+    };
 
+    const handleSortChange = (option: ISelectOption): void => {
+        setSort(String(option.value));
+        const tmp = { ...categoriesRef.current };
+        tmp.cat.forEach(item => {
+            item.loadedProducts = false;
+            item.data.products = [];
+        });
+        setCategories(tmp);
+        getProducts(categoriesRef.current.activeId);
     };
 
     React.useEffect(() => {
@@ -178,15 +189,26 @@ const ProductList = ({ className }: IProps): JSX.Element => {
                                     label='Sắp xếp'
                                     options={[
                                         {
+                                            label: 'Mới nhất',
+                                            value: 'newest',
+                                        },
+                                        {
+                                            label: 'Bán chạy',
+                                            value: 'buyers-desc',
+                                        },
+                                        {
                                             label: 'Giá giảm dần',
-                                            value: 1,
-                                            selected: true,
+                                            value: 'price-desc',
                                         },
                                         {
                                             label: 'Giá tăng dần',
-                                            value: 2,
+                                            value: 'price-asc',
                                         }
-                                    ]}
+                                    ].map(item => ({
+                                        ...item,
+                                        selected: item.value === sort,
+                                    }))}
+                                    onChange={handleSortChange}
                                 />
                             </div>
                             :

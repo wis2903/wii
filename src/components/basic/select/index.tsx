@@ -7,9 +7,10 @@ interface IProps {
     label: string,
     className?: string,
     options: ISelectOption[],
+    onChange?: (option: ISelectOption) => void,
 }
 
-const Select = ({ className, label, options }: IProps): JSX.Element => {
+const Select = ({ className, label, options, onChange }: IProps): JSX.Element => {
     const [selectedOption, setSelectedOption] = React.useState<ISelectOption | undefined>(options.find(item => item.selected));
     const [isShowDropdown, setIsShowDropdown] = React.useState<boolean>(false);
     const triggerRef = React.useRef<HTMLButtonElement>(null);
@@ -59,6 +60,7 @@ const Select = ({ className, label, options }: IProps): JSX.Element => {
                             <button key={item.value} className={classname([item.value === selectedOption?.value && styles.active])} onClick={(): void => {
                                 setSelectedOption(item);
                                 handleHideDropdown();
+                                if (onChange && item.value !== selectedOption?.value) onChange(item);
                             }}>
                                 {item.label}
                             </button>
