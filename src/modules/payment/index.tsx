@@ -1,11 +1,13 @@
 import React from 'react';
 import Button from '../../components/basic/button';
-import CartItem from '../../components/cart-item';
+import PaymentSummary from '../../components/payment-summary';
 import PopupWrapper from '../../components/popup/popup-wrapper';
-import { formatNumber } from '../../helpers/utils.helper';
+import { emailRegex, phoneRegex } from '../../resources/constants/regex';
+import { emptyBuyerInfo } from '../../resources/constants/utils';
 import CartService from '../../services/cart.service';
 import EventService from '../../services/event.service';
 import InvoiceService from '../../services/invoice.service';
+import PaymentService from '../../services/payment.service';
 import ShippingInfo from './shipping-info';
 import styles from './styles.module.scss';
 
@@ -14,9 +16,17 @@ interface IProps {
     onClose?: VoidFunction,
     items: ICartItem[],
 }
+interface IBuyerInfoState {
+    data: IBuyer,
+    error: IBuyerInfoValidationError,
+}
 
 const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
     const [finalItems, setFinalItems] = React.useState<ICartItem[]>(items);
+    const [buyerInfo, setBuyerInfo] = React.useState<IBuyerInfoState>({
+        data: { ...emptyBuyerInfo },
+        error: {},
+    });
 
     const handleOnAmountChange = (productId: IObjectId, color: string, amount: number): void => {
         const tmp = [...finalItems];
@@ -25,15 +35,42 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
         setFinalItems(tmp);
     };
 
-    const getTotalMoney = (): number => {
-        let res = 0;
-        finalItems.forEach(item => {
-            res += item.product.price * item.amount;
-        });
-        return res;
+    const validate = (): boolean => {
+        let flag = true;
+        const error: IBuyerInfoValidationError = {};
+        if (!buyerInfo.data.name) {
+            error.name = 'Vui lòng nhập tên người nhận';
+            flag = false;
+        }
+        if (!buyerInfo.data.phoneNumber) {
+            error.phoneNumber = 'Vui lòng nhập số điện thoại';
+            flag = false;
+        } else if (!phoneRegex.test(buyerInfo.data.phoneNumber)) {
+            error.phoneNumber = 'Số điện thoại không đúng, vui lòng kiểm tra lại';
+            flag = false;
+        }
+        if (!buyerInfo.data.email) {
+            error.email = 'Vui lòng nhập email';
+            flag = false;
+        } else if (!emailRegex.test(buyerInfo.data.email)) {
+            error.email = 'Email không đúng, vui lòng kiểm tra lại';
+            flag = false;
+        }
+        if (!buyerInfo.data.address) {
+            error.address = 'Vui lòng nhập địa chỉ người nhận';
+            flag = false;
+        }
+
+        setBuyerInfo(current => ({
+            ...current,
+            error,
+        }));
+        return flag;
     };
 
     const handlePayment = async (): Promise<void> => {
+        if (!validate()) return;
+
         await CartService.instance.removeMultipleItems(finalItems.map(item => ({
             productId: item.product.id,
             color: item.color.value,
@@ -41,22 +78,25 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
         if (onClose) onClose();
         await InvoiceService.instance.add({
             items: finalItems,
-            buyer: {
-                name: 'Whiskey',
-                email: 'wis290394@gmail.com',
-                address: 'Ho Chi Minh City',
-                phoneNumber: '0123456789',
-            },
+            buyer: buyerInfo.data,
             timestamp: +new Date(),
         });
+        PaymentService.instance.setCachedBuyerInfo(buyerInfo.data);
         EventService.instance.onPaymentSuccess.trigger();
     };
 
     React.useEffect(() => {
+        PaymentService.instance.getCachedBuyerInfo().then(res => {
+            if (res) setBuyerInfo(current => ({
+                ...current,
+                data: res,
+            }));
+        });
+    }, []);
+
+    React.useEffect(() => {
         setFinalItems(items);
     }, [items]);
-
-    const totalMoney = getTotalMoney();
 
     return (
         <PopupWrapper
@@ -73,49 +113,20 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
         >
             <div className={styles.wrapper}>
                 <div className={styles.left}>
-                    <h3 className={styles.title}>Chi tiết đơn hàng ({items.length})</h3>
-                    {
-                        finalItems.map(item =>
-                            <CartItem
-                                key={`${item.product.id}-${item.color.value}`}
-                                data={item}
-                                onAmountChange={(amount): void => {
-                                    handleOnAmountChange(item.product.id, item.color.value, amount);
-                                }}
-                            />
-                        )
-                    }
-                    <br />
-                    <br />
-                    <div>
-                        <h3 className={styles.title}>Tóm tắt đơn hàng</h3>
-
-                        <div className={styles.item}>
-                            <span className={styles.label}>Hình thức thanh toán:</span>
-                            <span className={styles.value}>Tiền mặt khi nhận hàng</span>
-                        </div>
-
-                        <div className={styles.item}>
-                            <span className={styles.label}>Giá trị tổng sản phẩm:</span>
-                            <span className={styles.value}>{formatNumber(totalMoney)} VND</span>
-                        </div>
-
-                        <div className={styles.item}>
-                            <span className={styles.label}>Phí vận chuyển:</span>
-                            <span className={styles.value}>Miễn phí</span>
-                        </div>
-
-                        <div className={styles.item}>
-                            <span className={styles.label}>Tổng giá trị:</span>
-                            <span className={styles.value}>{formatNumber(totalMoney)} VND</span>
-                        </div>
-                    </div>
+                    <PaymentSummary cartItems={finalItems} onCartItemAmountChange={handleOnAmountChange} />
                     <br />
                 </div>
 
                 <div className={styles.right}>
-                    <h3 className={styles.title}>Thông tin người nhận hàng</h3>
-                    <ShippingInfo />
+                    <ShippingInfo
+                        error={buyerInfo.error}
+                        onChange={(data): void => {
+                            setBuyerInfo(current => ({
+                                ...current,
+                                data,
+                            }));
+                        }}
+                    />
                     <div className={styles.action}>
                         <Button primary label='Tiến hành đặt hàng' onClick={handlePayment} />
                     </div>

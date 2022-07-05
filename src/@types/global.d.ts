@@ -24,4 +24,10 @@ declare global {
         email: string,
         address: string,
     }
+    type IBuyerInfoValidationError = {
+        name?: string,
+        address?: string,
+        email?: string,
+        phoneNumber?: string,
+    }
 }

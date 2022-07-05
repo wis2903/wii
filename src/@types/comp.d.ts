@@ -10,6 +10,9 @@ declare global {
         required?: boolean,
         icon?: string,
         label: string,
+        onValueChange?: (value: string) => void,
+        error?: string,
+        initValue?: string | number,
     }
     interface IPopupTitleComponentProps {
         text: string,

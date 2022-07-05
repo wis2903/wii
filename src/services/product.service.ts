@@ -17,7 +17,7 @@ class ProductService {
     public list = async ({categoryId, limit, offset}: IGetProductsListRequestParams): Promise<IProduct[]> => {
         return new Promise(resolve => {
             setTimeout(() => {
-                resolve(Array.from({ length: 20 }).map((item, i) => ({...mockUpProduct, id: String(i)})));
+                resolve(Array.from({ length: 20 }).map((item, i) => ({...mockUpProduct, categoryId, id: String(i)})));
             }, 1000);
         });
 

@@ -91,6 +91,7 @@ const ProductList = ({ className }: IProps): JSX.Element => {
             ...current,
             activeId: tab.value,
         }));
+        categoriesRef.current.activeId = tab.value;
         const activeCategory = getActiveCategory(tab.value);
         if (!activeCategory) return;
         if (!activeCategory.loadedProducts) getProducts(tab.value);

@@ -2,8 +2,8 @@ import React from 'react';
 import { classname } from '../../../helpers/utils.helper';
 import styles from './styles.module.scss';
 
-const Input = ({ className, label, icon, required, disabled, ...rest }: IInputComponentProps): JSX.Element => {
-    const [value, setValue] = React.useState<string>(rest.defaultValue ? String(rest.defaultValue) : '');
+const Input = ({ className, label, icon, required, disabled, error, onValueChange, initValue, ...rest }: IInputComponentProps): JSX.Element => {
+    const [value, setValue] = React.useState<string>(initValue ? String(initValue) : '');
     const [isFocusing, setIsFocusing] = React.useState<boolean>(false);
 
     const handleOnInputFocus = (e: React.FocusEvent<HTMLInputElement, Element>): void => {
@@ -19,23 +19,31 @@ const Input = ({ className, label, icon, required, disabled, ...rest }: IInputCo
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const val = e.target.value ? String(e.target.value) : '';
         setValue(val);
+        if (onValueChange) onValueChange(val);
     };
 
     return (
-        <div className={classname([styles.container, className, (value || isFocusing) && styles.focus, isFocusing && styles.focusing, disabled && styles.disabled])}>
-            <span className={styles.label}>
-                {label}
+        <div className={classname([styles.container, className])}>
+            <div className={classname([styles.wrapper, (value || isFocusing) && styles.focus, isFocusing && styles.focusing, disabled && styles.disabled, error && styles.hasError])}>
+                <span className={styles.label}>
+                    {label}
+                    {
+                        required
+                        &&
+                        <i>*</i>
+                    }
+                </span>
+                <input {...rest} disabled={disabled} value={value} onFocus={handleOnInputFocus} onBlur={handleOnInputBlur} onChange={handleInputChange} />
                 {
-                    required
+                    !!icon
                     &&
-                    <i>*</i>
+                    <img src={icon} alt="icon" className={styles.icon} />
                 }
-            </span>
-            <input {...rest} disabled={disabled} value={value} onFocus={handleOnInputFocus} onBlur={handleOnInputBlur} onChange={handleInputChange} />
+            </div>
             {
-                !!icon
+                !!error?.length
                 &&
-                <img src={icon} alt="icon" className={styles.icon} />
+                <div className={styles.error}>{error}</div>
             }
         </div>
     );

@@ -14,11 +14,12 @@ interface IProps {
 const ShippingInfo = ({ name, email, address, time, phoneNumber }: IProps): JSX.Element => {
     return (
         <div className={styles.container}>
-            <Input className={styles.input} label='Tên người nhận' defaultValue={name} disabled />
-            <Input className={styles.input} label='Số điện thoại người nhận' defaultValue={phoneNumber} disabled />
-            <Input className={styles.input} label='Email người nhận' defaultValue={email} disabled />
-            <Textbox className={styles.input} label='Địa chỉ người nhận' defaultValue={address} disabled />
-            <Input className={styles.input} label='Thời điểm đặt hàng' defaultValue={time} disabled />
+            <h3 className={styles.title}>Thông tin người nhận hàng</h3>
+            <Input className={styles.input} label='Tên người nhận' initValue={name} disabled />
+            <Input className={styles.input} label='Số điện thoại người nhận' initValue={phoneNumber} disabled />
+            <Input className={styles.input} label='Email người nhận' initValue={email} disabled />
+            <Textbox className={styles.input} label='Địa chỉ người nhận' initValue={address} disabled />
+            <Input className={styles.input} label='Thời điểm đặt hàng' initValue={time} disabled />
         </div>
     );
 };

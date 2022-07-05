@@ -26,7 +26,7 @@ export const parseProductData = (data: Record<string, unknown>): IProduct => {
     };
 };
 
-export const parseBuyData = (data: Record<string, unknown>): IBuyer => {
+export const parseBuyerData = (data: Record<string, unknown>): IBuyer => {
     return {
         name: String(data.name),
         phoneNumber: String(data.phoneNumber),
@@ -46,7 +46,7 @@ export const parseCartItemData = (data: Record<string, unknown>): ICartItem => {
 export const parseInvoiceData = (data: Record<string, unknown>): IInvoiceItem => {
     return {
         items: data.items instanceof Array ? data.items.map(item => parseCartItemData(Object(item))) : [],
-        buyer: parseBuyData(Object(data.buyer)),
+        buyer: parseBuyerData(Object(data.buyer)),
         timestamp: Number(data.timestamp),
     };
 };

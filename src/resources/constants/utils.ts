@@ -16,3 +16,10 @@ export const sorts: ISelectOption[] = [
         value: 'price-asc',
     }
 ];
+
+export const emptyBuyerInfo = {
+    name: '',
+    phoneNumber: '',
+    address: '',
+    email: '',
+};
