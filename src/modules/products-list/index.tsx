@@ -3,15 +3,16 @@ import { classname } from '../../helpers/utils.helper';
 import Button from '../../components/basic/button';
 import Product from '../../components/product/normal-product';
 import Select from '../../components/basic/select';
-import Tab from '../../components/tab';
+import Tab from '../../components/basic/tab';
 import styles from './styles.module.scss';
 import CategoryService from '../../services/category.service';
-import TabPlaceholder from '../../components/tab/placeholder';
+import TabPlaceholder from '../../components/basic/tab/placeholder';
 import ProductService from '../../services/product.service';
 import NormalProductPlaceholder from '../../components/product/normal-product/placeholder';
 import { animateScroll } from '../../helpers/dom.helpers';
 import SelectPlaceholder from '../../components/basic/select/placeholder';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { sorts } from '../../resources/constants/utils';
 
 interface IProps {
     className?: string,
@@ -39,14 +40,11 @@ const ProductList = ({ className }: IProps): JSX.Element => {
     const getActiveCategory = (categoryId: IObjectId): ICategoryInfo | undefined => {
         return categoriesRef.current.cat.find(item => item.data.id === categoryId) || categoriesRef.current.cat.find(item => item.data.id === defaultCategoryId);
     };
-
     const fetchData = async (): Promise<void> => {
         await getCategories();
-
         const activeCategory = getActiveCategory(categoriesRef.current.activeId);
         await getProducts(activeCategory?.data.id || defaultCategoryId);
     };
-
     const getCategories = async (): Promise<void> => {
         const cats = await CategoryService.instance.list();
         setCategories(current => {
@@ -71,7 +69,6 @@ const ProductList = ({ className }: IProps): JSX.Element => {
             return res;
         });
     };
-
     const getProducts = async (categoryId: IObjectId): Promise<void> => {
         const products = await ProductService.instance.list({ categoryId });
         const cat = categoriesRef.current.cat.find(item => item.data.id === categoryId);
@@ -84,32 +81,6 @@ const ProductList = ({ className }: IProps): JSX.Element => {
             isLoading: false,
         });
     };
-
-    const generateProductsEl = (): JSX.Element => {
-        const activeCategory = getActiveCategory(categories?.activeId || '');
-        if (!activeCategory || !activeCategory.loadedProducts || !activeCategory.data.products || !activeCategory.data.products.length) return <>
-            {
-                Array.from({ length: 20 }).map((item, i) =>
-                    <NormalProductPlaceholder
-                        key={`normal-product-placeholder-${i}`}
-                        className={styles.product}
-                    />
-                )
-            }
-        </>;
-        return <>
-            {
-                activeCategory.data.products.map(item =>
-                    <Product
-                        key={item.id}
-                        data={item}
-                        className={styles.product}
-                    />
-                )
-            }
-        </>;
-    };
-
     const handleOnTabChange = (tab: ITabItem): void => {
         animateScroll({
             targetPosition: 0,
@@ -124,13 +95,11 @@ const ProductList = ({ className }: IProps): JSX.Element => {
         if (!activeCategory) return;
         if (!activeCategory.loadedProducts) getProducts(tab.value);
     };
-
     const handleLoadMoreProducts = async (): Promise<void> => {
         setIsLoadingMoreProducts(true);
-        await getProducts(categories.activeId);
+        await getProducts(categoriesRef.current.activeId);
         setIsLoadingMoreProducts(false);
     };
-
     const handleSortChange = (option: ISelectOption): void => {
         setSort(String(option.value));
         const tmp = { ...categoriesRef.current };
@@ -141,11 +110,36 @@ const ProductList = ({ className }: IProps): JSX.Element => {
         setCategories(tmp);
         getProducts(categoriesRef.current.activeId);
     };
+    const generateProductsEl = (): JSX.Element => {
+        const activeCategory = getActiveCategory(categoriesRef.current.activeId || '');
+        if (!activeCategory || !activeCategory.loadedProducts || !activeCategory.data.products || !activeCategory.data.products.length) {
+            return <>
+                {
+                    Array.from({ length: 20 }).map((item, i) =>
+                        <NormalProductPlaceholder
+                            key={`normal-product-placeholder-${i}`}
+                            className={styles.product}
+                        />
+                    )
+                }
+            </>;
+        }
+        return <>
+            {
+                activeCategory.data.products.map(item =>
+                    <Product
+                        key={item.id}
+                        data={item}
+                        className={styles.product}
+                    />
+                )
+            }
+        </>;
+    };
 
     React.useEffect(() => {
         fetchData();
     }, []);
-
     React.useEffect(() => {
         categoriesRef.current = categories;
     }, [categories]);
@@ -187,24 +181,7 @@ const ProductList = ({ className }: IProps): JSX.Element => {
                             <div className={styles.actions}>
                                 <Select
                                     label='Sắp xếp'
-                                    options={[
-                                        {
-                                            label: 'Mới nhất',
-                                            value: 'newest',
-                                        },
-                                        {
-                                            label: 'Bán chạy',
-                                            value: 'buyers-desc',
-                                        },
-                                        {
-                                            label: 'Giá giảm dần',
-                                            value: 'price-desc',
-                                        },
-                                        {
-                                            label: 'Giá tăng dần',
-                                            value: 'price-asc',
-                                        }
-                                    ].map(item => ({
+                                    options={sorts.map(item => ({
                                         ...item,
                                         selected: item.value === sort,
                                     }))}

@@ -8,7 +8,7 @@ interface IProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
     label: string,
 }
 
-const Textbox = ({ className, label, required, ...rest }: IProps): JSX.Element => {
+const Textbox = ({ className, label, required, disabled, ...rest }: IProps): JSX.Element => {
     const [value, setValue] = React.useState<string>(rest.defaultValue ? String(rest.defaultValue) : '');
     const [isFocusing, setIsFocusing] = React.useState<boolean>(false);
 
@@ -28,7 +28,7 @@ const Textbox = ({ className, label, required, ...rest }: IProps): JSX.Element =
     };
 
     return (
-        <div className={classname([styles.container, className, (isFocusing || value) && styles.focus])}>
+        <div className={classname([styles.container, className, (isFocusing || value) && styles.focus, disabled && styles.disabled])}>
             <span className={styles.label}>
                 {label}
                 {
@@ -37,7 +37,7 @@ const Textbox = ({ className, label, required, ...rest }: IProps): JSX.Element =
                     <i>*</i>
                 }
             </span>
-            <textarea {...rest} value={value} rows={4} onChange={handleOnChange} onFocus={handleOnFocus} onBlur={handleOnBlur} />
+            <textarea {...rest} disabled={disabled} value={value} rows={4} onChange={handleOnChange} onFocus={handleOnFocus} onBlur={handleOnBlur} />
         </div>
     );
 };

@@ -1,3 +1,4 @@
 export enum LocalStorageKeyEnum {
-    cart = 'cart'
+    cart = 'cart',
+    invoice = 'invoice',
 }

@@ -26,4 +26,10 @@ declare global {
         product: IProduct,
         color: IColor,
     }
+
+    interface IInvoiceItem {
+        items: ICartItem[],
+        buyer: IBuyer,
+        timestamp: number,
+    }
 }

@@ -1,0 +1,87 @@
+.container {
+    .body {
+        max-width: 1200px;
+
+        .title {
+            font-size: 19px;
+            font-weight: 500;
+            margin: 0 0 20px;
+        }
+
+        .wrapper {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+
+            .left {
+                width: 50%;
+
+                .cartItem {
+                    &:last-child {
+                        border-bottom: 0;
+                        padding-bottom: 0;
+                    }
+                }
+
+                .item {
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+
+                    .label {
+                        display: block;
+                        width: 40%;
+                        font-size: 16px;
+                        color: #666666;
+                    }
+
+                    .value {
+                        display: block;
+                        width: 60%;
+                        font-weight: 400;
+                        font-size: 16px;
+                        color: #666666;
+                        line-height: 24px;
+                        text-align: right;
+                    }
+
+                    &:not(:last-child) {
+                        margin: 0 0 16px;
+                    }
+
+                    &:last-child {
+                        border-top: 1px solid #e5e5e5;
+                        padding-top: 16px;
+
+                        .label{
+                            font-size: 18px;
+                        }
+
+                        .value {
+                            color: #000000;
+                            font-weight: 600;
+                            font-size: 18px;
+                        }
+                    }
+                }
+            }
+
+            .right {
+                width: 50%;
+                padding-left: 60px;
+
+                .action {
+                    margin: 20px 0 0;
+
+                    button {
+                        width: 100%;
+
+                        &:not(:first-child){
+                            margin-top: 12px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

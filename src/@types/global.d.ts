@@ -18,4 +18,10 @@ declare global {
         images?: string[],
     };
     type IStorageItemValue = Record<string, unknown> | Array | undefined;
+    type IBuyer = {
+        name: string,
+        phoneNumber: string,
+        email: string,
+        address: string,
+    }
 }

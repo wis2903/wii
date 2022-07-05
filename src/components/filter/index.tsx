@@ -1,7 +1,7 @@
 import React from 'react';
 import { classname } from '../../helpers/utils.helper';
 import Checkbox from '../basic/checkbox';
-import CloseButton from '../close-button';
+import CloseButton from '../basic/close-button';
 import Select from '../basic/select';
 import styles from './styles.module.scss';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { classname } from '../../helpers/utils.helper';
 import Button from '../basic/button';
-import Tooltip from '../tooltip';
+import Tooltip from '../basic/tooltip';
 import styles from './styles.module.scss';
 
 interface IProps {

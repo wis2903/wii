@@ -22,6 +22,31 @@ export const parseProductData = (data: Record<string, unknown>): IProduct => {
         categoryId: String(data.category_id),
         rating: Number(data.rating),
         buyersNumber: Number(data.buyers_number),
-        colors: data.colors instanceof Array ? data.colors.map(item => parseColorData(item)) : [],
+        colors: data.colors instanceof Array ? data.colors.map(item => parseColorData(Object(item))) : [],
+    };
+};
+
+export const parseBuyData = (data: Record<string, unknown>): IBuyer => {
+    return {
+        name: String(data.name),
+        phoneNumber: String(data.phoneNumber),
+        email: String(data.email),
+        address: String(data.address),
+    };
+};
+
+export const parseCartItemData = (data: Record<string, unknown>): ICartItem => {
+    return {
+        amount: Number(data.amount),
+        product: parseProductData(Object(data.product)),
+        color: parseColorData(Object(data.color)),
+    };
+};
+
+export const parseInvoiceData = (data: Record<string, unknown>): IInvoiceItem => {
+    return {
+        items: data.items instanceof Array ? data.items.map(item => parseCartItemData(Object(item))) : [],
+        buyer: parseBuyData(Object(data.buyer)),
+        timestamp: Number(data.timestamp),
     };
 };

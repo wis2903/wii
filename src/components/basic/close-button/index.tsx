@@ -1,6 +1,6 @@
 import React from 'react';
-import { classname } from '../../helpers/utils.helper';
-import Button from '../basic/button';
+import { classname } from '../../../helpers/utils.helper';
+import Button from '../button';
 import styles from './styles.module.scss';
 
 interface IProps {

@@ -1,10 +1,9 @@
+import moment from 'moment';
 import React from 'react';
 import Button from '../../components/basic/button';
 import CartItem from '../../components/cart-item';
 import PopupWrapper from '../../components/popup/popup-wrapper';
 import { formatNumber } from '../../helpers/utils.helper';
-import CartService from '../../services/cart.service';
-import EventService from '../../services/event.service';
 import InvoiceService from '../../services/invoice.service';
 import ShippingInfo from './shipping-info';
 import styles from './styles.module.scss';
@@ -12,49 +11,21 @@ import styles from './styles.module.scss';
 interface IProps {
     className?: string,
     onClose?: VoidFunction,
-    items: ICartItem[],
+    data: IInvoiceItem,
 }
 
-const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
-    const [finalItems, setFinalItems] = React.useState<ICartItem[]>(items);
-
-    const handleOnAmountChange = (productId: IObjectId, color: string, amount: number): void => {
-        const tmp = [...finalItems];
-        const itm = tmp.find(item => item.product.id === productId && item.color.value === color);
-        if (itm) itm.amount = amount;
-        setFinalItems(tmp);
-    };
-
+const InvoiceDetails = ({ onClose, className, data }: IProps): JSX.Element => {
     const getTotalMoney = (): number => {
         let res = 0;
-        finalItems.forEach(item => {
+        data.items.forEach(item => {
             res += item.product.price * item.amount;
         });
         return res;
     };
-
-    const handlePayment = async (): Promise<void> => {
-        await CartService.instance.removeMultipleItems(finalItems.map(item => ({
-            productId: item.product.id,
-            color: item.color.value,
-        })));
+    const handleDeleteInvoice = (): void => {
+        InvoiceService.instance.remove(data.timestamp);
         if (onClose) onClose();
-        await InvoiceService.instance.add({
-            items: finalItems,
-            buyer: {
-                name: 'Whiskey',
-                email: 'wis290394@gmail.com',
-                address: 'Ho Chi Minh City',
-                phoneNumber: '0123456789',
-            },
-            timestamp: +new Date(),
-        });
-        EventService.instance.onPaymentSuccess.trigger();
     };
-
-    React.useEffect(() => {
-        setFinalItems(items);
-    }, [items]);
 
     const totalMoney = getTotalMoney();
 
@@ -63,25 +34,23 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
             className={styles.container}
             bodyClassName={styles.body}
             title={{
-                text: 'Xác nhận thông tin đặt hàng',
+                text: 'Thông tin đơn hàng đã đặt',
                 icon: {
                     type: 'fa',
-                    value: 'fa fa-truck',
+                    value: 'fa fa-money-check',
                 }
             }}
             onClose={onClose}
         >
             <div className={styles.wrapper}>
                 <div className={styles.left}>
-                    <h3 className={styles.title}>Chi tiết đơn hàng ({items.length})</h3>
+                    <h3 className={styles.title}>Chi tiết đơn hàng ({data.items.length})</h3>
                     {
-                        finalItems.map(item =>
+                        data.items.map(item =>
                             <CartItem
                                 key={`${item.product.id}-${item.color.value}`}
                                 data={item}
-                                onAmountChange={(amount): void => {
-                                    handleOnAmountChange(item.product.id, item.color.value, amount);
-                                }}
+                                disabled
                             />
                         )
                     }
@@ -115,9 +84,12 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
 
                 <div className={styles.right}>
                     <h3 className={styles.title}>Thông tin người nhận hàng</h3>
-                    <ShippingInfo />
+                    <ShippingInfo {...{
+                        ...data.buyer,
+                        time: moment(data.timestamp).format('DD/MM/YYYY, HH:mm')
+                    }} />
                     <div className={styles.action}>
-                        <Button primary label='Tiến hành đặt hàng' onClick={handlePayment} />
+                        <Button label='Xóa đơn hàng' onClick={handleDeleteInvoice} />
                     </div>
                 </div>
             </div>
@@ -125,4 +97,4 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
     );
 };
 
-export default Payment;
+export default InvoiceDetails;

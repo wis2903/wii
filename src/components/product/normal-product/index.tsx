@@ -5,7 +5,7 @@ import Price from '../../price';
 import ProductWrapper from '../../../modules/product-wrapper';
 import Stars from '../../stars';
 import styles from './styles.module.scss';
-import Tooltip from '../../tooltip';
+import Tooltip from '../../basic/tooltip';
 import CartService from '../../../services/cart.service';
 
 interface IProps {

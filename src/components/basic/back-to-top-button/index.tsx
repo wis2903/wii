@@ -1,7 +1,7 @@
 import React from 'react';
-import { animateScroll } from '../../helpers/dom.helpers';
-import Blank from '../basic/blank';
-import Button from '../basic/button';
+import { animateScroll } from '../../../helpers/dom.helpers';
+import Blank from '../blank';
+import Button from '../button';
 import styles from './styles.module.scss';
 
 const BackToTop = (): JSX.Element => {

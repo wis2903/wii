@@ -1,5 +1,5 @@
 import React from 'react';
-import { classname } from '../../helpers/utils.helper';
+import { classname } from '../../../helpers/utils.helper';
 import styles from './styles.module.scss';
 
 type ITooltipDir = 'left' | 'right' | 'top' | 'bottom' | 'center';

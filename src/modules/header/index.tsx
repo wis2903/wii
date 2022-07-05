@@ -2,13 +2,12 @@ import React from 'react';
 import CartButton from './cart-button';
 import Logo from '../../components/logo';
 import Search from './search';
-import Wrapper from '../../components/wrapper';
+import Wrapper from '../../components/basic/wrapper';
 import styles from './styles.module.scss';
 import NotificationButton from './notification-button';
 // import SakuraImage from '../../resources/images/sakura.png';
 
 const Header = (): JSX.Element => {
-
     return (
         <>
             <div className={styles.container}>

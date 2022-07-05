@@ -5,7 +5,7 @@ import EventService from '../../services/event.service';
 import AmountPicker from '../amount-picker';
 import Button from '../basic/button';
 import Price from '../price';
-import Tooltip from '../tooltip';
+import Tooltip from '../basic/tooltip';
 import styles from './styles.module.scss';
 
 interface IProps {
@@ -13,9 +13,10 @@ interface IProps {
     data: ICartItem,
     smallProductTitle?: boolean,
     onAmountChange?: (value: number) => void,
+    disabled?: boolean,
 }
 
-const CartItem = ({ className, data, smallProductTitle, onAmountChange }: IProps): JSX.Element => {
+const CartItem = ({ className, data, smallProductTitle, onAmountChange, disabled }: IProps): JSX.Element => {
     const handleRemoveItemFromCart = async (): Promise<void> => {
         CartService.instance.remove({ productId: data.product.id, color: data.color.value });
     };
@@ -39,16 +40,24 @@ const CartItem = ({ className, data, smallProductTitle, onAmountChange }: IProps
                     label={data.product.name}
                     onClick={handleShowProductDetails}
                 />
-                <div className={styles.color}>Màu sắc: {data.color.label}</div>
-
+                <div className={classname([styles.color, disabled && styles.smallMargin])}>Màu sắc: {data.color.label}</div>
                 <div className={styles.amountWrapper}>
-                    <AmountPicker defaultValue={data.amount} onChange={handleUpdateItemFromCart} />
+                    {
+                        !disabled
+                            ? <AmountPicker defaultValue={data.amount} onChange={handleUpdateItemFromCart} />
+                            : <span className={styles.amountDisabled}>Số lượng: {data.amount}</span>
+
+                    }
                     <Price className={styles.price} value={data.product.price * data.amount} />
                 </div>
 
-                <Tooltip text='Bỏ khỏi giỏ hàng' dir='left' className={styles.removeButtonWrapper}>
-                    <Button className={styles.removeButton} onClick={handleRemoveItemFromCart} />
-                </Tooltip>
+                {
+                    !disabled
+                    &&
+                    <Tooltip text='Bỏ khỏi giỏ hàng' dir='left' className={styles.removeButtonWrapper}>
+                        <Button className={styles.removeButton} onClick={handleRemoveItemFromCart} />
+                    </Tooltip>
+                }
             </div>
         </div>
     );

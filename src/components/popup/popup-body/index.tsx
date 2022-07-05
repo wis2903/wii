@@ -1,6 +1,6 @@
 import React from 'react';
 import { classname } from '../../../helpers/utils.helper';
-import CloseButton from '../../close-button';
+import CloseButton from '../../basic/close-button';
 import styles from './styles.module.scss';
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement>{

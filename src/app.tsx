@@ -1,5 +1,5 @@
 import React from 'react';
-import BackToTop from './components/back-to-top';
+import BackToTop from './components/basic/back-to-top-button';
 import Footer from './modules/footer';
 import Header from './modules/header';
 import Home from './pages/home';

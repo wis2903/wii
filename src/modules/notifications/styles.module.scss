@@ -1,6 +1,6 @@
 .container{
     width: 90%;
-    max-width: 360px;
+    max-width: 400px;
     background: #ffffff;
     position: absolute;
     right: 20px;
@@ -23,5 +23,9 @@
     .empty{
         font-weight: 600;
         font-size: 16px;
+    }
+
+    .list{
+        margin: -10px;
     }
 }

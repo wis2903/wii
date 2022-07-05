@@ -1,5 +1,5 @@
 import React from 'react';
-import Tooltip from '../../../components/tooltip';
+import Tooltip from '../../../components/basic/tooltip';
 import { classname } from '../../../helpers/utils.helper';
 import EventService from '../../../services/event.service';
 import Notifications from '../../notifications';
@@ -21,12 +21,17 @@ const NotificationButton = ({ className }: IProps): JSX.Element => {
             setIsShowNotification(false);
         }, 3000);
     };
+    const handleOnRequestShowInvoiceDetails = (): void => {
+        setIsExpanded(false);
+    };
 
     React.useEffect(() => {
         EventService.instance.onPaymentSuccess.addEventListener(handleOnPaymentSuccess);
+        EventService.instance.onRequestShowInvoiceDetails.addEventListener(handleOnRequestShowInvoiceDetails);
 
         return (): void => {
             EventService.instance.onPaymentSuccess.removeEventListener(handleOnPaymentSuccess);
+            EventService.instance.onRequestShowInvoiceDetails.removeEventListener(handleOnRequestShowInvoiceDetails);
             if (timeoutHandler.current) clearTimeout(timeoutHandler.current);
         };
     }, []);

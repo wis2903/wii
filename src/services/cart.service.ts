@@ -1,3 +1,4 @@
+import { parseCartItemData } from '../helpers/data.helper';
 import { LocalStorageKeyEnum } from '../resources/constants/enum';
 import EventService from './event.service';
 import StorageService from './storage.service';
@@ -18,7 +19,7 @@ class CartService {
     public list = async (): Promise<ICartItem[]> => {
         const res = await StorageService.instance.get(LocalStorageKeyEnum.cart);
         if (!res || !(res instanceof Array)) return [];
-        return res;
+        return res.map(item => parseCartItemData(Object(item)));
     }
 
     public add = async ({ product, color, amount }: ICartItem): Promise<void> => {

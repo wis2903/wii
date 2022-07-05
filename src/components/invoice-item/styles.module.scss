@@ -1,0 +1,43 @@
+.container{
+    width: 100%;
+    text-align: left;
+    font-weight: 400;
+    color: #666666;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+    border: 0;
+    overflow: visible;
+
+    &:hover{
+        background: #de3b3b;
+        color: #ffffff;
+
+        span{
+            color: #ffffff;
+        }
+    }
+
+    span{
+        font-weight: 600;
+        color: #000000;
+        margin: 0 4px;
+        font-size: 16px;
+    }
+
+    &:not(:first-child){
+        margin-top: 12px;
+        position: relative;
+
+        &::after{
+            content: '';
+            position: absolute;
+            width: calc(100% - 20px);
+            height: 1px;
+            background: #e5e5e5;
+            left: 50%;
+            top: -6px;
+            transform: translateX(-50%);
+        }
+    }
+}

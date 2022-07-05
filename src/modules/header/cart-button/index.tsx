@@ -1,6 +1,6 @@
 import React from 'react';
-import Tooltip from '../../../components/tooltip';
-import { classname } from '../../../helpers/utils.helper';
+import Tooltip from '../../../components/basic/tooltip';
+import { classname, getTotalProductsNumberFromCartItems } from '../../../helpers/utils.helper';
 import CartService from '../../../services/cart.service';
 import EventService from '../../../services/event.service';
 import styles from './styles.module.scss';
@@ -19,11 +19,7 @@ const Cart = ({ className }: IProps): JSX.Element => {
     };
     const updateCartItemsNumber = async (): Promise<void> => {
         CartService.instance.list().then(res => {
-            let totalNumber = 0;
-            res.forEach(item => {
-                totalNumber += item.amount;
-            });
-            setCartItemsNumber(totalNumber);
+            setCartItemsNumber(getTotalProductsNumberFromCartItems(res));
         });
     };
     const handleShowNotification = (): void => {

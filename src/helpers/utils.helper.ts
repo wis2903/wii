@@ -11,3 +11,11 @@ export const classname = (classNames: (unknown)[]): string => {
 export const formatNumber = (num: number): string => {
     return new Intl.NumberFormat('en-US').format(num);
 };
+
+export const getTotalProductsNumberFromCartItems = (cartItems: ICartItem[]): number => {
+    let totalNumber = 0;
+    cartItems.forEach(item => {
+        totalNumber += item.amount;
+    });
+    return totalNumber;
+};
