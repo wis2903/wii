@@ -4,8 +4,8 @@ import { classname } from '../../helpers/utils.helper';
 import CartItem from '../../components/cart-item';
 import styles from './styles.module.scss';
 import Button from '../../components/basic/button';
-import PaymentService from '../../services/payment.service';
 import CartService from '../../services/cart.service';
+import EventService from '../../services/event.service';
 
 interface IProps {
     className?: string,
@@ -15,24 +15,29 @@ interface IProps {
 const Cart = ({ className, onClose }: IProps): JSX.Element => {
     const [cartItems, setCartItems] = React.useState<ICartItem[]>([]);
 
-    const handleOnShowPaymentPopup = (): void => {
+    const handleCloseShoppingCart = (): void => {
         if (onClose) onClose();
     };
-
+    const handleShowPayment = (): void => {
+        EventService.instance.onRequestShowPayment.trigger(cartItems);
+    };
     const updateCartItems = async (): Promise<void> => {
         CartService.instance.list().then(res => {
             setCartItems(res);
         });
     };
+    const handleOnShoppingCartItemsUpdated = (): void => {
+        updateCartItems();
+    };
 
     React.useEffect(() => {
         updateCartItems();
-        PaymentService.instance.addRequestShowPopupListener(handleOnShowPaymentPopup);
-        CartService.instance.addProductsUpdatedListener(updateCartItems);
+        EventService.instance.onRequestShowPayment.addEventListener(handleCloseShoppingCart);
+        EventService.instance.onShoppingCartItemsUpdated.addEventListener(handleOnShoppingCartItemsUpdated);
 
         return (): void => {
-            PaymentService.instance.removeRequestShowPopupListener(handleOnShowPaymentPopup);
-            CartService.instance.removeProductsUpdatedListener(updateCartItems);
+            EventService.instance.onRequestShowPayment.removeEventListener(handleCloseShoppingCart);
+            EventService.instance.onShoppingCartItemsUpdated.removeEventListener(handleOnShoppingCartItemsUpdated);
         };
     }, []);
 
@@ -62,9 +67,7 @@ const Cart = ({ className, onClose }: IProps): JSX.Element => {
                 !!cartItems.length
                 &&
                 <div className={styles.action}>
-                    <Button label='Xác nhận đặt hàng' primary onClick={(): void => {
-                        PaymentService.instance.requestShowPoup(cartItems);
-                    }} />
+                    <Button label='Xác nhận đặt hàng' primary onClick={handleShowPayment} />
                 </div>
             }
         </PopupWrapper>

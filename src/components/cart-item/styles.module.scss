@@ -28,6 +28,12 @@
             font-size: 18px;
             font-weight: 600;
             margin: 0 0 8px;
+            text-align: left;
+            padding: 0;
+            border: 0;
+            height: auto;
+            width: calc(100% - 52px);
+            text-decoration: underline;
 
             &.small {
                 font-size: 17px;

@@ -3,30 +3,45 @@ import styles from './styles.module.scss';
 import { animateScroll } from '../../helpers/dom.helpers';
 import { classname } from '../../helpers/utils.helper';
 import Payment from '../payment';
-import PaymentService from '../../services/payment.service';
 import Cart from '../cart';
-import CartService from '../../services/cart.service';
+import ProductDetails from '../product-details';
+import EventService from '../../services/event.service';
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     className?: string,
 }
 interface IPaymentPopupState {
     isShown: boolean,
-    items: ICartItem[],
+    items?: ICartItem[],
+}
+interface IProductDetailsState {
+    isShown: boolean,
+    product?: IProduct,
+}
+interface IShoppingCartState {
+    isShown: boolean,
 }
 
 const Layout = ({ children, className, ...rest }: IProps): JSX.Element => {
+    const [shoppingCart, setShoppingCart] = React.useState<IShoppingCartState>({ isShown: false });
     const [paymentPopup, setPaymentPopup] = React.useState<IPaymentPopupState>({ isShown: false, items: [] });
-    const [isShowCartPopup, setIsShowCartPopup] = React.useState<boolean>(false);
+    const [productDetailsPopup, setProductDetailsPopup] = React.useState<IProductDetailsState>({ isShown: false });
 
-    const handleOnRequestShowPaymentPopup = (items?: ICartItem[]): void => {
+    const handleOnRequestShowPayment = (data: unknown): void => {
+        if (!data) return;
         setPaymentPopup({
             isShown: true,
-            items: items || [],
+            items: data as ICartItem[],
         });
     };
-    const handleOnRequestShowCartPopup = (): void => {
-        setIsShowCartPopup(true);
+    const handleOnRequestShowShoppingCart = (): void => {
+        setShoppingCart({ isShown: true });
+    };
+    const handleOnRequestShowProductDetails = (product: unknown): void => {
+        setProductDetailsPopup({
+            isShown: true,
+            product: product as IProduct,
+        });
     };
 
     React.useEffect(() => {
@@ -36,12 +51,14 @@ const Layout = ({ children, className, ...rest }: IProps): JSX.Element => {
             duration: 1000,
         });
 
-        PaymentService.instance.addRequestShowPopupListener(handleOnRequestShowPaymentPopup);
-        CartService.instance.addRequestShowPopupListener(handleOnRequestShowCartPopup);
+        EventService.instance.onRequestShowPayment.addEventListener(handleOnRequestShowPayment);
+        EventService.instance.onRequestShowProductDetails.addEventListener(handleOnRequestShowProductDetails);
+        EventService.instance.onRequestShowShoppingCart.addEventListener(handleOnRequestShowShoppingCart);
 
         return (): void => {
-            PaymentService.instance.removeRequestShowPopupListener(handleOnRequestShowPaymentPopup);
-            CartService.instance.removeRequestShowPopupListener(handleOnRequestShowCartPopup);
+            EventService.instance.onRequestShowPayment.removeEventListener(handleOnRequestShowPayment);
+            EventService.instance.onRequestShowProductDetails.removeEventListener(handleOnRequestShowProductDetails);
+            EventService.instance.onRequestShowShoppingCart.removeEventListener(handleOnRequestShowShoppingCart);
         };
     }, []);
 
@@ -51,17 +68,24 @@ const Layout = ({ children, className, ...rest }: IProps): JSX.Element => {
                 {children}
             </div>
             {
-                paymentPopup.isShown
+                shoppingCart.isShown
                 &&
-                <Payment items={paymentPopup.items} onClose={(): void => {
-                    setPaymentPopup({ isShown: false, items: [] });
+                <Cart onClose={(): void => {
+                    setShoppingCart({ isShown: false });
                 }} />
             }
             {
-                isShowCartPopup
+                paymentPopup.isShown && paymentPopup.items
                 &&
-                <Cart onClose={(): void => {
-                    setIsShowCartPopup(false);
+                <Payment items={paymentPopup.items} onClose={(): void => {
+                    setPaymentPopup({ isShown: false });
+                }} />
+            }
+            {
+                productDetailsPopup.isShown && productDetailsPopup.product
+                &&
+                <ProductDetails data={productDetailsPopup.product} onClose={(): void => {
+                    setProductDetailsPopup({ isShown: false });
                 }} />
             }
         </>

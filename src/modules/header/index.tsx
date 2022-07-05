@@ -1,12 +1,11 @@
 import React from 'react';
 import CartButton from './cart-button';
 import Logo from '../../components/logo';
-import Search from '../../components/search';
+import Search from './search';
 import Wrapper from '../../components/wrapper';
 import styles from './styles.module.scss';
-// import SakuraImage from '../../resources/images/sakura.png';
 import NotificationButton from './notification-button';
-import CartService from '../../services/cart.service';
+// import SakuraImage from '../../resources/images/sakura.png';
 
 const Header = (): JSX.Element => {
 
@@ -24,9 +23,7 @@ const Header = (): JSX.Element => {
                     <div className={styles.right}>
                         <Search className={styles.search} label="Tìm kiếm sản phẩm ..." />
                         <NotificationButton />
-                        <CartButton className={styles.cart} onClick={(): void => {
-                            CartService.instance.requestShowPopup();
-                        }} />
+                        <CartButton className={styles.cart} />
                     </div>
                 </Wrapper>
             </div>

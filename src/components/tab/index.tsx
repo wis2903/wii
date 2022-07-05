@@ -31,6 +31,13 @@ const Tab = ({ className, items, onChange }: IProps): JSX.Element => {
         }, 200);
     }, []);
 
+    React.useEffect(() => {
+        setSelectedItem(items.find(item => item.selected));
+        setTimeout(() => {
+            updateActiveItemHTMLElement();
+        }, 200);
+    }, [items]);
+
     return (
         <div className={classname([styles.container, className])} ref={containerRef}>
             {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { classname } from '../../../helpers/utils.helper';
 import CartService from '../../../services/cart.service';
-import PaymentService from '../../../services/payment.service';
+import EventService from '../../../services/event.service';
 import AmountPicker from '../../amount-picker';
 import Button from '../../basic/button';
 import ColorPicker from '../../color-picker';
@@ -25,6 +25,13 @@ const ProductActions = ({ className, product, onColorChange }: IProps): JSX.Elem
             color,
         });
     };
+    const handleBuyNow = (): void => {
+        EventService.instance.onRequestShowPayment.trigger([{
+            product,
+            amount,
+            color,
+        }]);
+    };
 
     return (
         <div className={classname([styles.container, className])}>
@@ -37,7 +44,7 @@ const ProductActions = ({ className, product, onColorChange }: IProps): JSX.Elem
             <div className={styles.colorWrapper}>
                 <h4 className={styles.catLabel}>Màu sắc sản phẩm: {color.label}</h4>
                 <ColorPicker colors={product.colors} onChange={(c): void => {
-                    if(onColorChange) onColorChange(c);
+                    if (onColorChange) onColorChange(c);
                     setColor(c);
                 }} />
             </div>
@@ -52,13 +59,7 @@ const ProductActions = ({ className, product, onColorChange }: IProps): JSX.Elem
 
             <div className={styles.buttons}>
                 <Button primary label='Thêm vào giỏ hàng' onClick={handleAddProductToCart} />
-                <Button primary label='Mua ngay' onClick={(): void => {
-                    PaymentService.instance.requestShowPoup([{
-                        product,
-                        amount,
-                        color,
-                    }]);
-                }} />
+                <Button primary label='Mua ngay' onClick={handleBuyNow} />
             </div>
         </div>
     );

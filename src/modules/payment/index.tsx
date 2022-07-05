@@ -4,7 +4,7 @@ import CartItem from '../../components/cart-item';
 import PopupWrapper from '../../components/popup/popup-wrapper';
 import { formatNumber } from '../../helpers/utils.helper';
 import CartService from '../../services/cart.service';
-import NotificationService from '../../services/notification.service';
+import EventService from '../../services/event.service';
 import ShippingInfo from './shipping-info';
 import styles from './styles.module.scss';
 
@@ -38,7 +38,7 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
             color: item.color.value,
         })));
         if (onClose) onClose();
-        NotificationService.instance.requestShowNotification();
+        EventService.instance.onPaymentSuccess.trigger();
     };
 
     React.useEffect(() => {

@@ -1,0 +1,47 @@
+type IEventListener = (data?: unknown) => void
+
+class EventHandler {
+    private eventListeners: IEventListener[];
+    private name: string;
+
+    constructor(nm: string) {
+        this.eventListeners = [];
+        this.name = nm;
+    }
+
+    public addEventListener = (callback: IEventListener): void => {
+        this.eventListeners.push(callback);
+    }
+
+    public removeEventListener = (callback: IEventListener): void => {
+        this.eventListeners = this.eventListeners.filter(item => item !== callback);
+    }
+
+    public trigger = (data?: unknown): void => {
+        this.eventListeners.forEach(callback => { callback(data); });
+    }
+}
+
+class EventService {
+    private static inst?: EventService;
+    public onRequestShowProductDetails: EventHandler;
+    public onRequestShowShoppingCart: EventHandler;
+    public onShoppingCartItemsUpdated: EventHandler;
+    public onRequestShowPayment: EventHandler;
+    public onPaymentSuccess: EventHandler;
+
+    constructor() {
+        this.onRequestShowProductDetails = new EventHandler('on-request-show-product-details');
+        this.onRequestShowShoppingCart = new EventHandler('on-request-show-shopping-cart');
+        this.onShoppingCartItemsUpdated = new EventHandler('on-shopping-cart-items-updated');
+        this.onRequestShowPayment = new EventHandler('on-request-show-payment');
+        this.onPaymentSuccess = new EventHandler('on-payment-success');
+    }
+
+    public static get instance(): EventService {
+        if (!EventService.inst) EventService.inst = new EventService();
+        return EventService.inst;
+    }
+}
+
+export default EventService;

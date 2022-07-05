@@ -11,6 +11,7 @@ import ProductService from '../../services/product.service';
 import NormalProductPlaceholder from '../../components/product/normal-product/placeholder';
 import { animateScroll } from '../../helpers/dom.helpers';
 import SelectPlaceholder from '../../components/basic/select/placeholder';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 interface IProps {
     className?: string,
@@ -24,40 +25,49 @@ interface ICategoriesState {
     cat: ICategoryInfo[],
     activeId: IObjectId,
 }
+const defaultCategoryId = 'best-seller';
 
 const ProductList = ({ className }: IProps): JSX.Element => {
-    const [categories, setCategories] = React.useState<ICategoriesState>({ isLoading: true, cat: [], activeId: -1 });
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const [categories, setCategories] = React.useState<ICategoriesState>({ isLoading: true, cat: [], activeId: searchParams.get('category-id') || defaultCategoryId });
     const [isLoadingMoreProducts, setIsLoadingMoreProducts] = React.useState<boolean>(false);
     const containerRef = React.useRef<HTMLDivElement>(null);
     const categoriesRef = React.useRef<ICategoriesState>(categories);
 
     const getActiveCategory = (categoryId: IObjectId): ICategoryInfo | undefined => {
-        return categoriesRef.current.cat.find(item => item.data.id === categoryId);
+        return categoriesRef.current.cat.find(item => item.data.id === categoryId) || categoriesRef.current.cat.find(item => item.data.id === defaultCategoryId);
     };
 
     const fetchData = async (): Promise<void> => {
         await getCategories();
-        await getProducts(-1);
+
+        const activeCategory = getActiveCategory(categoriesRef.current.activeId);
+        await getProducts(activeCategory?.data.id || defaultCategoryId);
     };
 
     const getCategories = async (): Promise<void> => {
         const cats = await CategoryService.instance.list();
-        setCategories({
-            isLoading: true,
-            cat: [
-                {
-                    loadedProducts: false,
-                    data: {
-                        id: -1,
-                        name: 'Phổ biến',
-                    }
-                },
-                ...cats.map(item => ({
-                    loadedProducts: false,
-                    data: item,
-                }))
-            ],
-            activeId: -1,
+        setCategories(current => {
+            const res = {
+                ...current,
+                isLoading: true,
+                cat: [
+                    {
+                        loadedProducts: false,
+                        data: {
+                            id: defaultCategoryId,
+                            name: 'Phổ biến',
+                        }
+                    },
+                    ...cats.map(item => ({
+                        loadedProducts: false,
+                        data: item,
+                    }))
+                ],
+            };
+            categoriesRef.current = res;
+            return res;
         });
     };
 
@@ -128,6 +138,13 @@ const ProductList = ({ className }: IProps): JSX.Element => {
     React.useEffect(() => {
         categoriesRef.current = categories;
     }, [categories]);
+    React.useEffect(() => {
+        const activeCategory = getActiveCategory(searchParams.get('category-id') || defaultCategoryId);
+        if (activeCategory) handleOnTabChange({
+            label: activeCategory.data.name,
+            value: activeCategory.data.id,
+        });
+    }, [searchParams.get('category-id')]);
 
     const activeCategory = getActiveCategory(categories.activeId);
 
@@ -144,34 +161,36 @@ const ProductList = ({ className }: IProps): JSX.Element => {
                                     ...categories.cat.map(item => ({
                                         label: item.data.name,
                                         value: item.data.id,
-                                        selected: categories.activeId === item.data.id,
+                                        selected: activeCategory?.data.id === item.data.id,
                                     }))
                                 ]}
-                                onChange={handleOnTabChange}
+                                onChange={(tab: ITabItem): void => {
+                                    navigate(`/?category-id=${tab.value}`);
+                                }}
                             />
                     }
 
                     {
                         activeCategory?.loadedProducts
-                        ?
-                        <div className={styles.actions}>
-                            <Select
-                                label='Sắp xếp'
-                                options={[
-                                    {
-                                        label: 'Giá giảm dần',
-                                        value: 1,
-                                        selected: true,
-                                    },
-                                    {
-                                        label: 'Giá tăng dần',
-                                        value: 2,
-                                    }
-                                ]}
-                            />
-                        </div>
-                        :
-                        <SelectPlaceholder />
+                            ?
+                            <div className={styles.actions}>
+                                <Select
+                                    label='Sắp xếp'
+                                    options={[
+                                        {
+                                            label: 'Giá giảm dần',
+                                            value: 1,
+                                            selected: true,
+                                        },
+                                        {
+                                            label: 'Giá tăng dần',
+                                            value: 2,
+                                        }
+                                    ]}
+                                />
+                            </div>
+                            :
+                            <SelectPlaceholder />
                     }
                 </div>
             </div>

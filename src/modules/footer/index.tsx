@@ -5,8 +5,9 @@ import Wrapper from '../../components/wrapper';
 import styles from './styles.module.scss';
 import SakuraImage from '../../resources/images/sakura.png';
 import Logo from '../../components/logo';
-import CartService from '../../services/cart.service';
 import CategoryService from '../../services/category.service';
+import EventService from '../../services/event.service';
+import { useNavigate } from 'react-router-dom';
 
 interface IProps {
     reference?: React.LegacyRef<HTMLDivElement>,
@@ -14,9 +15,10 @@ interface IProps {
 
 const Footer = ({ reference }: IProps): JSX.Element => {
     const [categories, setCategories] = React.useState<ICategory[]>([]);
+    const navigate = useNavigate();
 
     const handleShowCartPopup = (): void => {
-        CartService.instance.requestShowPopup();
+        EventService.instance.onRequestShowShoppingCart.trigger();
     };
 
     const handleOnCategoriesLoaded = (): void => {
@@ -51,7 +53,9 @@ const Footer = ({ reference }: IProps): JSX.Element => {
 
                     <div className={styles.buttons}>
                         {categories.map(item =>
-                            <Button key={item.id} label={item.name} />
+                            <Button key={item.id} label={item.name} onClick={(): void => {
+                                navigate(`/?category-id=${item.id}`);
+                            }} />
                         )}
                     </div>
                 </div>

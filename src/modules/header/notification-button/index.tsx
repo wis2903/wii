@@ -1,7 +1,7 @@
 import React from 'react';
 import Tooltip from '../../../components/tooltip';
 import { classname } from '../../../helpers/utils.helper';
-import NotificationService from '../../../services/notification.service';
+import EventService from '../../../services/event.service';
 import Notifications from '../../notifications';
 import styles from './styles.module.scss';
 
@@ -14,20 +14,19 @@ const NotificationButton = ({ className }: IProps): JSX.Element => {
     const [isExpanded, setIsExpanded] = React.useState<boolean>(false);
     const timeoutHandler = React.useRef<ReturnType<typeof setTimeout>>();
 
-    const handleOnShowNotification = (): void => {
+    const handleOnPaymentSuccess = (): void => {
         if (timeoutHandler.current) clearTimeout(timeoutHandler.current);
         setIsShowNotification(true);
-
         timeoutHandler.current = setTimeout(() => {
             setIsShowNotification(false);
         }, 3000);
     };
 
     React.useEffect(() => {
-        NotificationService.instance.addShowNotificationListeners(handleOnShowNotification);
+        EventService.instance.onPaymentSuccess.addEventListener(handleOnPaymentSuccess);
 
         return (): void => {
-            NotificationService.instance.removeShowNotificationListeners(handleOnShowNotification);
+            EventService.instance.onPaymentSuccess.removeEventListener(handleOnPaymentSuccess);
             if (timeoutHandler.current) clearTimeout(timeoutHandler.current);
         };
     }, []);

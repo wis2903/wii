@@ -2,26 +2,20 @@ import React from 'react';
 import Tooltip from '../../../components/tooltip';
 import { classname } from '../../../helpers/utils.helper';
 import CartService from '../../../services/cart.service';
-import NotificationService from '../../../services/notification.service';
+import EventService from '../../../services/event.service';
 import styles from './styles.module.scss';
 
 interface IProps {
     className?: string,
-    onClick?: VoidFunction,
 }
 
-const Cart = ({ className, onClick }: IProps): JSX.Element => {
+const Cart = ({ className }: IProps): JSX.Element => {
     const [isShowNotification, setIsShowNotification] = React.useState<boolean>(false);
     const [cartItemsNumber, setCartItemsNumber] = React.useState<number>(0);
     const timeoutHandler = React.useRef<ReturnType<typeof setTimeout>>();
 
-    const handleOnAddedProductToCart = (): void => {
-        if (timeoutHandler.current) clearTimeout(timeoutHandler.current);
-        setIsShowNotification(true);
-        timeoutHandler.current = setTimeout(() => {
-            setIsShowNotification(false);
-        }, 3000);
-        updateCartItemsNumber();
+    const handleShowShoppingCart = (): void => {
+        EventService.instance.onRequestShowShoppingCart.trigger();
     };
     const updateCartItemsNumber = async (): Promise<void> => {
         CartService.instance.list().then(res => {
@@ -32,15 +26,25 @@ const Cart = ({ className, onClick }: IProps): JSX.Element => {
             setCartItemsNumber(totalNumber);
         });
     };
+    const handleShowNotification = (): void => {
+        if (timeoutHandler.current) clearTimeout(timeoutHandler.current);
+        setIsShowNotification(true);
+        timeoutHandler.current = setTimeout(() => {
+            setIsShowNotification(false);
+        }, 3000);
+    };
+    const handleOnShoppingCartItemsUpdated = (data: unknown): void => {
+        updateCartItemsNumber();
+        if (data && Object(data).withoutNotification) return;
+        handleShowNotification();
+    };
 
     React.useEffect(() => {
         updateCartItemsNumber();
-        CartService.instance.addProductsUpdatedListener(handleOnAddedProductToCart);
-        NotificationService.instance.addShowNotificationListeners(updateCartItemsNumber);
+        EventService.instance.onShoppingCartItemsUpdated.addEventListener(handleOnShoppingCartItemsUpdated);
 
         return (): void => {
-            CartService.instance.removeProductsUpdatedListener(handleOnAddedProductToCart);
-            NotificationService.instance.removeShowNotificationListeners(updateCartItemsNumber);
+            EventService.instance.onShoppingCartItemsUpdated.removeEventListener(handleOnShoppingCartItemsUpdated);
             if (timeoutHandler.current) clearTimeout(timeoutHandler.current);
         };
     }, []);
@@ -48,7 +52,7 @@ const Cart = ({ className, onClick }: IProps): JSX.Element => {
     return (
         <div className={classname([styles.container, className])}>
             <Tooltip text='Giỏ hàng' dir='bottom'>
-                <button onClick={onClick}>
+                <button onClick={handleShowShoppingCart}>
                     <span className={styles.icon}>
                         <span className='fa fa-cart-shopping' />
                         <span className={styles.indicator}>{cartItemsNumber < 100 ? cartItemsNumber : '99+'}</span>

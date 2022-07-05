@@ -4,8 +4,7 @@ import ProductActions from '../../components/product/product-actions';
 import ProductImagesSlideShow from '../../components/product/product-images-slideshow';
 import Stars from '../../components/stars';
 import { classname } from '../../helpers/utils.helper';
-import CartService from '../../services/cart.service';
-import PaymentService from '../../services/payment.service';
+import EventService from '../../services/event.service';
 import styles from './styles.module.scss';
 
 interface IProps {
@@ -17,21 +16,20 @@ interface IProps {
 const ProductDetails = ({ className, onClose, data }: IProps): JSX.Element => {
     const [activeColor, setActiveColor] = React.useState<IColor>(data.colors[0]);
 
-    const handleOnShowPaymentPopup = (): void => {
+    const handleOnRequestShowPayment = (): void => {
         if (onClose) onClose();
     };
-
-    const handleOnShowCartNotification = (): void => {
+    const handleOnShoppingCartUpdated = (): void => {
         if (onClose) onClose();
     };
 
     React.useEffect(() => {
-        PaymentService.instance.addRequestShowPopupListener(handleOnShowPaymentPopup);
-        CartService.instance.addProductsUpdatedListener(handleOnShowCartNotification);
+        EventService.instance.onRequestShowPayment.addEventListener(handleOnRequestShowPayment);
+        EventService.instance.onShoppingCartItemsUpdated.addEventListener(handleOnShoppingCartUpdated);
 
         return (): void => {
-            PaymentService.instance.removeRequestShowPopupListener(handleOnShowPaymentPopup);
-            CartService.instance.removeProductsUpdatedListener(handleOnShowCartNotification);
+            EventService.instance.onRequestShowPayment.removeEventListener(handleOnRequestShowPayment);
+            EventService.instance.onShoppingCartItemsUpdated.removeEventListener(handleOnShoppingCartUpdated);
         };
     }, []);
 

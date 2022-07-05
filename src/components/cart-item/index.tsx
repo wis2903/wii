@@ -1,6 +1,7 @@
 import React from 'react';
 import { classname } from '../../helpers/utils.helper';
 import CartService from '../../services/cart.service';
+import EventService from '../../services/event.service';
 import AmountPicker from '../amount-picker';
 import Button from '../basic/button';
 import Price from '../price';
@@ -25,12 +26,19 @@ const CartItem = ({ className, data, smallProductTitle, onAmountChange }: IProps
         });
         if (onAmountChange) onAmountChange(value);
     };
+    const handleShowProductDetails = (): void => {
+        EventService.instance.onRequestShowProductDetails.trigger(data.product);
+    };
 
     return (
         <div className={classname([styles.container, className])}>
             <div className={styles.thumbnail} />
             <div className={styles.info}>
-                <h3 className={classname([styles.name, smallProductTitle && styles.small])}>{data.product.name}</h3>
+                <Button
+                    className={classname([styles.name, smallProductTitle && styles.small])}
+                    label={data.product.name}
+                    onClick={handleShowProductDetails}
+                />
                 <div className={styles.color}>Màu sắc: {data.color.label}</div>
 
                 <div className={styles.amountWrapper}>

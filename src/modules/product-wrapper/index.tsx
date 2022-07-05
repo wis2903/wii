@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '../../components/basic/button';
 import { mockUpProduct } from '../../mockup/product.mockup';
-import ProductDetails from '../product-details';
+import EventService from '../../services/event.service';
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     className?: string,
@@ -9,24 +9,14 @@ interface IProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const ProductWrapper = ({ productId, className, children }: IProps): JSX.Element => {
-    const [isShowDetails, setIsShowDetails] = React.useState<boolean>(false);
+    const handleShowProductDetails = (): void => {
+        EventService.instance.onRequestShowProductDetails.trigger(mockUpProduct);
+    };
 
     return (
-        <>
-            <Button disableClickTransform className={className} label="" onClick={(): void => {
-                setIsShowDetails(true);
-            }}>
-                {children}
-            </Button>
-
-            {
-                isShowDetails
-                &&
-                <ProductDetails data={mockUpProduct} onClose={(): void => {
-                    setIsShowDetails(false);
-                }} />
-            }
-        </>
+        <Button disableClickTransform className={className} label="" onClick={handleShowProductDetails}>
+            {children}
+        </Button>
     );
 };
 
