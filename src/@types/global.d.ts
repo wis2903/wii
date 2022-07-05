@@ -15,6 +15,7 @@ declare global {
     type IColor = {
         label: string,
         value: string,
+        images?: string[],
     };
     type IStorageItemValue = Record<string, unknown> | Array | undefined;
 }

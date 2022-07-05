@@ -1,6 +1,8 @@
+type IShowPopupRequest = (items?: ICartItem[]) => void;
+
 class PaymentService {
     private static inst?: PaymentService;
-    private showPopupRequests: VoidFunction[];
+    private showPopupRequests: IShowPopupRequest[];
 
     constructor() {
         this.showPopupRequests = [];
@@ -11,16 +13,16 @@ class PaymentService {
         return PaymentService.inst;
     }
 
-    public addRequestShowPopupListener = (callback: VoidFunction): void => {
+    public addRequestShowPopupListener = (callback: IShowPopupRequest): void => {
         this.showPopupRequests.push(callback);
     }
 
-    public removeRequestShowPopupListener = (callback: VoidFunction): void => {
+    public removeRequestShowPopupListener = (callback: IShowPopupRequest): void => {
         this.showPopupRequests = this.showPopupRequests.filter(item => item !== callback);
     }
 
-    public requestShowPoup = (): void => {
-        this.showPopupRequests.forEach(callback => { callback(); });
+    public requestShowPoup = (items: ICartItem[]): void => {
+        this.showPopupRequests.forEach(callback => { callback(items); });
     }
 }
 

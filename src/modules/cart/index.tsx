@@ -63,7 +63,7 @@ const Cart = ({ className, onClose }: IProps): JSX.Element => {
                 &&
                 <div className={styles.action}>
                     <Button label='Xác nhận đặt hàng' primary onClick={(): void => {
-                        PaymentService.instance.requestShowPoup();
+                        PaymentService.instance.requestShowPoup(cartItems);
                     }} />
                 </div>
             }

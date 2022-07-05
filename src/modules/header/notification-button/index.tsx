@@ -35,12 +35,12 @@ const NotificationButton = ({ className }: IProps): JSX.Element => {
     return (
         <>
             <div className={classname([styles.container, className])}>
-                <Tooltip text='Đơn hàng đã xử lý' dir='bottom'>
+                <Tooltip text='Đơn hàng đã đặt' dir='bottom'>
                     <button onClick={(): void => {
                         setIsExpanded(true);
                     }}>
                         <span className={styles.icon}>
-                            <span className='fa fa-truck' />
+                            <span className='fa fa-money-check' />
                         </span>
                     </button>
                 </Tooltip>

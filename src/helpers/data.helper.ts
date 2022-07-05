@@ -5,6 +5,14 @@ export const parseCategoryData = (data: Record<string, unknown>): ICategory => {
     };
 };
 
+export const parseColorData = (data: Record<string, unknown>): IColor => {
+    return {
+        label: String(data.label),
+        value: String(data.value),
+        images: data.images instanceof Array ? data.images.map(item => String(item)) : [],
+    };
+};
+
 export const parseProductData = (data: Record<string, unknown>): IProduct => {
     return {
         id: String(data.id),
@@ -14,6 +22,6 @@ export const parseProductData = (data: Record<string, unknown>): IProduct => {
         categoryId: String(data.category_id),
         rating: Number(data.rating),
         buyersNumber: Number(data.buyers_number),
-        imageUrls: data.images instanceof Array ? data.images.map(item => String(item)) : [],
+        colors: data.colors instanceof Array ? data.colors.map(item => parseColorData(item)) : [],
     };
 };

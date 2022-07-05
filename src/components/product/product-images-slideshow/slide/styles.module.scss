@@ -10,6 +10,11 @@
         padding: 0;
         padding-top: 16%;
         border: 0;
+        border: 1px solid transparent;
+
+        &.active{
+            border-color: #de3b3b;
+        }
 
         &:not(:first-child){
             margin: 0 0 0 12px;

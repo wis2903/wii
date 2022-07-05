@@ -7,9 +7,10 @@ import styles from './styles.module.scss';
 interface IProps {
     className?: string,
     colors: IColor[],
+    onChange?: (color: IColor) => void,
 }
 
-const ColorPicker = ({ colors, className }: IProps): JSX.Element => {
+const ColorPicker = ({ colors, className, onChange }: IProps): JSX.Element => {
     const [activeColor, setActiveColor] = React.useState<IColor>(colors[0]);
 
     return (
@@ -24,6 +25,7 @@ const ColorPicker = ({ colors, className }: IProps): JSX.Element => {
                     >
                         <Button onClick={(): void => {
                             setActiveColor(item);
+                            if (activeColor.value !== item.value && onChange) onChange(item);
                         }}>
                             <span style={{ backgroundColor: item.value }} />
                         </Button>

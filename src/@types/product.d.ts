@@ -12,7 +12,7 @@ declare global {
         categoryData?: ICategory,
         rating: number,
         buyersNumber: number,
-        imageUrls: string[],
+        colors: IColor[],
     }
 
     interface ICategory {

@@ -7,7 +7,6 @@ import Stars from '../../stars';
 import styles from './styles.module.scss';
 import Tooltip from '../../tooltip';
 import CartService from '../../../services/cart.service';
-import { colors } from '../../../resources/constants/color';
 
 interface IProps {
     className?: string,
@@ -18,7 +17,7 @@ const Product = ({ data, className }: IProps): JSX.Element => {
     const handleAddProductToCart = async (): Promise<void> => {
         CartService.instance.add({
             product: data,
-            color: colors.white,
+            color: data.colors[0],
             amount: 1,
         });
     };

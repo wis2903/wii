@@ -10,13 +10,20 @@ import CartService from '../../services/cart.service';
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     className?: string,
 }
+interface IPaymentPopupState {
+    isShown: boolean,
+    items: ICartItem[],
+}
 
 const Layout = ({ children, className, ...rest }: IProps): JSX.Element => {
-    const [isShowPaymentPopup, setIsShowPaymentPopup] = React.useState<boolean>(false);
+    const [paymentPopup, setPaymentPopup] = React.useState<IPaymentPopupState>({ isShown: false, items: [] });
     const [isShowCartPopup, setIsShowCartPopup] = React.useState<boolean>(false);
 
-    const handleOnRequestShowPaymentPopup = (): void => {
-        setIsShowPaymentPopup(true);
+    const handleOnRequestShowPaymentPopup = (items?: ICartItem[]): void => {
+        setPaymentPopup({
+            isShown: true,
+            items: items || [],
+        });
     };
     const handleOnRequestShowCartPopup = (): void => {
         setIsShowCartPopup(true);
@@ -44,10 +51,10 @@ const Layout = ({ children, className, ...rest }: IProps): JSX.Element => {
                 {children}
             </div>
             {
-                isShowPaymentPopup
+                paymentPopup.isShown
                 &&
-                <Payment onClose={(): void => {
-                    setIsShowPaymentPopup(false);
+                <Payment items={paymentPopup.items} onClose={(): void => {
+                    setPaymentPopup({ isShown: false, items: [] });
                 }} />
             }
             {

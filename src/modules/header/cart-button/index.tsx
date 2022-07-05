@@ -2,6 +2,7 @@ import React from 'react';
 import Tooltip from '../../../components/tooltip';
 import { classname } from '../../../helpers/utils.helper';
 import CartService from '../../../services/cart.service';
+import NotificationService from '../../../services/notification.service';
 import styles from './styles.module.scss';
 
 interface IProps {
@@ -22,7 +23,6 @@ const Cart = ({ className, onClick }: IProps): JSX.Element => {
         }, 3000);
         updateCartItemsNumber();
     };
-
     const updateCartItemsNumber = async (): Promise<void> => {
         CartService.instance.list().then(res => {
             let totalNumber = 0;
@@ -36,9 +36,11 @@ const Cart = ({ className, onClick }: IProps): JSX.Element => {
     React.useEffect(() => {
         updateCartItemsNumber();
         CartService.instance.addProductsUpdatedListener(handleOnAddedProductToCart);
+        NotificationService.instance.addShowNotificationListeners(updateCartItemsNumber);
 
         return (): void => {
             CartService.instance.removeProductsUpdatedListener(handleOnAddedProductToCart);
+            NotificationService.instance.removeShowNotificationListeners(updateCartItemsNumber);
             if (timeoutHandler.current) clearTimeout(timeoutHandler.current);
         };
     }, []);

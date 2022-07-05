@@ -11,7 +11,7 @@
 
     .thumbnail {
         width: 140px;
-        height: 90px;
+        height: 100px;
         border-radius: 4px;
         background: #e5e5e5;
         margin: 0 20px 0 0;
@@ -27,7 +27,7 @@
         .name {
             font-size: 18px;
             font-weight: 600;
-            margin: 0 0 4px;
+            margin: 0 0 8px;
 
             &.small {
                 font-size: 17px;
@@ -38,7 +38,7 @@
         .color {
             font-size: 14px;
             color: #666666;
-            margin: 0 0 12px;
+            margin: 0 0 16px;
         }
 
         .amountWrapper {

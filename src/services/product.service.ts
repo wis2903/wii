@@ -1,3 +1,5 @@
+import { mockUpProduct } from '../mockup/product.mockup';
+
 interface IGetProductsListRequestParams {
     categoryId: IObjectId,
     limit?: number,
@@ -15,15 +17,7 @@ class ProductService {
     public list = async ({categoryId, limit, offset}: IGetProductsListRequestParams): Promise<IProduct[]> => {
         return new Promise(resolve => {
             setTimeout(() => {
-                resolve(Array.from({ length: 20 }).map(() => ({
-                    id: String(Math.random()),
-                    name: 'Túi Handbag cầm tay đơn giản',
-                    price: 199000,
-                    categoryId: '',
-                    buyersNumber: 10,
-                    rating: 4 / 5,
-                    imageUrls: [],
-                })));
+                resolve(Array.from({ length: 20 }).map((item, i) => ({...mockUpProduct, id: String(i)})));
             }, 1000);
         });
 

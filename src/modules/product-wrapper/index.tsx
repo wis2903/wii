@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../../components/basic/button';
+import { mockUpProduct } from '../../mockup/product.mockup';
 import ProductDetails from '../product-details';
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -21,7 +22,7 @@ const ProductWrapper = ({ productId, className, children }: IProps): JSX.Element
             {
                 isShowDetails
                 &&
-                <ProductDetails onClose={(): void => {
+                <ProductDetails data={mockUpProduct} onClose={(): void => {
                     setIsShowDetails(false);
                 }} />
             }

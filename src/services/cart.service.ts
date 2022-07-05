@@ -1,6 +1,11 @@
 import { LocalStorageKeyEnum } from '../resources/constants/enum';
 import StorageService from './storage.service';
 
+interface IRemoveItemRequestParams {
+    productId: IObjectId,
+    color: string
+}
+
 class CartService {
     private static inst?: CartService;
 
@@ -65,14 +70,23 @@ class CartService {
         this.requestShowCartNotification();
     }
 
-    public remove = async ({ productId, color }: { productId: IObjectId, color: string }): Promise<void> => {
+    public remove = async ({ productId, color }: IRemoveItemRequestParams): Promise<void> => {
         let allCartItems = await this.list();
         allCartItems = allCartItems.filter(item => {
-            if(item.product.id !== productId) return true;
+            if (item.product.id !== productId) return true;
             return item.color.value !== color;
         });
         await StorageService.instance.set(LocalStorageKeyEnum.cart, allCartItems);
         this.requestShowCartNotification();
+    }
+
+    public removeMultipleItems = async (params: IRemoveItemRequestParams[]): Promise<void> => {
+        let allCartItems = await this.list();
+        allCartItems = allCartItems.filter(item => {
+            if (!params.find(param => param.productId === item.product.id)) return true;
+            return !params.find(param => param.color === item.color.value);
+        });
+        await StorageService.instance.set(LocalStorageKeyEnum.cart, allCartItems);
     }
 }
 

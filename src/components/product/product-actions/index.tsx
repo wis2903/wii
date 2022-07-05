@@ -1,6 +1,5 @@
 import React from 'react';
 import { classname } from '../../../helpers/utils.helper';
-import { colors } from '../../../resources/constants/color';
 import CartService from '../../../services/cart.service';
 import PaymentService from '../../../services/payment.service';
 import AmountPicker from '../../amount-picker';
@@ -12,16 +11,18 @@ import styles from './styles.module.scss';
 interface IProps {
     className?: string,
     product: IProduct,
+    onColorChange?: (color: IColor) => void,
 }
 
-const ProductActions = ({ className, product }: IProps): JSX.Element => {
+const ProductActions = ({ className, product, onColorChange }: IProps): JSX.Element => {
     const [amount, setAmount] = React.useState<number>(1);
+    const [color, setColor] = React.useState<IColor>(product.colors[0]);
 
     const handleAddProductToCart = async (): Promise<void> => {
         CartService.instance.add({
             product,
             amount,
-            color: colors.white,
+            color,
         });
     };
 
@@ -34,17 +35,11 @@ const ProductActions = ({ className, product }: IProps): JSX.Element => {
             </div>
 
             <div className={styles.colorWrapper}>
-                <h4 className={styles.catLabel}>Màu sắc sản phẩm: Trắng</h4>
-                <ColorPicker colors={[
-                    {
-                        label: 'Đen',
-                        value: 'black',
-                    },
-                    {
-                        label: 'Trắng',
-                        value: '#ffffff',
-                    },
-                ]} />
+                <h4 className={styles.catLabel}>Màu sắc sản phẩm: {color.label}</h4>
+                <ColorPicker colors={product.colors} onChange={(c): void => {
+                    if(onColorChange) onColorChange(c);
+                    setColor(c);
+                }} />
             </div>
 
             <h4 className={styles.catLabel}>Số lượng sản phẩm</h4>
@@ -58,7 +53,11 @@ const ProductActions = ({ className, product }: IProps): JSX.Element => {
             <div className={styles.buttons}>
                 <Button primary label='Thêm vào giỏ hàng' onClick={handleAddProductToCart} />
                 <Button primary label='Mua ngay' onClick={(): void => {
-                    PaymentService.instance.requestShowPoup();
+                    PaymentService.instance.requestShowPoup([{
+                        product,
+                        amount,
+                        color,
+                    }]);
                 }} />
             </div>
         </div>
