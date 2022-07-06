@@ -25,11 +25,15 @@ const Footer = ({ reference }: IProps): JSX.Element => {
         setCategories(CategoryService.instance.categories);
     };
 
+    const handleNavigateToAdmin = (): void => {
+        navigate('/admin');
+    };
+
     React.useEffect(() => {
-        CategoryService.instance.addLoadedCategoriesListener(handleOnCategoriesLoaded);
+        EventService.instance.onCategoriesLoaded.addEventListener(handleOnCategoriesLoaded);
 
         return (): void => {
-            CategoryService.instance.removeLoadedCategoriesListener(handleOnCategoriesLoaded);
+            EventService.instance.onCategoriesLoaded.removeEventListener(handleOnCategoriesLoaded);
         };
     }, []);
 
@@ -44,7 +48,7 @@ const Footer = ({ reference }: IProps): JSX.Element => {
                         <Button label='Giới thiệu về chúng tôi' />
                         <Button label='Giỏ hàng của bạn' onClick={handleShowCartPopup} />
                         <Button label='Tra cứu đơn hàng' />
-                        <Button label='Dành cho quản trị viên' />
+                        <Button label='Dành cho quản trị viên' onClick={handleNavigateToAdmin}/>
                     </div>
                 </div>
 

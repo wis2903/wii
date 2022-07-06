@@ -18,7 +18,7 @@ declare global {
     interface ICategory {
         id: IObjectId,
         name: string,
-        products?: Iproduct[],
+        products?: IProduct[],
     }
 
     interface ICartItem {

@@ -1,28 +1,17 @@
+import EventService from './event.service';
+
 class CategoryService {
     private static inst?: CategoryService;
-
-    private onLoadedCategoriesListeners: VoidFunction[];
 
     public categories: ICategory[];
 
     constructor() {
-        this.onLoadedCategoriesListeners = [];
         this.categories = [];
     }
 
     public static get instance(): CategoryService {
         if (!CategoryService.inst) CategoryService.inst = new CategoryService();
         return CategoryService.inst;
-    }
-
-    public addLoadedCategoriesListener = (callback: VoidFunction): void => {
-        this.onLoadedCategoriesListeners.push(callback);
-    }
-    public removeLoadedCategoriesListener = (callback: VoidFunction): void => {
-        this.onLoadedCategoriesListeners = this.onLoadedCategoriesListeners.filter(item => item !== callback);
-    }
-    public triggerOnLoadedCategoriesListeners = (): void => {
-        this.onLoadedCategoriesListeners.forEach(callback => { callback(); });
     }
 
     public list = async (): Promise<ICategory[]> => {
@@ -39,7 +28,7 @@ class CategoryService {
             ];
             setTimeout(() => {
                 this.categories = res;
-                this.triggerOnLoadedCategoriesListeners();
+                EventService.instance.onCategoriesLoaded.trigger();
                 resolve(res);
             }, 1000);
         });

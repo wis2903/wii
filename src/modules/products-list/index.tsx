@@ -1,18 +1,18 @@
 import React from 'react';
 import { classname } from '../../helpers/utils.helper';
 import Button from '../../components/basic/button';
-import Product from '../../components/product/normal-product';
 import Select from '../../components/basic/select';
 import Tab from '../../components/basic/tab';
 import styles from './styles.module.scss';
 import CategoryService from '../../services/category.service';
 import TabPlaceholder from '../../components/basic/tab/placeholder';
 import ProductService from '../../services/product.service';
-import NormalProductPlaceholder from '../../components/product/normal-product/placeholder';
 import { animateScroll } from '../../helpers/dom.helpers';
 import SelectPlaceholder from '../../components/basic/select/placeholder';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { sorts } from '../../resources/constants/utils';
+import Products from '../../components/products';
+import EventService from '../../services/event.service';
 
 interface IProps {
     className?: string,
@@ -37,6 +37,10 @@ const ProductList = ({ className }: IProps): JSX.Element => {
     const containerRef = React.useRef<HTMLDivElement>(null);
     const categoriesRef = React.useRef<ICategoriesState>(categories);
 
+    const handleOnCategoriesLoaded = (): void => {
+        fetchData();
+    };
+
     const getActiveCategory = (categoryId: IObjectId): ICategoryInfo | undefined => {
         return categoriesRef.current.cat.find(item => item.data.id === categoryId) || categoriesRef.current.cat.find(item => item.data.id === defaultCategoryId);
     };
@@ -46,7 +50,7 @@ const ProductList = ({ className }: IProps): JSX.Element => {
         await getProducts(activeCategory?.data.id || defaultCategoryId);
     };
     const getCategories = async (): Promise<void> => {
-        const cats = await CategoryService.instance.list();
+        const cats = CategoryService.instance.categories;
         setCategories(current => {
             const res = {
                 ...current,
@@ -85,7 +89,7 @@ const ProductList = ({ className }: IProps): JSX.Element => {
         animateScroll({
             targetPosition: 0,
             initialPosition: window.scrollY,
-            duration: 1000,
+            duration: 500,
         });
         setCategories(current => ({
             ...current,
@@ -111,35 +115,12 @@ const ProductList = ({ className }: IProps): JSX.Element => {
         setCategories(tmp);
         getProducts(categoriesRef.current.activeId);
     };
-    const generateProductsEl = (): JSX.Element => {
-        const activeCategory = getActiveCategory(categoriesRef.current.activeId || '');
-        if (!activeCategory || !activeCategory.loadedProducts || !activeCategory.data.products || !activeCategory.data.products.length) {
-            return <>
-                {
-                    Array.from({ length: 20 }).map((item, i) =>
-                        <NormalProductPlaceholder
-                            key={`normal-product-placeholder-${i}`}
-                            className={styles.product}
-                        />
-                    )
-                }
-            </>;
-        }
-        return <>
-            {
-                activeCategory.data.products.map(item =>
-                    <Product
-                        key={item.id}
-                        data={item}
-                        className={styles.product}
-                    />
-                )
-            }
-        </>;
-    };
 
     React.useEffect(() => {
-        fetchData();
+        EventService.instance.onCategoriesLoaded.addEventListener(handleOnCategoriesLoaded);
+        return (): void => {
+            EventService.instance.onCategoriesLoaded.removeEventListener(handleOnCategoriesLoaded);
+        };
     }, []);
     React.useEffect(() => {
         categoriesRef.current = categories;
@@ -195,9 +176,13 @@ const ProductList = ({ className }: IProps): JSX.Element => {
                 </div>
             </div>
             <br />
-            <div className={classname([styles.list, styles.hasPadding])}>
-                {generateProductsEl()}
-
+            <Products
+                className={classname([styles.list, styles.hasPadding])}
+                data={{
+                    isLoading: !activeCategory || !activeCategory.loadedProducts || !activeCategory.data.products || !activeCategory.data.products.length,
+                    products: activeCategory?.data.products,
+                }}
+            >
                 {
                     activeCategory?.loadedProducts
                     &&
@@ -209,7 +194,7 @@ const ProductList = ({ className }: IProps): JSX.Element => {
                         />
                     </div>
                 }
-            </div>
+            </Products>
         </div>
     );
 };

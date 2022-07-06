@@ -7,6 +7,9 @@ import Cart from '../cart';
 import ProductDetails from '../product-details';
 import EventService from '../../services/event.service';
 import InvoiceDetails from '../invoice-details';
+import CategoryService from '../../services/category.service';
+import Header from '../header';
+import Footer from '../footer';
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     className?: string,
@@ -64,6 +67,8 @@ const Layout = ({ children, className, ...rest }: IProps): JSX.Element => {
             initialPosition: window.scrollY,
             duration: 1000,
         });
+        if (!CategoryService.instance.categories.length) CategoryService.instance.list();
+        else EventService.instance.onCategoriesLoaded.trigger();
 
         EventService.instance.onRequestShowPayment.addEventListener(handleOnRequestShowPayment);
         EventService.instance.onRequestShowProductDetails.addEventListener(handleOnRequestShowProductDetails);
@@ -80,9 +85,11 @@ const Layout = ({ children, className, ...rest }: IProps): JSX.Element => {
 
     return (
         <>
+            <Header />
             <div className={classname([className, styles.container, 'layout'])} {...rest}>
                 {children}
             </div>
+            <Footer />
             {
                 shoppingCart.isShown
                 &&
