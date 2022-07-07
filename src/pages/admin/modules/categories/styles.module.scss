@@ -1,0 +1,16 @@
+.container{
+    .head{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 0 28px;
+
+        button{
+            font-size: 15px;
+        }
+    }
+
+    .wrapper{
+        background: 0;
+    }
+}

@@ -1,0 +1,25 @@
+.container {
+    .body {
+        max-width: 480px;
+    }
+
+    .message {
+        font-size: 16px;
+        line-height: 26px;
+    }
+
+    .action {
+        margin: 30px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        button {
+            width: calc(50% - 6px);
+
+            &.fullWidth {
+                width: 100%;
+            }
+        }
+    }
+}

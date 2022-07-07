@@ -2,6 +2,7 @@ export const parseCategoryData = (data: Record<string, unknown>): ICategory => {
     return {
         id: String(data.id),
         name: String(data.name),
+        description: String(data.description),
     };
 };
 
@@ -18,11 +19,14 @@ export const parseProductData = (data: Record<string, unknown>): IProduct => {
         id: String(data.id),
         name: String(data.name),
         description: data.description ? String(data.description) : undefined,
+        codeFromCompany: String(data.codeFromCompany),
+        priceFromCompany: Number(data.priceFromCompany),
         price: Number(data.price),
-        categoryId: String(data.category_id),
+        categoryId: String(data.categoryId),
         rating: Number(data.rating),
-        buyersNumber: Number(data.buyers_number),
+        buyersNumber: Number(data.buyersNumber),
         colors: data.colors instanceof Array ? data.colors.map(item => parseColorData(Object(item))) : [],
+        timestamp: Number(data.timestamp),
     };
 };
 

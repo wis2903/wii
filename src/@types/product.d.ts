@@ -3,21 +3,27 @@ export { };
 declare global {
     type IObjectId = string | number;
 
-    interface IProduct {
-        id: IObjectId,
+    interface IProducWithoutId {
         name: string,
         description?: string,
+        codeFromCompany: string,
+        priceFromCompany: number,
         price: number,
         categoryId: string | number,
-        categoryData?: ICategory,
         rating: number,
         buyersNumber: number,
         colors: IColor[],
+        timestamp: number,
+    }
+
+    interface IProduct extends IProducWithoutId {
+        id: IObjectId,
     }
 
     interface ICategory {
         id: IObjectId,
         name: string,
+        description?: string,
         products?: IProduct[],
     }
 

@@ -10,9 +10,11 @@ import InvoiceDetails from '../invoice-details';
 import CategoryService from '../../services/category.service';
 import Header from '../header';
 import Footer from '../footer';
+import Confirmation from '../../components/confirmation';
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     className?: string,
+    isAdminLayout?: boolean,
 }
 interface IPaymentPopupState {
     isShown: boolean,
@@ -25,16 +27,22 @@ interface IProductDetailsPopupState {
 interface IShoppingCartState {
     isShown: boolean,
 }
-interface IInvoiceDetailsPopup {
+interface IInvoiceDetailsPopupState {
     isShown: boolean,
     invoice?: IInvoiceItem,
 }
+interface IConfirmationPopupState {
+    isShown: boolean,
+    message?: string,
+    isAlert?: boolean,
+}
 
-const Layout = ({ children, className, ...rest }: IProps): JSX.Element => {
+const Layout = ({ children, className, isAdminLayout, ...rest }: IProps): JSX.Element => {
     const [shoppingCart, setShoppingCart] = React.useState<IShoppingCartState>({ isShown: false });
     const [paymentPopup, setPaymentPopup] = React.useState<IPaymentPopupState>({ isShown: false, items: [] });
     const [productDetailsPopup, setProductDetailsPopup] = React.useState<IProductDetailsPopupState>({ isShown: false });
-    const [invoiceDetailsPopup, setInvoiceDetailsPopup] = React.useState<IInvoiceDetailsPopup>({ isShown: false });
+    const [invoiceDetailsPopup, setInvoiceDetailsPopup] = React.useState<IInvoiceDetailsPopupState>({ isShown: false });
+    const [confirmationPopup, setConfirmationPopup] = React.useState<IConfirmationPopupState>({ isShown: false });
 
     const handleOnRequestShowPayment = (data: unknown): void => {
         if (!data) return;
@@ -60,6 +68,14 @@ const Layout = ({ children, className, ...rest }: IProps): JSX.Element => {
             invoice: data as IInvoiceItem,
         });
     };
+    const handleOnRequestShowConfirmation = (data: unknown): void => {
+        setConfirmationPopup({
+            isShown: true,
+            message: String(Object(data).message),
+            isAlert: Boolean(Object(data).alert)
+        });
+        setPaymentPopup({ isShown: false });
+    };
 
     React.useEffect(() => {
         animateScroll({
@@ -74,22 +90,34 @@ const Layout = ({ children, className, ...rest }: IProps): JSX.Element => {
         EventService.instance.onRequestShowProductDetails.addEventListener(handleOnRequestShowProductDetails);
         EventService.instance.onRequestShowShoppingCart.addEventListener(handleOnRequestShowShoppingCart);
         EventService.instance.onRequestShowInvoiceDetails.addEventListener(handleOnRequestShowInvoiceDetails);
+        EventService.instance.onRequestShowConfirmation.addEventListener(handleOnRequestShowConfirmation);
 
         return (): void => {
             EventService.instance.onRequestShowPayment.removeEventListener(handleOnRequestShowPayment);
             EventService.instance.onRequestShowProductDetails.removeEventListener(handleOnRequestShowProductDetails);
             EventService.instance.onRequestShowShoppingCart.removeEventListener(handleOnRequestShowShoppingCart);
             EventService.instance.onRequestShowInvoiceDetails.removeEventListener(handleOnRequestShowInvoiceDetails);
+            EventService.instance.onRequestShowConfirmation.removeEventListener(handleOnRequestShowConfirmation);
         };
     }, []);
 
     return (
         <>
-            <Header />
+            {
+                !isAdminLayout
+                &&
+                <Header />
+            }
+
             <div className={classname([className, styles.container, 'layout'])} {...rest}>
                 {children}
             </div>
-            <Footer />
+            {
+                !isAdminLayout
+                &&
+                <Footer />
+            }
+
             {
                 shoppingCart.isShown
                 &&
@@ -117,6 +145,17 @@ const Layout = ({ children, className, ...rest }: IProps): JSX.Element => {
                 <ProductDetails data={productDetailsPopup.product} onClose={(): void => {
                     setProductDetailsPopup({ isShown: false });
                 }} />
+            }
+            {
+                confirmationPopup.isShown && confirmationPopup.message
+                &&
+                <Confirmation
+                    message={confirmationPopup.message}
+                    isAlert={confirmationPopup.isAlert}
+                    onClose={(): void => {
+                        setConfirmationPopup({ isShown: false });
+                    }}
+                />
             }
         </>
     );

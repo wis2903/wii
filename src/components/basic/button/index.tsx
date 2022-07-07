@@ -6,12 +6,13 @@ interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string,
     label?: string,
     primary?: boolean,
+    secondary?: boolean,
     icon?: IComponentIconInfo,
     disableClickTransform?: boolean,
     enableColorTransformOnHover?: boolean,
 }
 
-const Button = ({ className, primary, label, icon, disableClickTransform, enableColorTransformOnHover, ...rest }: IProps): JSX.Element => {
+const Button = ({ className, primary, secondary, label, icon, disableClickTransform, enableColorTransformOnHover, ...rest }: IProps): JSX.Element => {
     const [isClicked, setIsClicked] = React.useState<boolean>(false);
     const [isBlocking, setIsBlocking] = React.useState<boolean>(false);
     const clickDebounceTimeout = React.useRef<ReturnType<typeof setTimeout>>();
@@ -47,6 +48,7 @@ const Button = ({ className, primary, label, icon, disableClickTransform, enable
                 styles.container,
                 className,
                 primary && styles.primary,
+                secondary && styles.secondary,
                 isClicked && styles.active,
                 enableColorTransformOnHover && styles.enableColorTransformOnHover,
                 !label && styles.noLabel,

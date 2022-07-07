@@ -30,4 +30,8 @@ declare global {
         email?: string,
         phoneNumber?: string,
     }
+    type IFileInfo = {
+        file: File,
+        blob: Blob,
+    }
 }

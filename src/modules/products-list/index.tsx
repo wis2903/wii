@@ -50,7 +50,7 @@ const ProductList = ({ className }: IProps): JSX.Element => {
         await getProducts(activeCategory?.data.id || defaultCategoryId);
     };
     const getCategories = async (): Promise<void> => {
-        const cats = CategoryService.instance.categories;
+        const cats = [...CategoryService.instance.categories];
         setCategories(current => {
             const res = {
                 ...current,
@@ -183,7 +183,7 @@ const ProductList = ({ className }: IProps): JSX.Element => {
                     products: activeCategory?.data.products,
                 }}
             >
-                {
+                {/* {
                     activeCategory?.loadedProducts
                     &&
                     <div className={styles.action}>
@@ -193,7 +193,7 @@ const ProductList = ({ className }: IProps): JSX.Element => {
                             onClick={handleLoadMoreProducts}
                         />
                     </div>
-                }
+                } */}
             </Products>
         </div>
     );

@@ -8,9 +8,10 @@ interface IProps {
     cartItems: ICartItem[],
     disabledUpdateCartItem?: boolean,
     onCartItemAmountChange?: (productId: IObjectId, color: string, amount: number) => void,
+    onRemoveCartItem?: (cartItem: ICartItem) => void,
 }
 
-const PaymentSummary = ({ className, cartItems, disabledUpdateCartItem, onCartItemAmountChange }: IProps): JSX.Element => {
+const PaymentSummary = ({ className, cartItems, disabledUpdateCartItem, onCartItemAmountChange, onRemoveCartItem }: IProps): JSX.Element => {
     const getTotalMoney = (): number => {
         let res = 0;
         cartItems.forEach(item => {
@@ -24,13 +25,18 @@ const PaymentSummary = ({ className, cartItems, disabledUpdateCartItem, onCartIt
         <div className={classname([styles.container, className])}>
             <h3 className={styles.title}>Chi tiết đơn hàng ({cartItems.length})</h3>
             {
-                cartItems.map(item =>
+                !cartItems.length
+                ? <div className={styles.empty}>Bạn chưa lựa chọn sản phẩm nào</div>
+                : cartItems.map(item =>
                     <CartItem
                         key={`${item.product.id}-${item.color.value}`}
                         data={item}
                         disabled={disabledUpdateCartItem}
                         onAmountChange={(amount): void => {
                             if (onCartItemAmountChange) onCartItemAmountChange(item.product.id, item.color.value, amount);
+                        }}
+                        onRemove={(): void => {
+                            if (onRemoveCartItem) onRemoveCartItem(item);
                         }}
                     />
                 )

@@ -1,12 +1,15 @@
 import React from 'react';
-import AdminLayout from '../components/layout';
+import Layout from '../../../modules/layout';
+import AdminHeader from '../components/header';
+import CategoriesManagement from '../modules/categories';
 import styles from './styles.module.scss';
 
 const AdminMainPage = (): JSX.Element => {
     return (
-        <AdminLayout className={styles.container}>
-
-        </AdminLayout>
+        <Layout isAdminLayout className={styles.container}>
+            <AdminHeader />
+            <CategoriesManagement />
+        </Layout>
     );
 };
 

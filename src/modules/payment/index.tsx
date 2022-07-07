@@ -8,6 +8,7 @@ import CartService from '../../services/cart.service';
 import EventService from '../../services/event.service';
 import InvoiceService from '../../services/invoice.service';
 import PaymentService from '../../services/payment.service';
+import UtilsService from '../../services/utils.service';
 import ShippingInfo from './shipping-info';
 import styles from './styles.module.scss';
 
@@ -33,6 +34,13 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
         const itm = tmp.find(item => item.product.id === productId && item.color.value === color);
         if (itm) itm.amount = amount;
         setFinalItems(tmp);
+    };
+
+    const handleOnRemoveCartItem = (cartItem: ICartItem): void => {
+        setFinalItems(current => current.filter(item => {
+            if (item.product.id === cartItem.product.id) return false;
+            return item.color.value !== cartItem.color.value;
+        }));
     };
 
     const validate = (): boolean => {
@@ -69,6 +77,11 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
     };
 
     const handlePayment = async (): Promise<void> => {
+        if (!finalItems.length) {
+            UtilsService.instance.alert('Không thể tiến hành  đặt hàng vì đơn hàng không có sản phẩm nào. Vui lòng chọn ít nhất 1 sản phẩm.');
+            return;
+        }
+
         if (!validate()) return;
 
         await CartService.instance.removeMultipleItems(finalItems.map(item => ({
@@ -113,7 +126,11 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
         >
             <div className={styles.wrapper}>
                 <div className={styles.left}>
-                    <PaymentSummary cartItems={finalItems} onCartItemAmountChange={handleOnAmountChange} />
+                    <PaymentSummary
+                        cartItems={finalItems}
+                        onCartItemAmountChange={handleOnAmountChange}
+                        onRemoveCartItem={handleOnRemoveCartItem}
+                    />
                     <br />
                 </div>
 

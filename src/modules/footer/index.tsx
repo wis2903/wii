@@ -8,6 +8,7 @@ import Logo from '../../components/logo';
 import CategoryService from '../../services/category.service';
 import EventService from '../../services/event.service';
 import { useNavigate } from 'react-router-dom';
+import { animateScroll } from '../../helpers/dom.helpers';
 
 interface IProps {
     reference?: React.LegacyRef<HTMLDivElement>,
@@ -29,6 +30,15 @@ const Footer = ({ reference }: IProps): JSX.Element => {
         navigate('/admin');
     };
 
+    const handleNavigateToHomePage = (): void => {
+        animateScroll({
+            initialPosition: window.scrollY,
+            targetPosition: 0,
+            duration: 1000,
+        });
+        navigate('/');
+    };
+
     React.useEffect(() => {
         EventService.instance.onCategoriesLoaded.addEventListener(handleOnCategoriesLoaded);
 
@@ -45,10 +55,11 @@ const Footer = ({ reference }: IProps): JSX.Element => {
                 <div className={styles.com}>
                     <Logo className={styles.logo} />
                     <div className={styles.buttons}>
+                        <Button label='Trang chủ' onClick={handleNavigateToHomePage} />
                         <Button label='Giới thiệu về chúng tôi' />
                         <Button label='Giỏ hàng của bạn' onClick={handleShowCartPopup} />
                         <Button label='Tra cứu đơn hàng' />
-                        <Button label='Dành cho quản trị viên' onClick={handleNavigateToAdmin}/>
+                        <Button label='Dành cho quản trị viên' onClick={handleNavigateToAdmin} />
                     </div>
                 </div>
 

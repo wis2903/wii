@@ -19,3 +19,15 @@ export const getTotalProductsNumberFromCartItems = (cartItems: ICartItem[]): num
     });
     return totalNumber;
 };
+
+export const getRandomNumber = (min: number, max: number): number => {
+    return min + Math.random() * (max - min);
+};
+
+export const upperCaseFirstLetter = (str: string): string => {
+    try {
+        return `${str.substring(0, 1).toUpperCase()}${str.substring(1)}`;
+    } catch (e) {
+        return str;
+    }
+};

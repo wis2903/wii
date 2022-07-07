@@ -30,7 +30,9 @@ class EventService {
     public onRequestShowPayment: EventHandler;
     public onPaymentSuccess: EventHandler;
     public onRequestShowInvoiceDetails: EventHandler;
-    public onCategoriesLoaded: EventHandler; 
+    public onCategoriesLoaded: EventHandler;
+    public onRequestShowConfirmation: EventHandler;
+    public onAnswerTheConfirmation: EventHandler;
 
     constructor() {
         this.onRequestShowProductDetails = new EventHandler('on-request-show-product-details');
@@ -40,6 +42,8 @@ class EventService {
         this.onPaymentSuccess = new EventHandler('on-payment-success');
         this.onRequestShowInvoiceDetails = new EventHandler('on-request-show-invoice-details');
         this.onCategoriesLoaded = new EventHandler('on-categories-loaded');
+        this.onRequestShowConfirmation = new EventHandler('on-request-show-confirmation');
+        this.onAnswerTheConfirmation = new EventHandler('on-answer-the-confirmation');
     }
 
     public static get instance(): EventService {

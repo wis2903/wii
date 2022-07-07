@@ -1,5 +1,5 @@
 import React from 'react';
-import { classname } from '../../../helpers/utils.helper';
+import { classname, upperCaseFirstLetter } from '../../../helpers/utils.helper';
 import Button from '../../basic/button';
 import Price from '../../price';
 import ProductWrapper from '../../../modules/product-wrapper';
@@ -31,7 +31,7 @@ const Product = ({ data, className }: IProps): JSX.Element => {
                 </Tooltip>
             </div>
             <div className={styles.info}>
-                <ProductWrapper productId={data.id} className={styles.name}>{data.name}</ProductWrapper>
+                <ProductWrapper productId={data.id} className={styles.name}>{upperCaseFirstLetter(data.name)}</ProductWrapper>
                 <div className={styles.rating}>
                     <Stars rate={data.rating} />
                     <span className={styles.extra}>{data.buyersNumber} người mua</span>

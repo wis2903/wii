@@ -14,11 +14,13 @@ interface IProps {
     smallProductTitle?: boolean,
     onAmountChange?: (value: number) => void,
     disabled?: boolean,
+    onRemove?: () => void,
 }
 
-const CartItem = ({ className, data, smallProductTitle, onAmountChange, disabled }: IProps): JSX.Element => {
+const CartItem = ({ className, data, smallProductTitle, disabled, onAmountChange, onRemove }: IProps): JSX.Element => {
     const handleRemoveItemFromCart = async (): Promise<void> => {
         CartService.instance.remove({ productId: data.product.id, color: data.color.value });
+        if(onRemove) onRemove();
     };
     const handleUpdateItemFromCart = async (value: number): Promise<void> => {
         CartService.instance.update({

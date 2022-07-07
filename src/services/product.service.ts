@@ -1,4 +1,6 @@
-import { mockUpProduct } from '../mockup/product.mockup';
+import { where } from 'firebase/firestore';
+import { parseProductData } from '../helpers/data.helper';
+import FirebaseService from './firebase.service';
 
 interface IGetProductsListRequestParams {
     categoryId: IObjectId,
@@ -14,14 +16,22 @@ class ProductService {
         return ProductService.inst;
     }
 
-    public list = async ({categoryId, limit, offset}: IGetProductsListRequestParams): Promise<IProduct[]> => {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                resolve(Array.from({ length: 20 }).map((item, i) => ({...mockUpProduct, categoryId, id: String(i)})));
-            }, 1000);
-        });
+    public list = async ({ categoryId, limit, offset }: IGetProductsListRequestParams): Promise<IProduct[]> => {
+        let docs = [];
+        if (categoryId === 'best-seller') {
+            docs = await FirebaseService.instance.getDocuments('products');
+        } else {
+            docs = await FirebaseService.instance.getDocuments('products', where('categoryId', '==', categoryId));
+        }
+        return docs.map(item => ({
+            ...parseProductData(item.data),
+            id: item.id,
+        }));
+    }
 
-        return [];
+    public add = async (product: IProducWithoutId): Promise<string | undefined> => {
+        const id = await FirebaseService.instance.addDocument('products', { ...product });
+        return id;
     }
 }
 
