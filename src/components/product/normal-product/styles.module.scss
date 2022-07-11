@@ -62,22 +62,11 @@
             right: 10px;
             display: none;
             font-size: 15px;
-            height: auto;
-
-            button{
-                height: 32px;
-                padding-left: 10px;
-                padding-right: 10px;
-
-                > span{
-                    font-size: 14px;
-                }
-            }
         }
     }
 
     .thumbnail {
-        padding-top: 80%;
+        padding-top: 100%;
         border-radius: 0;
         background-color: #e5e5e5;
         border-top-left-radius: 4px;
@@ -86,6 +75,9 @@
         width: 100%;
         border: 0;
         display: block;
+        background-position: center;
+        background-size: cover;
+        border-bottom: 1px solid #f5f5f5;
     }
 
     .info {
@@ -95,22 +87,29 @@
         white-space: unset;
 
         .name {
-            font-size: 17px;
-            line-height: 26px;
+            font-size: 16px;
+            line-height: 24px;
             color: #222222;
             width: 100%;
             padding: 0;
             height: auto;
             border: 0;
             text-align: left;
+            overflow: hidden;
+            text-overflow: unset;
+            white-space: unset;
+            height: 50px;
+            align-items: flex-start;
+            display: flex;
         }
 
         .price {
-            margin: 8px 0 0;
+            margin: 12px 0 0;
+            color: #de3b3b;
         }
 
         .rating {
-            margin: 2px 0 0;
+            margin: 0 0;
             display: flex;
             align-items: center;
 

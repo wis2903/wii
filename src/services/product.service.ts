@@ -1,11 +1,15 @@
 import { where } from 'firebase/firestore';
-import { parseProductData } from '../helpers/data.helper';
+import { filterProducts, parseProductData, sortProducts } from '../helpers/data.helper';
+import { SortEnum } from '../resources/constants/enum';
 import FirebaseService from './firebase.service';
 
 interface IGetProductsListRequestParams {
     categoryId: IObjectId,
-    limit?: number,
-    offset?: number,
+    sort: SortEnum,
+}
+interface IFilterProductsRequestParams {
+    keyword: string,
+    sort: SortEnum,
 }
 
 class ProductService {
@@ -16,22 +20,39 @@ class ProductService {
         return ProductService.inst;
     }
 
-    public list = async ({ categoryId, limit, offset }: IGetProductsListRequestParams): Promise<IProduct[]> => {
+    public list = async ({ categoryId, sort }: IGetProductsListRequestParams): Promise<IProduct[]> => {
         let docs = [];
         if (categoryId === 'best-seller') {
             docs = await FirebaseService.instance.getDocuments('products');
         } else {
-            docs = await FirebaseService.instance.getDocuments('products', where('categoryId', '==', categoryId));
+            docs = await FirebaseService.instance.getDocuments(
+                'products',
+                where('categoryId', '==', categoryId)
+            );
         }
-        return docs.map(item => ({
+        const products = docs.map(item => ({
             ...parseProductData(item.data),
             id: item.id,
         }));
+        return sortProducts(products, sort);
+    }
+
+    public filter = async ({ keyword, sort }: IFilterProductsRequestParams): Promise<IProduct[]> => {
+        const docs = await FirebaseService.instance.getDocuments('products');
+        const products = docs.map(item => ({
+            ...parseProductData(item.data),
+            id: item.id,
+        }));
+        return sortProducts(filterProducts(products, keyword), sort);
     }
 
     public add = async (product: IProducWithoutId): Promise<string | undefined> => {
         const id = await FirebaseService.instance.addDocument('products', { ...product });
         return id;
+    }
+
+    public delete = async (productId: string): Promise<void> => {
+        await FirebaseService.instance.deleteDocument('products', productId);
     }
 }
 

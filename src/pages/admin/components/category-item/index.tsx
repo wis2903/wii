@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '../../../../components/basic/button';
 import { upperCaseFirstLetter } from '../../../../helpers/utils.helper';
+import { SortEnum } from '../../../../resources/constants/enum';
 import CategoryService from '../../../../services/category.service';
 import ProductService from '../../../../services/product.service';
 import UtilsService from '../../../../services/utils.service';
@@ -18,6 +19,7 @@ interface ICategoryPopup {
 }
 interface IProductPopup {
     isShown: boolean,
+    product?: IProduct,
 }
 
 const CategoryItem = ({ data }: IProps): JSX.Element => {
@@ -33,7 +35,7 @@ const CategoryItem = ({ data }: IProps): JSX.Element => {
     };
 
     React.useEffect(() => {
-        ProductService.instance.list({ categoryId: data.id }).then(res => {
+        ProductService.instance.list({ categoryId: data.id, sort: SortEnum.newest }).then(res => {
             setProducts(res);
         });
     }, []);
@@ -70,7 +72,7 @@ const CategoryItem = ({ data }: IProps): JSX.Element => {
                             label='Sửa'
                             icon={{
                                 type: 'fa',
-                                value: 'fa fa-file-lines'
+                                value: 'fa fa-pen'
                             }}
                             onClick={(): void => {
                                 setCategoryPopup({ isShown: true, edit: true });
@@ -95,7 +97,16 @@ const CategoryItem = ({ data }: IProps): JSX.Element => {
                             !products.length
                                 ? <div className={styles.empty}>Chưa có sản phẩm trong danh mục</div>
                                 : products.map(item =>
-                                    <ProductItem data={item} key={item.id} />
+                                    <ProductItem
+                                        data={item}
+                                        key={item.id}
+                                        onDelete={(): void => {
+                                            setProducts(current => current.filter(p => p.id !== item.id));
+                                        }}
+                                        onUpdate={(): void => {
+                                            setProductPopup({ isShown: true, product: item });
+                                        }}
+                                    />
                                 )
                         }
                     </div>
@@ -114,10 +125,11 @@ const CategoryItem = ({ data }: IProps): JSX.Element => {
                 productPopup.isShown
                 && <ProductPopup
                     category={data}
+                    product={productPopup.product}
                     onClose={(): void => {
                         setProductPopup({ isShown: false });
                     }}
-                    onSuccess={(product): void => {
+                    onAdded={(product): void => {
                         setProducts(current => ([
                             product,
                             ...current,

@@ -56,10 +56,10 @@ const Footer = ({ reference }: IProps): JSX.Element => {
                     <Logo className={styles.logo} />
                     <div className={styles.buttons}>
                         <Button label='Trang chủ' onClick={handleNavigateToHomePage} />
-                        <Button label='Giới thiệu về chúng tôi' />
-                        <Button label='Giỏ hàng của bạn' onClick={handleShowCartPopup} />
+                        <Button label='Giới thiệu' />
+                        <Button label='Giỏ hàng' onClick={handleShowCartPopup} />
                         <Button label='Tra cứu đơn hàng' />
-                        <Button label='Dành cho quản trị viên' onClick={handleNavigateToAdmin} />
+                        <Button label='Quản trị viên' onClick={handleNavigateToAdmin} />
                     </div>
                 </div>
 

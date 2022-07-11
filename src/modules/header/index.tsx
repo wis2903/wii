@@ -5,15 +5,15 @@ import Search from './search';
 import Wrapper from '../../components/basic/wrapper';
 import styles from './styles.module.scss';
 import NotificationButton from './notification-button';
-// import SakuraImage from '../../resources/images/sakura.png';
+import SakuraImage from '../../resources/images/sakura.png';
 
 const Header = (): JSX.Element => {
     return (
         <>
             <div className={styles.container}>
-                {/* <div className={styles.decoration}>
+                <div className={styles.decoration}>
                     <img className={styles.image2} src={SakuraImage} alt="sakura" />
-                </div> */}
+                </div>
 
                 <Wrapper className={styles.wrapper}>
                     <div className={styles.left}>

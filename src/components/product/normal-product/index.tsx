@@ -5,8 +5,8 @@ import Price from '../../price';
 import ProductWrapper from '../../../modules/product-wrapper';
 import Stars from '../../stars';
 import styles from './styles.module.scss';
-import Tooltip from '../../basic/tooltip';
 import CartService from '../../../services/cart.service';
+import { getProductThumbnail } from '../../../helpers/data.helper';
 
 interface IProps {
     className?: string,
@@ -25,13 +25,19 @@ const Product = ({ data, className }: IProps): JSX.Element => {
     return (
         <div className={classname([styles.container, className])}>
             <div className={styles.thumbnailWrapper}>
-                <ProductWrapper productId={data.id} className={styles.thumbnail} />
-                <Tooltip dir='left' theme='light' text='Thêm vào giỏ hàng' className={styles.cartButton}>
-                    <Button primary icon={{ type: 'fa', value: 'fa fa-cart-plus' }} onClick={handleAddProductToCart} />
-                </Tooltip>
+                <ProductWrapper
+                    product={data}
+                    className={styles.thumbnail}
+                    style={{
+                        backgroundImage: `url(${getProductThumbnail(data)})`
+                    }}
+                />
+                <Button className={styles.cartButton} primary icon={{ type: 'fa', value: 'fa fa-cart-plus' }} onClick={handleAddProductToCart} />
             </div>
             <div className={styles.info}>
-                <ProductWrapper productId={data.id} className={styles.name}>{upperCaseFirstLetter(data.name)}</ProductWrapper>
+                <ProductWrapper product={data} className={styles.name}>
+                    {data.codeFromCompany} - {upperCaseFirstLetter(data.name)}
+                </ProductWrapper>
                 <div className={styles.rating}>
                     <Stars rate={data.rating} />
                     <span className={styles.extra}>{data.buyersNumber} người mua</span>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { classname } from '../../helpers/utils.helper';
-import Button from '../../components/basic/button';
 import Select from '../../components/basic/select';
 import Tab from '../../components/basic/tab';
 import styles from './styles.module.scss';
@@ -13,6 +12,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { sorts } from '../../resources/constants/utils';
 import Products from '../../components/products';
 import EventService from '../../services/event.service';
+import { SortEnum } from '../../resources/constants/enum';
 
 interface IProps {
     className?: string,
@@ -32,8 +32,7 @@ const ProductList = ({ className }: IProps): JSX.Element => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const [categories, setCategories] = React.useState<ICategoriesState>({ isLoading: true, cat: [], activeId: searchParams.get('category-id') || defaultCategoryId });
-    const [isLoadingMoreProducts, setIsLoadingMoreProducts] = React.useState<boolean>(false);
-    const [sort, setSort] = React.useState<string>('newest');
+    const [sort, setSort] = React.useState<SortEnum>(SortEnum.newest);
     const containerRef = React.useRef<HTMLDivElement>(null);
     const categoriesRef = React.useRef<ICategoriesState>(categories);
 
@@ -47,7 +46,7 @@ const ProductList = ({ className }: IProps): JSX.Element => {
     const fetchData = async (): Promise<void> => {
         await getCategories();
         const activeCategory = getActiveCategory(categoriesRef.current.activeId);
-        await getProducts(activeCategory?.data.id || defaultCategoryId);
+        await getProducts(activeCategory?.data.id || defaultCategoryId, sort);
     };
     const getCategories = async (): Promise<void> => {
         const cats = [...CategoryService.instance.categories];
@@ -61,6 +60,7 @@ const ProductList = ({ className }: IProps): JSX.Element => {
                         data: {
                             id: defaultCategoryId,
                             name: 'Phổ biến',
+                            timestamp: +new Date(),
                         }
                     },
                     ...cats.map(item => ({
@@ -73,12 +73,11 @@ const ProductList = ({ className }: IProps): JSX.Element => {
             return res;
         });
     };
-    const getProducts = async (categoryId: IObjectId): Promise<void> => {
-        const products = await ProductService.instance.list({ categoryId });
+    const getProducts = async (categoryId: IObjectId, sortType: SortEnum): Promise<void> => {
+        const products = await ProductService.instance.list({ categoryId, sort: sortType });
         const cat = categoriesRef.current.cat.find(item => item.data.id === categoryId);
         if (!cat) return;
-        if (!cat.data.products) cat.data.products = products;
-        else cat.data.products = cat.data.products.concat(products);
+        cat.data.products = products;
         cat.loadedProducts = true;
         setCategories({
             ...categoriesRef.current,
@@ -98,22 +97,17 @@ const ProductList = ({ className }: IProps): JSX.Element => {
         categoriesRef.current.activeId = tab.value;
         const activeCategory = getActiveCategory(tab.value);
         if (!activeCategory) return;
-        if (!activeCategory.loadedProducts) getProducts(tab.value);
-    };
-    const handleLoadMoreProducts = async (): Promise<void> => {
-        setIsLoadingMoreProducts(true);
-        await getProducts(categoriesRef.current.activeId);
-        setIsLoadingMoreProducts(false);
+        if (!activeCategory.loadedProducts) getProducts(tab.value, sort);
     };
     const handleSortChange = (option: ISelectOption): void => {
-        setSort(String(option.value));
+        setSort(option.value as SortEnum);
         const tmp = { ...categoriesRef.current };
         tmp.cat.forEach(item => {
             item.loadedProducts = false;
             item.data.products = [];
         });
         setCategories(tmp);
-        getProducts(categoriesRef.current.activeId);
+        getProducts(categoriesRef.current.activeId, option.value as SortEnum);
     };
 
     React.useEffect(() => {
@@ -179,22 +173,10 @@ const ProductList = ({ className }: IProps): JSX.Element => {
             <Products
                 className={classname([styles.list, styles.hasPadding])}
                 data={{
-                    isLoading: !activeCategory || !activeCategory.loadedProducts || !activeCategory.data.products || !activeCategory.data.products.length,
+                    isLoading: !activeCategory || !activeCategory.loadedProducts,
                     products: activeCategory?.data.products,
                 }}
-            >
-                {/* {
-                    activeCategory?.loadedProducts
-                    &&
-                    <div className={styles.action}>
-                        <Button
-                            primary
-                            label={isLoadingMoreProducts ? 'Đang tải...' : `Xem thêm sản phẩm ${activeCategory.data.name.toLowerCase()}`}
-                            onClick={handleLoadMoreProducts}
-                        />
-                    </div>
-                } */}
-            </Products>
+            />
         </div>
     );
 };

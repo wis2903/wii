@@ -2,7 +2,7 @@
     .label{
         font-size: 18px;
         margin: 0 0 12px;
-        color: #de3b3b;
+        color: #000000;
     }
 
     .item{
@@ -10,11 +10,12 @@
         height: 34px;
         display: flex;
         align-items: center;
+        color: #666666;
 
         span{
-            font-weight: 500;
             margin: 0 0 0 8px;
-            font-size: 17px;
+            font-size: 16px;
+            color: #000000;
         }
     }
 

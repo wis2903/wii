@@ -1,13 +1,13 @@
 .container{
     span{
-        font-size: 10px;
+        font-size: 9px;
         
         &:not(:first-child){
             margin-left: 2px;
         }
 
         &.checked{
-            color: #de6a5b;
+            color: #ff9900;
         }
     }
 }

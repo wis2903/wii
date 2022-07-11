@@ -7,13 +7,22 @@ import CategoryPopup from '../../components/category-popup';
 import CategoryItem from '../../components/category-item';
 import PageTitle from '../../components/page-title';
 import styles from './styles.module.scss';
+import CategoryPlaceholder from '../../components/category-item/placeholder';
+
+interface ICategoriesState {
+    isLoading: boolean,
+    data: ICategory[],
+}
 
 const CategoriesManagement = (): JSX.Element => {
-    const [categories, setCategories] = React.useState<ICategory[]>([]);
+    const [categories, setCategories] = React.useState<ICategoriesState>({ isLoading: true, data: [] });
     const [isShowCategoryPopup, setIsShowCategoryPopup] = React.useState<boolean>(false);
 
     const handleOnCategoriesLoaded = (): void => {
-        setCategories(CategoryService.instance.categories);
+        setCategories({
+            isLoading: false,
+            data: CategoryService.instance.categories,
+        });
     };
 
     React.useEffect(() => {
@@ -36,9 +45,13 @@ const CategoriesManagement = (): JSX.Element => {
 
                     <div className={styles.mainContent}>
                         {
-                            categories.map(item =>
-                                <CategoryItem key={item.id} data={item} />
-                            )
+                            categories.isLoading
+                                ? Array.from({ length: 4 }).map((item, i) =>
+                                    <CategoryPlaceholder key={`category-placeholder-${i}`} />
+                                )
+                                : categories.data.map(item =>
+                                    <CategoryItem key={item.id} data={item} />
+                                )
                         }
                     </div>
                 </Wrapper>

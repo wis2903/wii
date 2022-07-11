@@ -1,14 +1,20 @@
-.container{
+.container {
     width: 100%;
 
-    .preview{
-        padding-top: 74%;
+    .preview {
+        padding-top: 100%;
         background: #e5e5e5;
         border-radius: 4px;
+        background-size: cover;
+        background-position: center;
+        border: 1px solid #e5e5e5;
     }
 
-    .slide{
+    .slide {
         margin: 12px 0 0;
         height: 104px;
     }
+
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 20px;
 }

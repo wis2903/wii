@@ -21,10 +21,14 @@ class CategoryService {
             id: item.id,
             name: item.data.name,
             description: item.data.description,
+            timestamp: Number(item.data.timestamp || 0),
         }));
-        this.categories = res;
+        this.categories = res.sort((a, b) => {
+            if (a.timestamp < b.timestamp) return -1;
+            return 1;
+        });
         EventService.instance.onCategoriesLoaded.trigger();
-        return res;
+        return this.categories;
     }
 
     public delete = async (id: IObjectId): Promise<void> => {
@@ -36,9 +40,9 @@ class CategoryService {
     }
 
     public add = async (name: string, description?: string): Promise<void> => {
-        const id = await FirebaseService.instance.addDocument('categories', { name, description });
+        const id = await FirebaseService.instance.addDocument('categories', { name, description, timestamp: +new Date() });
         if (id) {
-            this.categories.push({ id, name, description });
+            this.categories.push({ id, name, description, timestamp: +new Date() });
             EventService.instance.onCategoriesLoaded.trigger();
         }
     }

@@ -13,7 +13,7 @@ const ProductSlide = ({ images, onSelect }: IProps): JSX.Element => {
 
     React.useEffect(() => {
         setActive(`${images[0]}-0`);
-        if(onSelect) onSelect(images[0]);
+        if (onSelect) onSelect(images[0]);
     }, [images]);
 
     return (
@@ -26,6 +26,9 @@ const ProductSlide = ({ images, onSelect }: IProps): JSX.Element => {
                         onClick={(): void => {
                             setActive(`${item}-${i}`);
                             if (onSelect) onSelect(item);
+                        }}
+                        style={{
+                            backgroundImage: `url(${item})`
                         }}
                     />
                 )

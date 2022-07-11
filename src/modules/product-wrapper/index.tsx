@@ -1,20 +1,19 @@
 import React from 'react';
 import Button from '../../components/basic/button';
-import { mockUpProduct } from '../../mockup/product.mockup';
 import EventService from '../../services/event.service';
 
-interface IProps extends React.HTMLAttributes<HTMLDivElement> {
+interface IProps extends React.HTMLAttributes<HTMLButtonElement> {
     className?: string,
-    productId: IObjectId,
+    product: IProduct,
 }
 
-const ProductWrapper = ({ productId, className, children }: IProps): JSX.Element => {
+const ProductWrapper = ({ product, className, children, ...rest }: IProps): JSX.Element => {
     const handleShowProductDetails = (): void => {
-        EventService.instance.onRequestShowProductDetails.trigger(mockUpProduct);
+        EventService.instance.onRequestShowProductDetails.trigger(product);
     };
 
     return (
-        <Button disableClickTransform className={className} label="" onClick={handleShowProductDetails}>
+        <Button {...rest} disableClickTransform className={className} label="" onClick={handleShowProductDetails}>
             {children}
         </Button>
     );

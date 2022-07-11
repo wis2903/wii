@@ -1,70 +1,73 @@
-.container{
-    .body{
+.container {
+    .body {
         max-width: 1200px;
         position: relative;
 
-        .wrapper{
+        .wrapper {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
 
-            .left{
+            .left {
                 width: 55%;
 
-                .label{
-                    font-size: 18px;
-                    margin: 30px 0 20px;
+                .label {
+                    font-size: 20px;
+                    margin: 30px 0 30px;
                     font-weight: 600;
                 }
             }
 
-            .right{
+            .right {
                 width: 45%;
                 padding-left: 40px;
             }
 
-            .images{
+            .images {
                 margin: 0 0 0;
 
-                > div{
+                >div {
                     border-radius: 4px;
                     background: #e5e5e5;
                     padding-top: 80%;
+                    border: 1px solid #e5e5e5;
+                    background-position: center;
+                    background-size: cover;
 
-                    &:not(:first-child){
+                    &:not(:first-child) {
                         margin: 20px 0 0;
                     }
                 }
             }
 
-            .info{
+            .info {
                 margin: 0 0 24px;
 
-                .name{
+                .name {
                     font-weight: 600;
                     font-size: 24px;
                     margin: 0 0 6px;
                 }
 
-                .description{
+                .description {
                     font-size: 16px;
                     margin: 0 0 10px;
                     line-height: 22px;
                     color: #666666;
                 }
 
-                .rating{
+                .rating {
                     display: flex;
                     align-items: center;
 
-                    .buyers{
+                    .buyers {
                         font-size: 14px;
                         margin: 2px 0 0 12px;
                         color: #666666;
                     }
                 }
 
-                .category{
+                .category {
                     font-size: 15px;
                     margin: 16px 0 0;
                     color: #666666;

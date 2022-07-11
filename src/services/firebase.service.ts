@@ -44,7 +44,7 @@ class FirebaseService {
 
     public getDocuments = async (collectionName: string, constraint?: QueryConstraint): Promise<{ id: string, data: DocumentData }[]> => {
         try {
-            const querySnapshot = constraint ? await getDocs(query(collection(this.db, collectionName), constraint)) :  await getDocs(collection(this.db, collectionName));
+            const querySnapshot = constraint ? await getDocs(query(collection(this.db, collectionName), constraint)) : await getDocs(collection(this.db, collectionName));
             const documents: { id: string, data: DocumentData }[] = [];
             querySnapshot.forEach((doc) => {
                 documents.push({
@@ -98,7 +98,7 @@ class FirebaseService {
     public uploadFile = async (file: File): Promise<string> => {
         return new Promise(resolve => {
             const storage = getStorage();
-            const storageRef = ref(storage, `images/${+new Date()}-${file.name}`);
+            const storageRef = ref(storage, `images/${+new Date()}-${file.name.replace(/[ \\(\\)]/g, '-')}`);
 
             const uploadTask = uploadBytesResumable(storageRef, file);
 

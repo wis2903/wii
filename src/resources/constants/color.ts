@@ -35,4 +35,8 @@ export const colors: Record<string, IColor> = {
         label: 'Tím',
         value: 'purple',
     },
+    'pink': {
+        label: 'Hồng',
+        value: 'pink',
+    }
 };

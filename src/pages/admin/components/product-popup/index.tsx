@@ -13,8 +13,9 @@ import styles from './styles.module.scss';
 
 interface IProps {
     category: ICategory,
+    product?: IProduct,
     onClose?: VoidFunction,
-    onSuccess?: (product: IProduct) => void,
+    onAdded?: (product: IProduct) => void,
 }
 interface IProductColorState {
     id: number,
@@ -26,7 +27,7 @@ interface IInputState {
     error?: string,
 }
 
-const ProductPopup = ({ category, onClose, onSuccess }: IProps): JSX.Element => {
+const ProductPopup = ({ category, product, onClose, onAdded }: IProps): JSX.Element => {
     const getDefaultColorData = (): IProductColorState => {
         return {
             id: +new Date(),
@@ -37,11 +38,11 @@ const ProductPopup = ({ category, onClose, onSuccess }: IProps): JSX.Element => 
 
     const [productColors, setProductColors] = React.useState<IProductColorState[]>([getDefaultColorData()]);
     const [isProcessing, setIsProcessing] = React.useState<boolean>(false);
-    const [name, setName] = React.useState<IInputState>({ value: '' });
-    const [description, setDescription] = React.useState<IInputState>({ value: '' });
-    const [codeFromCompany, setCodeFromCompany] = React.useState<IInputState>({ value: '' });
-    const [priceFromCompany, setPriceFromCompany] = React.useState<IInputState>({ value: '' });
-    const [price, setPrice] = React.useState<IInputState>({ value: '' });
+    const [name, setName] = React.useState<IInputState>({ value: product?.name || '' });
+    const [description, setDescription] = React.useState<IInputState>({ value: product?.description || '' });
+    const [codeFromCompany, setCodeFromCompany] = React.useState<IInputState>({ value: product?.codeFromCompany || '' });
+    const [priceFromCompany, setPriceFromCompany] = React.useState<IInputState>({ value: product?.priceFromCompany ? String(product.priceFromCompany) : '' });
+    const [price, setPrice] = React.useState<IInputState>({ value: product?.price ? String(product.price) : '' });
 
     const validate = (): boolean => {
         let flag = true;
@@ -96,6 +97,10 @@ const ProductPopup = ({ category, onClose, onSuccess }: IProps): JSX.Element => 
         return flag;
     };
 
+    const handleUpdateProduct = async (): Promise<void> => {
+        //
+    };
+
     const handleAddProduct = async (): Promise<void> => {
         if (isProcessing || !productColors.length || !validate()) return;
         setIsProcessing(true);
@@ -126,11 +131,12 @@ const ProductPopup = ({ category, onClose, onSuccess }: IProps): JSX.Element => 
             colors: cs,
             categoryId: category.id,
             timestamp: +new Date(),
+            code: '',
         };
 
         const id = await ProductService.instance.add(newProductData);
         setIsProcessing(false);
-        if (id && onSuccess) onSuccess({ ...newProductData, id });
+        if (id && onAdded) onAdded({ ...newProductData, id });
         if (onClose) onClose();
     };
 
@@ -139,10 +145,10 @@ const ProductPopup = ({ category, onClose, onSuccess }: IProps): JSX.Element => 
             className={styles.container}
             onClose={onClose}
             title={{
-                text: `Thêm sản phẩm danh mục: ${category.name}`,
+                text: product ? 'Cập nhật thông tin sản phẩm' : `Thêm sản phẩm danh mục: ${category.name}`,
                 icon: {
                     type: 'fa',
-                    value: 'fa fa-plus'
+                    value: product ? 'fa fa-pen' : 'fa fa-plus'
                 }
             }}
         >
@@ -151,6 +157,7 @@ const ProductPopup = ({ category, onClose, onSuccess }: IProps): JSX.Element => 
                 required
                 className={styles.input}
                 label='Tên sản phẩm'
+                initValue={product?.name}
                 error={name.error}
                 onValueChange={(value): void => {
                     setName({ value });
@@ -160,6 +167,7 @@ const ProductPopup = ({ category, onClose, onSuccess }: IProps): JSX.Element => 
                 required
                 className={styles.input}
                 label='Mô tả sản phẩm'
+                initValue={product?.description}
                 error={description.error}
                 onValueChange={(value): void => {
                     setDescription({ value });
@@ -169,6 +177,7 @@ const ProductPopup = ({ category, onClose, onSuccess }: IProps): JSX.Element => 
                 required
                 className={styles.input}
                 label='Mã sản phẩm từ xưởng'
+                initValue={product?.codeFromCompany}
                 error={codeFromCompany.error}
                 onValueChange={(value): void => {
                     setCodeFromCompany({ value });
@@ -179,6 +188,7 @@ const ProductPopup = ({ category, onClose, onSuccess }: IProps): JSX.Element => 
                     required
                     className={styles.input}
                     label='Giá gốc (VND)'
+                    initValue={product?.priceFromCompany}
                     error={priceFromCompany.error}
                     onValueChange={(value): void => {
                         setPriceFromCompany({ value });
@@ -188,6 +198,7 @@ const ProductPopup = ({ category, onClose, onSuccess }: IProps): JSX.Element => 
                     required
                     className={styles.input}
                     label='Giá bán (VND)'
+                    initValue={product?.price}
                     error={price.error}
                     onValueChange={(value): void => {
                         setPrice({ value });
@@ -234,7 +245,11 @@ const ProductPopup = ({ category, onClose, onSuccess }: IProps): JSX.Element => 
 
             <div className={styles.action}>
                 <Button label='Hủy' onClick={onClose} />
-                <Button primary label={isProcessing ? 'Đang tải...' : 'Thêm'} onClick={handleAddProduct} />
+                {
+                    product
+                        ? <Button primary label={isProcessing ? 'Đang tải...' : 'Cập nhật'} onClick={handleUpdateProduct} />
+                        : <Button primary label={isProcessing ? 'Đang tải...' : 'Thêm'} onClick={handleAddProduct} />
+                }
             </div>
         </PopupWrapper>
     );

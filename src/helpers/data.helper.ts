@@ -1,8 +1,19 @@
+import { SortEnum } from '../resources/constants/enum';
+
+export const getProductThumbnail = (product: IProduct, color?: IColor): string => {
+    if (color && color.images) return color.images[0];
+
+    if (!product.colors[0]) return '';
+    if (!product.colors[0].images) return '';
+    return product.colors[0].images[0];
+};
+
 export const parseCategoryData = (data: Record<string, unknown>): ICategory => {
     return {
         id: String(data.id),
         name: String(data.name),
         description: String(data.description),
+        timestamp: Number(data.timestamp),
     };
 };
 
@@ -20,6 +31,7 @@ export const parseProductData = (data: Record<string, unknown>): IProduct => {
         name: String(data.name),
         description: data.description ? String(data.description) : undefined,
         codeFromCompany: String(data.codeFromCompany),
+        code: String(data.code),
         priceFromCompany: Number(data.priceFromCompany),
         price: Number(data.price),
         categoryId: String(data.categoryId),
@@ -53,4 +65,42 @@ export const parseInvoiceData = (data: Record<string, unknown>): IInvoiceItem =>
         buyer: parseBuyerData(Object(data.buyer)),
         timestamp: Number(data.timestamp),
     };
+};
+
+export const filterProducts = (products: IProduct[], keyword: string): IProduct[] => {
+    try {
+        const kwrd = keyword.toLowerCase();
+        const isProductMatchKeyword = (product: IProduct): boolean => {
+            let matchedCharsNumber = 0;
+            for (let i = 0; i < kwrd.length; i++) {
+                const char = kwrd[i];
+                if (
+                    product.name.toLowerCase().indexOf(char) > -1
+                    || (product.description || '').toLowerCase().indexOf(char) > -1
+                    || product.codeFromCompany.toLowerCase().indexOf(char) > -1
+                ) matchedCharsNumber += 1;
+            }
+            return matchedCharsNumber >= (keyword.length * 0.8);
+        };
+
+        return products.filter(item => isProductMatchKeyword(item));
+    } catch (e) {
+        return [];
+    }
+};
+
+export const sortProducts = (products: IProduct[], sort: SortEnum): IProduct[] => {
+    return products.sort((a, b) => {
+        switch (sort) {
+            case SortEnum.newest:
+                return a.timestamp > b.timestamp ? -1 : 1;
+            case SortEnum.buyersDesc:
+                return a.buyersNumber > b.buyersNumber ? -1 : 1;
+            case SortEnum.priceDesc:
+                return a.price > b.price ? -1 : 1;
+            case SortEnum.priceAsc:
+                return a.price < b.price ? -1 : 1;
+            default: return -1;
+        }
+    });
 };

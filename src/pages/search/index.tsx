@@ -1,9 +1,11 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import Button from '../../components/basic/button';
+import Select from '../../components/basic/select';
 import Wrapper from '../../components/basic/wrapper';
 import Products from '../../components/products';
 import Layout from '../../modules/layout';
+import { SortEnum } from '../../resources/constants/enum';
+import { sorts } from '../../resources/constants/utils';
 import ProductService from '../../services/product.service';
 import styles from './styles.module.scss';
 
@@ -15,45 +17,54 @@ interface IProductsState {
 const SearchPage = (): JSX.Element => {
     const params = useParams();
     const [products, setProducts] = React.useState<IProductsState>({ isLoading: true, data: [] });
-    const [isLoadingMoreProducts, setIsLoadingMoreProducts] = React.useState<boolean>(false);
+    const [keyword, setKeyword] = React.useState<string>('');
+    const [sort, setSort] = React.useState<SortEnum>(SortEnum.newest);
 
-    const getProducts = async (): Promise<void> => {
+    const handleSortChange = (option: ISelectOption): void => {
+        setSort(option.value as SortEnum);
+        getProducts(keyword, option.value as SortEnum);
+    };
+
+    const getProducts = async (kwrd: string, srt: SortEnum): Promise<void> => {
         setProducts({ isLoading: true, data: [] });
-        const res = await ProductService.instance.list({ categoryId: '' });
+        const res: IProduct[] = await ProductService.instance.filter({ keyword: kwrd, sort: srt });
         setProducts({ isLoading: false, data: res });
     };
 
-    const handleLoadMoreProducts = async (): Promise<void> => {
-        setIsLoadingMoreProducts(true);
-        const res = await ProductService.instance.list({ categoryId: '' });
-        setProducts({
-            isLoading: false,
-            data: products.data.concat(res),
-        });
-        setIsLoadingMoreProducts(false);
-    };
-
     React.useEffect(() => {
-        getProducts();
+        setKeyword(String(params.keyword));
+    }, []);
+    React.useEffect(() => {
+        setKeyword(String(params.keyword));
     }, [params.keyword]);
+    React.useEffect(() => {
+        if (keyword) {
+            getProducts(keyword, sort);
+        }
+    }, [keyword]);
 
     return (
         <Layout className={styles.container}>
             <Wrapper className={styles.wrapper}>
-                <h3 className={styles.title}>Kết quả tìm kiếm từ khóa: &#39;{params.keyword}&#39;</h3>
+                <div className={styles.head}>
+                    <h3 className={styles.title}>Kết quả tìm kiếm từ khóa: &#39;{params.keyword}&#39;</h3>
+                    {
+                        !products.isLoading
+                        && <Select
+                            label='Sắp xếp'
+                            options={sorts.map(item => ({
+                                ...item,
+                                selected: item.value === sort,
+                            }))}
+                            onChange={handleSortChange}
+                        />
+                    }
+                </div>
 
                 <Products className={styles.list} data={{
                     isLoading: products.isLoading,
                     products: products.data,
-                }}>
-                    <div className={styles.action}>
-                        <Button
-                            primary
-                            label={isLoadingMoreProducts ? 'Đang tải...' : 'Xem thêm kết quả'}
-                            onClick={handleLoadMoreProducts}
-                        />
-                    </div>
-                </Products>
+                }}></Products>
                 <br />
             </Wrapper>
         </Layout>

@@ -26,12 +26,27 @@ const ProductPreview = ({ className, images }: IProps): JSX.Element => {
         return res;
     };
 
+    const [activeImage, setActiveImage] = React.useState<string>(images[0] || '');
+    const [devidedImages, setDevidedImages] = React.useState<(string[])[]>(devideImageToSlides());
+
+    React.useEffect(() => {
+        setDevidedImages(devideImageToSlides());
+        setActiveImage(images[0] || '');
+    }, [images]);
+
     return (
         <div className={classname([styles.container, className])}>
-            <div className={styles.preview} />
-            <Slide className={styles.slide} items={devideImageToSlides().map((slide, i) =>
-                <ProductSlide key={`slide-${i}`} images={slide} />,
-            )} />
+            <div className={styles.preview} style={{
+                backgroundImage: `url(${activeImage})`
+            }} />
+            <Slide
+                className={styles.slide}
+                items={devidedImages.map((slide, i) =>
+                    <ProductSlide key={`slide-${i}`} images={slide} onSelect={(image): void => {
+                        setActiveImage(image);
+                    }} />,
+                )}
+            />
         </div>
     );
 };

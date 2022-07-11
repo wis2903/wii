@@ -1,5 +1,5 @@
 import React from 'react';
-import { classname } from '../../helpers/utils.helper';
+import { classname, upperCaseFirstLetter } from '../../helpers/utils.helper';
 import CartService from '../../services/cart.service';
 import EventService from '../../services/event.service';
 import AmountPicker from '../amount-picker';
@@ -7,6 +7,7 @@ import Button from '../basic/button';
 import Price from '../price';
 import Tooltip from '../basic/tooltip';
 import styles from './styles.module.scss';
+import { getProductThumbnail } from '../../helpers/data.helper';
 
 interface IProps {
     className?: string,
@@ -20,7 +21,7 @@ interface IProps {
 const CartItem = ({ className, data, smallProductTitle, disabled, onAmountChange, onRemove }: IProps): JSX.Element => {
     const handleRemoveItemFromCart = async (): Promise<void> => {
         CartService.instance.remove({ productId: data.product.id, color: data.color.value });
-        if(onRemove) onRemove();
+        if (onRemove) onRemove();
     };
     const handleUpdateItemFromCart = async (value: number): Promise<void> => {
         CartService.instance.update({
@@ -35,11 +36,16 @@ const CartItem = ({ className, data, smallProductTitle, disabled, onAmountChange
 
     return (
         <div className={classname([styles.container, className])}>
-            <div className={styles.thumbnail} />
+            <div
+                className={styles.thumbnail}
+                style={{
+                    backgroundImage: `url(${getProductThumbnail(data.product, data.color)})`
+                }}
+            />
             <div className={styles.info}>
                 <Button
                     className={classname([styles.name, smallProductTitle && styles.small])}
-                    label={data.product.name}
+                    label={`${data.product.codeFromCompany} - ${upperCaseFirstLetter(data.product.name)}`}
                     onClick={handleShowProductDetails}
                 />
                 <div className={classname([styles.color, disabled && styles.smallMargin])}>Màu sắc: {data.color.label}</div>

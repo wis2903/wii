@@ -1,19 +1,21 @@
+import { SortEnum } from './enum';
+
 export const sorts: ISelectOption[] = [
     {
         label: 'Mới nhất',
-        value: 'newest',
+        value: SortEnum.newest,
     },
     {
         label: 'Bán chạy',
-        value: 'buyers-desc',
+        value: SortEnum.buyersDesc,
     },
     {
         label: 'Giá giảm dần',
-        value: 'price-desc',
+        value: SortEnum.priceDesc,
     },
     {
         label: 'Giá tăng dần',
-        value: 'price-asc',
+        value: SortEnum.priceAsc,
     }
 ];
 

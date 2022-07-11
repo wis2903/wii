@@ -49,6 +49,7 @@ const CategoryPopup = ({ onClose, category }: IProps): JSX.Element => {
             id: category.id,
             name: name.value,
             description: description.value,
+            timestamp: category.timestamp,
         });
         setIsProcessing(false);
         if (onClose) onClose();

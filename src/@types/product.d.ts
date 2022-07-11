@@ -7,6 +7,7 @@ declare global {
         name: string,
         description?: string,
         codeFromCompany: string,
+        code: string,
         priceFromCompany: number,
         price: number,
         categoryId: string | number,
@@ -25,6 +26,7 @@ declare global {
         name: string,
         description?: string,
         products?: IProduct[],
+        timestamp: number,
     }
 
     interface ICartItem {
