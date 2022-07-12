@@ -1,32 +1,25 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../../../components/basic/button';
 import Wrapper from '../../../../components/basic/wrapper';
 import Logo from '../../../../components/logo';
-import { classname } from '../../../../helpers/utils.helper';
+import { classname, upperCaseFirstLetter } from '../../../../helpers/utils.helper';
+import { adminHeaderMenu } from '../../../../resources/constants/utils';
+import AuthService from '../../../../services/auth.service';
 import styles from './styles.module.scss';
 
-interface IMenuItem {
-    label: string,
-    id: string
+interface IProps {
+    onMenuChange?: (menu: IAdminHeaderMenuItem) => void,
 }
 
-const menu: IMenuItem[] = [
-    {
-        label: 'Quản lý sản phẩm',
-        id: 'categories',
-    },
-    {
-        label: 'Đơn hàng',
-        id: 'orders',
-    },
-    {
-        label: 'Thống kê',
-        id: 'statistic',
-    },
-];
+const AdminHeader = ({ onMenuChange }: IProps): JSX.Element => {
+    const navigate = useNavigate();
+    const [activeMenu, setActiveMenu] = React.useState<IAdminHeaderMenuItem>(adminHeaderMenu[0]);
 
-const AdminHeader = (): JSX.Element => {
-    const [activeMenu] = React.useState<IMenuItem>(menu[0]);
+    const handleLogOut = async (): Promise<void> => {
+        await AuthService.instance.requestSignOutAsAdmin();
+        navigate('/');
+    };
 
     return (
         <div className={styles.container}>
@@ -36,18 +29,22 @@ const AdminHeader = (): JSX.Element => {
                 <div className={styles.right}>
                     <div className={styles.menu}>
                         {
-                            menu.map(item =>
+                            adminHeaderMenu.map(item =>
                                 <Button
                                     key={item.id}
                                     label={item.label}
                                     className={classname([item.id === activeMenu.id && styles.active])}
+                                    onClick={(): void => {
+                                        setActiveMenu(item);
+                                        if (item !== activeMenu && onMenuChange) onMenuChange(item);
+                                    }}
                                 />
                             )
                         }
                     </div>
                     <div className={styles.userSettings}>
-                        Chào, Whiskey!
-                        <Button label='Đăng xuất' />
+                        Chào, {upperCaseFirstLetter(AuthService.instance.signedInUsername || '')}!
+                        <Button label='Đăng xuất' onClick={handleLogOut} />
                     </div>
                 </div>
             </Wrapper>

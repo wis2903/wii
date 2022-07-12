@@ -30,6 +30,11 @@
             color: #666666;
             line-height: 24px;
             text-align: right;
+
+            &.highlight{
+                color: #000000;
+                font-weight: 600;
+            }
         }
 
         &:not(:last-child) {

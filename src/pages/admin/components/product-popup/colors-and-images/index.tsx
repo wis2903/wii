@@ -20,8 +20,8 @@ const ProductColorsAndImages = ({ product, onChange }: IProps): JSX.Element => {
     };
     const getExistedColorData = (): IProductColorState[] => {
         if (product && product.colors) {
-            return product.colors.map(item => ({
-                id: `${item.value}-${+new Date()}`,
+            return product.colors.map((item, i) => ({
+                id: `${item.value}-${i}-${+new Date()}`,
                 color: item,
             }));
         }

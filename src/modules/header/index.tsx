@@ -20,7 +20,7 @@ const Header = (): JSX.Element => {
                         <Logo />
                     </div>
                     <div className={styles.right}>
-                        <Search className={styles.search} label="Tìm kiếm sản phẩm ..." />
+                        <Search className={styles.search} label="Tìm kiếm sản phẩm..." />
                         <NotificationButton />
                         <CartButton className={styles.cart} />
                     </div>

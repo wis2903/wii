@@ -42,13 +42,7 @@ const PaymentSummary = ({ className, cartItems, disabledUpdateCartItem, onCartIt
                 )
             }
             <br />
-            <br />
             <h3 className={styles.title}>Tóm tắt đơn hàng</h3>
-
-            <div className={styles.item}>
-                <span className={styles.label}>Hình thức thanh toán:</span>
-                <span className={styles.value}>Thanh toán tiền mặt khi nhận hàng</span>
-            </div>
 
             <div className={styles.item}>
                 <span className={styles.label}>Giá trị tổng sản phẩm:</span>
@@ -57,7 +51,12 @@ const PaymentSummary = ({ className, cartItems, disabledUpdateCartItem, onCartIt
 
             <div className={styles.item}>
                 <span className={styles.label}>Phí vận chuyển:</span>
-                <span className={styles.value}>Miễn phí</span>
+                <span className={classname([styles.value, styles.highlight])}>Miễn phí</span>
+            </div>
+
+            <div className={styles.item}>
+                <span className={styles.label}>Hình thức thanh toán:</span>
+                <span className={classname([styles.value, styles.highlight])}>Thanh toán tiền mặt khi nhận hàng</span>
             </div>
 
             <div className={styles.item}>

@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../../../../components/basic/button';
+import { filterProducts } from '../../../../helpers/data.helper';
 import { upperCaseFirstLetter } from '../../../../helpers/utils.helper';
 import { SortEnum } from '../../../../resources/constants/enum';
 import CategoryService from '../../../../services/category.service';
@@ -12,6 +13,7 @@ import styles from './styles.module.scss';
 
 interface IProps {
     data: ICategory,
+    keyword?: string,
 }
 interface ICategoryPopup {
     isShown: boolean,
@@ -22,7 +24,7 @@ interface IProductPopup {
     product?: IProduct,
 }
 
-const CategoryItem = ({ data }: IProps): JSX.Element => {
+const CategoryItem = ({ data, keyword }: IProps): JSX.Element => {
     const [expanded, setExpanded] = React.useState<boolean>(true);
     const [categoryPopup, setCategoryPopup] = React.useState<ICategoryPopup>({ isShown: false });
     const [productPopup, setProductPopup] = React.useState<IProductPopup>({ isShown: false });
@@ -40,6 +42,8 @@ const CategoryItem = ({ data }: IProps): JSX.Element => {
         });
     }, []);
 
+    const filteredProducts = filterProducts(products, keyword || '');
+
     return (
         <>
             <div className={styles.container}>
@@ -47,7 +51,7 @@ const CategoryItem = ({ data }: IProps): JSX.Element => {
                     <h3 className={styles.title}>
                         {upperCaseFirstLetter(data.name)}
                         {' '}
-                        {!!products.length && `(${products.length})`}
+                        {!!filteredProducts.length && `(${filteredProducts.length})`}
                     </h3>
                     <div className={styles.action}>
                         <Button
@@ -94,9 +98,9 @@ const CategoryItem = ({ data }: IProps): JSX.Element => {
                     &&
                     <div className={styles.list}>
                         {
-                            !products.length
-                                ? <div className={styles.empty}>Chưa có sản phẩm trong danh mục</div>
-                                : products.map(item =>
+                            !filteredProducts.length
+                                ? <div className={styles.empty}>Không tìm thấy sản phẩm nào</div>
+                                : filteredProducts.map(item =>
                                     <ProductItem
                                         data={item}
                                         key={item.id}

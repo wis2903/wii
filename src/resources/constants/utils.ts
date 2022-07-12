@@ -1,4 +1,4 @@
-import { SortEnum } from './enum';
+import { AdminHeaderMenuEnum, SortEnum } from './enum';
 
 export const sorts: ISelectOption[] = [
     {
@@ -25,3 +25,14 @@ export const emptyBuyerInfo = {
     address: '',
     email: '',
 };
+
+export const adminHeaderMenu: IAdminHeaderMenuItem[] = [
+    {
+        label: 'Quản lý sản phẩm',
+        id: AdminHeaderMenuEnum.products,
+    },
+    {
+        label: 'Quản lý đơn hàng',
+        id: AdminHeaderMenuEnum.orders,
+    },
+];

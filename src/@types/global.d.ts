@@ -34,4 +34,8 @@ declare global {
         file: File,
         blob: Blob,
     }
+    type IAdminHeaderMenuItem = {
+        label: string,
+        id: string
+    }
 }

@@ -1,16 +1,31 @@
-.container{
-    .head{
+.container {
+    .head {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin: 0 0 28px;
 
-        button{
+        button {
             font-size: 15px;
+            height: 44px;
+            margin-left: 20px;
+        }
+
+        .search {
+            >div {
+                background-color: #ffffff;
+                border-color: transparent;
+            }
+        }
+
+        .right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
         }
     }
 
-    .wrapper{
+    .wrapper {
         background: 0;
     }
 }

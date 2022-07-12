@@ -46,7 +46,7 @@ export const parseProductData = (data: Record<string, unknown>): IProduct => {
         buyersNumber: Number(data.buyersNumber),
         colors: data.colors instanceof Array ? data.colors.map(item => parseColorData(Object(item))) : [],
         timestamp: Number(data.timestamp),
-        attributes: data.attributes instanceof Array ? data.attributes.map(item => parseProductAttributeData(item)): undefined,
+        attributes: data.attributes instanceof Array ? data.attributes.map(item => parseProductAttributeData(item)) : undefined,
     };
 };
 
@@ -76,6 +76,8 @@ export const parseInvoiceData = (data: Record<string, unknown>): IInvoiceItem =>
 };
 
 export const filterProducts = (products: IProduct[], keyword: string): IProduct[] => {
+    if (!keyword) return products;
+
     try {
         const kwrd = keyword.toLowerCase();
         const isProductMatchKeyword = (product: IProduct): boolean => {

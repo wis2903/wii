@@ -8,6 +8,8 @@ import CategoryItem from '../../components/category-item';
 import PageTitle from '../../components/page-title';
 import styles from './styles.module.scss';
 import CategoryPlaceholder from '../../components/category-item/placeholder';
+import Input from '../../../../components/basic/input';
+import SearchIcon from '../../../../resources/images/search.png';
 
 interface ICategoriesState {
     isLoading: boolean,
@@ -16,6 +18,7 @@ interface ICategoriesState {
 
 const CategoriesManagement = (): JSX.Element => {
     const [categories, setCategories] = React.useState<ICategoriesState>({ isLoading: true, data: [] });
+    const [keyword, setKeyword] = React.useState<string>('');
     const [isShowCategoryPopup, setIsShowCategoryPopup] = React.useState<boolean>(false);
 
     const handleOnCategoriesLoaded = (): void => {
@@ -37,10 +40,23 @@ const CategoriesManagement = (): JSX.Element => {
             <div className={styles.container}>
                 <Wrapper className={styles.wrapper}>
                     <div className={styles.head}>
-                        <PageTitle text='Quản lý danh mục sản phẩm' />
-                        <Button label='Thêm danh mục mới' primary onClick={(): void => {
-                            setIsShowCategoryPopup(true);
-                        }} />
+                        <PageTitle text='Quản lý sản phẩm' />
+                        <div className={styles.right}>
+                            <Input
+                                className={styles.search}
+                                label='Tìm kiếm sản phẩm...'
+                                icon={{
+                                    type: 'image',
+                                    value: SearchIcon,
+                                }}
+                                onValueChange={(value): void => {
+                                    setKeyword(value);
+                                }}
+                            />
+                            <Button label='Thêm danh mục' primary onClick={(): void => {
+                                setIsShowCategoryPopup(true);
+                            }} />
+                        </div>
                     </div>
 
                     <div className={styles.mainContent}>
@@ -50,7 +66,7 @@ const CategoriesManagement = (): JSX.Element => {
                                     <CategoryPlaceholder key={`category-placeholder-${i}`} />
                                 )
                                 : categories.data.map(item =>
-                                    <CategoryItem key={item.id} data={item} />
+                                    <CategoryItem key={item.id} data={item} keyword={keyword} />
                                 )
                         }
                     </div>
