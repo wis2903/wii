@@ -45,14 +45,14 @@
 
                 .name {
                     font-weight: 600;
-                    font-size: 24px;
-                    margin: 0 0 6px;
+                    font-size: 26px;
+                    margin: 0 0 8px;
                 }
 
                 .description {
                     font-size: 16px;
-                    margin: 0 0 10px;
-                    line-height: 22px;
+                    margin: 12px 0 0;
+                    line-height: 26px;
                     color: #666666;
                 }
 
@@ -61,16 +61,30 @@
                     align-items: center;
 
                     .buyers {
-                        font-size: 14px;
+                        font-size: 16px;
                         margin: 2px 0 0 12px;
                         color: #666666;
                     }
                 }
 
-                .category {
-                    font-size: 15px;
-                    margin: 16px 0 0;
-                    color: #666666;
+                .attributes{
+                    margin: 12px 0 0;
+
+                    .item{
+                        &:not(:first-child){
+                            margin: 10px 0 0;
+                        }
+
+                        span{
+                            font-size: 16px;
+
+                            &.label{    
+                                color: #888888;
+                                font-weight: 400;
+                                margin: 0 8px 0 0;
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -4,7 +4,6 @@ import ProductActions from '../../components/product/product-actions';
 import ProductImagesSlideShow from '../../components/product/product-images-slideshow';
 import Stars from '../../components/stars';
 import { classname, upperCaseFirstLetter } from '../../helpers/utils.helper';
-import CategoryService from '../../services/category.service';
 import EventService from '../../services/event.service';
 import styles from './styles.module.scss';
 
@@ -39,40 +38,34 @@ const ProductDetails = ({ className, onClose, data }: IProps): JSX.Element => {
             <div className={styles.wrapper}>
                 <div className={styles.left}>
                     <ProductImagesSlideShow images={activeColor.images || []} />
-                    {
-                        activeColor.images
-                        &&
-                        <>
-                            <h3 className={styles.label}>Hình ảnh chi tiết</h3>
-                            <div className={styles.images}>
-                                {
-                                    activeColor.images.map((item, i) =>
-                                        <div
-                                            key={`image-preview-${i}`}
-                                            style={{
-                                                backgroundImage: `url(${item})`
-                                            }}
-                                        />
-                                    )
-                                }
-                            </div>
-                        </>
-                    }
                 </div>
                 <div className={styles.right}>
                     <div className={styles.info}>
                         <h3 className={styles.name}>
                             {data.codeFromCompany} - {upperCaseFirstLetter(data.name)}
                         </h3>
-                        <p className={styles.description}>{data.description}</p>
                         <div className={styles.rating}>
                             <Stars rate={data.rating} />
                             <span className={styles.buyers}>{data.buyersNumber} người mua</span>
                         </div>
-                        <div className={styles.category}>
-                            Sản phẩm thuộc danh mục
-                            {' '}
-                            {CategoryService.instance.categories.find(item => item.id === data.categoryId)?.name}
+                        <p className={styles.description}>{data.description}</p>
+                        <div className={styles.attributes}>
+                            <div className={styles.item}>
+                                <span className={styles.label}>- Xuất xứ:</span>
+                                <span>Trung Quốc</span>
+                            </div>
+                            <div className={styles.item}>
+                                <span className={styles.label}>- Kích thước:</span>
+                                <span>25 x 15 x 7 (cm)</span>
+                            </div>
+                            <div className={styles.item}>
+                                <span className={styles.label}>- Chất liệu:</span>
+                                <span>Da bò thật</span>
+                            </div>
+                            <div className={styles.item}>
+                                <span className={styles.label}>- Trọng lượng:</span>
+                                <span>1.2 kg</span>
+                            </div>
                         </div>
                     </div>
                     <ProductActions className={styles.productActions} product={data} onColorChange={(c): void => {

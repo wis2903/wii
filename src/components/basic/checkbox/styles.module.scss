@@ -14,8 +14,10 @@
     }
 
     .label {
-        padding-top: 4px;
-        padding-left: 8px;
+        padding-top: 1px;
+        padding-left: 10px;
+        font-size: 16px;
+        color: #666666;
     }
 
     &.checked {
@@ -33,6 +35,10 @@
                 transform: translate(-50%, -76%) rotate(-45deg);
                 width: 7px;
             }
+        }
+
+        .label{
+            color: #222222;
         }
     }
 }

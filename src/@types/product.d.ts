@@ -37,7 +37,7 @@ declare global {
 
     interface IInvoiceItem {
         items: ICartItem[],
-        buyer: IBuyer,
+        buyer: Partial<IBuyer>,
         timestamp: number,
     }
 }

@@ -19,6 +19,10 @@ class PaymentService {
         if (!res) return undefined;
         return parseBuyerData(Object(res));
     }
+
+    public removeCachedBuyerInfo = async (): Promise<void> => {
+        StorageService.instance.remove(LocalStorageKeyEnum.cachedBuyInfo);
+    }
 }
 
 export default PaymentService;

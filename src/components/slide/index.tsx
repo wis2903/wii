@@ -82,7 +82,7 @@ const Slide = ({ className, indicatorLeftClassName, indicatorRightClassName, ite
             <div className={styles.wrapper}>
                 <div className={classname([styles.mainContent, index.animation && styles.animation])} style={{
                     width: `${(items.length + 2) * 100}%`,
-                    left: `${index.value * -100}%`
+                    marginLeft: `${index.value * -100}%`
                 }}>
                     <div style={{
                         width: `${100 / (items.length + 2)}%`

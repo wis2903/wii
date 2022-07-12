@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '../../components/basic/button';
 import PaymentSummary from '../../components/payment-summary';
 import PopupWrapper from '../../components/popup/popup-wrapper';
+import { hideSensitiveInformation } from '../../helpers/utils.helper';
 import { emailRegex, phoneRegex } from '../../resources/constants/regex';
 import { emptyBuyerInfo } from '../../resources/constants/utils';
 import CartService from '../../services/cart.service';
@@ -24,6 +25,7 @@ interface IBuyerInfoState {
 
 const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
     const [finalItems, setFinalItems] = React.useState<ICartItem[]>(items);
+    const [isRememberBuyerInfo, setIsRememberBuyInfo] = React.useState<boolean>(false);
     const [buyerInfo, setBuyerInfo] = React.useState<IBuyerInfoState>({
         data: { ...emptyBuyerInfo },
         error: {},
@@ -38,7 +40,7 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
 
     const handleOnRemoveCartItem = (cartItem: ICartItem): void => {
         setFinalItems(current => current.filter(item => {
-            if (item.product.id === cartItem.product.id) return false;
+            if (item.product.id !== cartItem.product.id) return true;
             return item.color.value !== cartItem.color.value;
         }));
     };
@@ -91,19 +93,27 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
         if (onClose) onClose();
         await InvoiceService.instance.add({
             items: finalItems,
-            buyer: buyerInfo.data,
+            buyer: {
+                name: buyerInfo.data.name,
+                email: hideSensitiveInformation(buyerInfo.data.email),
+                phoneNumber: hideSensitiveInformation(buyerInfo.data.phoneNumber),
+            },
             timestamp: +new Date(),
         });
-        PaymentService.instance.setCachedBuyerInfo(buyerInfo.data);
+        if (isRememberBuyerInfo) PaymentService.instance.setCachedBuyerInfo(buyerInfo.data);
+        else PaymentService.instance.removeCachedBuyerInfo();
         EventService.instance.onPaymentSuccess.trigger();
     };
 
     React.useEffect(() => {
         PaymentService.instance.getCachedBuyerInfo().then(res => {
-            if (res) setBuyerInfo(current => ({
-                ...current,
-                data: res,
-            }));
+            if (res) {
+                setBuyerInfo(current => ({
+                    ...current,
+                    data: res,
+                }));
+                setIsRememberBuyInfo(true);
+            }
         });
     }, []);
 
@@ -142,6 +152,9 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
                                 ...current,
                                 data,
                             }));
+                        }}
+                        onRememberBuyerInfoChange={(isRemember): void => {
+                            setIsRememberBuyInfo(isRemember);
                         }}
                     />
                     <div className={styles.action}>

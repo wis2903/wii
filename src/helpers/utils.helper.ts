@@ -31,3 +31,11 @@ export const upperCaseFirstLetter = (str: string): string => {
         return str;
     }
 };
+
+export const hideSensitiveInformation = (str: string): string => {
+    try {
+        return str.substring(0, 3) + Array.from({ length: str.length - 6 }).map(item => '*').join('') + str.substring(str.length - 3);
+    } catch (e) {
+        return str;
+    }
+};

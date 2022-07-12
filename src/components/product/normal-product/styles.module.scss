@@ -53,15 +53,28 @@
     border: 0;
     padding: 0;
 
-    .thumbnailWrapper {
-        position: relative;
+    .slideIndicatorLeft,
+    .slideIndicatorRight {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        display: none;
 
-        .cartButton {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            display: none;
-            font-size: 15px;
+        &::after{
+            top: 11px;
+            right: 9px;
+        }
+
+        &.slideIndicatorLeft{
+            left: -8px;
+        }
+
+        &.slideIndicatorRight{
+            right: -8px;
+            
+            &::after{
+                right: 12px;
+            }
         }
     }
 
@@ -115,7 +128,7 @@
 
             .extra {
                 color: #666666;
-                font-size: 12px;
+                font-size: 14px;
                 padding-top: 3px;
                 margin: 0 0 0 10px;
             }
@@ -123,10 +136,9 @@
     }
 
     &:hover {
-        .thumbnailWrapper {
-            .cartButton {
-                display: block;
-            }
+        .slideIndicatorLeft,
+        .slideIndicatorRight {
+            display: inline-block;
         }
     }
 }

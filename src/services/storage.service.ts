@@ -19,6 +19,10 @@ class StorageService {
     public set = async (key: string, value: Record<string, unknown> | unknown[]): Promise<void> => {
         localStorage.setItem(key, JSON.stringify(value));
     }
+
+    public remove = async (key: string): Promise<void> => {
+        localStorage.removeItem(key);
+    }
 }
 
 export default StorageService;

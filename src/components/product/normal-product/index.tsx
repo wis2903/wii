@@ -1,12 +1,10 @@
 import React from 'react';
 import { classname, upperCaseFirstLetter } from '../../../helpers/utils.helper';
-import Button from '../../basic/button';
 import Price from '../../price';
 import ProductWrapper from '../../../modules/product-wrapper';
 import Stars from '../../stars';
 import styles from './styles.module.scss';
-import CartService from '../../../services/cart.service';
-import { getProductThumbnail } from '../../../helpers/data.helper';
+import Slide from '../../slide';
 
 interface IProps {
     className?: string,
@@ -14,25 +12,28 @@ interface IProps {
 }
 
 const Product = ({ data, className }: IProps): JSX.Element => {
-    const handleAddProductToCart = async (): Promise<void> => {
-        CartService.instance.add({
-            product: data,
-            color: data.colors[0],
-            amount: 1,
-        });
-    };
+    let images: string[] = [];
+    data.colors.forEach(c => {
+        images = images.concat(c.images || []);
+    });
 
     return (
         <div className={classname([styles.container, className])}>
             <div className={styles.thumbnailWrapper}>
-                <ProductWrapper
-                    product={data}
-                    className={styles.thumbnail}
-                    style={{
-                        backgroundImage: `url(${getProductThumbnail(data)})`
-                    }}
+                <Slide
+                    indicatorLeftClassName={styles.slideIndicatorLeft}
+                    indicatorRightClassName={styles.slideIndicatorRight}
+                    items={images.map((item) =>
+                        <ProductWrapper
+                            key={`${item}`}
+                            product={data}
+                            className={styles.thumbnail}
+                            style={{
+                                backgroundImage: `url(${item})`
+                            }}
+                        />
+                    )}
                 />
-                <Button className={styles.cartButton} primary icon={{ type: 'fa', value: 'fa fa-cart-plus' }} onClick={handleAddProductToCart} />
             </div>
             <div className={styles.info}>
                 <ProductWrapper product={data} className={styles.name}>

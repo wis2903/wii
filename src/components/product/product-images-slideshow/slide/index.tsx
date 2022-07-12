@@ -6,25 +6,18 @@ import styles from './styles.module.scss';
 interface IProps {
     images: string[],
     onSelect?: (image: string) => void,
+    activeImage: string,
 }
 
-const ProductSlide = ({ images, onSelect }: IProps): JSX.Element => {
-    const [active, setActive] = React.useState<string>(`${images[0]}-0`);
-
-    React.useEffect(() => {
-        setActive(`${images[0]}-0`);
-        if (onSelect) onSelect(images[0]);
-    }, [images]);
-
+const ProductSlide = ({ images, activeImage, onSelect }: IProps): JSX.Element => {
     return (
         <div className={styles.container}>
             {
                 images.map((item, i) =>
                     <Button
-                        className={classname([styles.item, active === `${item}-${i}` && styles.active])}
+                        className={classname([styles.item, activeImage === item && styles.active])}
                         key={`slide-item-${i}}`}
                         onClick={(): void => {
-                            setActive(`${item}-${i}`);
                             if (onSelect) onSelect(item);
                         }}
                         style={{

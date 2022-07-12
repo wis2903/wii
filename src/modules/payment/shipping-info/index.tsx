@@ -1,5 +1,6 @@
 import React from 'react';
 import Blank from '../../../components/basic/blank';
+import Checkbox from '../../../components/basic/checkbox';
 import Input from '../../../components/basic/input';
 import Textbox from '../../../components/basic/textbox';
 import { classname } from '../../../helpers/utils.helper';
@@ -10,6 +11,7 @@ import styles from './styles.module.scss';
 interface IProps {
     className?: string,
     onChange?: (data: IBuyer) => void,
+    onRememberBuyerInfoChange?: (isRemember: boolean) => void,
     error: IBuyerInfoValidationError,
 }
 interface ICachedBuyerInfoState {
@@ -17,8 +19,9 @@ interface ICachedBuyerInfoState {
     data?: IBuyer,
 }
 
-const ShippingInfo = ({ className, onChange, error }: IProps): JSX.Element => {
+const ShippingInfo = ({ className, onChange, onRememberBuyerInfoChange, error }: IProps): JSX.Element => {
     const formData = React.useRef<IBuyer>({ ...emptyBuyerInfo });
+    const [isRememberBuyerInfo, setIsRememberBuyInfo] = React.useState<boolean>(false);
     const [cachedBuyerInfo, setCachedBuyerInfo] = React.useState<ICachedBuyerInfoState>({ isLoading: true });
 
     const handleOnNameChange = (value: string): void => {
@@ -43,7 +46,10 @@ const ShippingInfo = ({ className, onChange, error }: IProps): JSX.Element => {
 
     React.useEffect(() => {
         PaymentService.instance.getCachedBuyerInfo().then(res => {
-            if (res) formData.current = res;
+            if (res) {
+                formData.current = res;
+                setIsRememberBuyInfo(true);
+            }
             setCachedBuyerInfo({ isLoading: false, data: res });
         });
     }, []);
@@ -84,6 +90,17 @@ const ShippingInfo = ({ className, onChange, error }: IProps): JSX.Element => {
                 error={error.address}
                 onValueChange={handleOnAddressChange}
                 initValue={cachedBuyerInfo.data?.address}
+            />
+            <Checkbox
+                label='Ghi nhớ thông tin người nhận hàng'
+                checked={isRememberBuyerInfo}
+                className={styles.checkbox}
+                onChecked={(): void => {
+                    if (onRememberBuyerInfoChange) onRememberBuyerInfoChange(true);
+                }}
+                onUnchecked={(): void => {
+                    if (onRememberBuyerInfoChange) onRememberBuyerInfoChange(false);
+                }}
             />
         </div>
     );

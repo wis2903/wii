@@ -4,6 +4,7 @@ import Button from '../../components/basic/button';
 import PaymentSummary from '../../components/payment-summary';
 import PopupWrapper from '../../components/popup/popup-wrapper';
 import InvoiceService from '../../services/invoice.service';
+import UtilsService from '../../services/utils.service';
 import ShippingInfo from './shipping-info';
 import styles from './styles.module.scss';
 
@@ -14,9 +15,10 @@ interface IProps {
 }
 
 const InvoiceDetails = ({ onClose, className, data }: IProps): JSX.Element => {
-    const handleDeleteInvoice = (): void => {
-        InvoiceService.instance.remove(data.timestamp);
+    const handleDeleteInvoice = async (): Promise<void> => {
         if (onClose) onClose();
+        const confirmed = await UtilsService.instance.confirm('Vui lòng xác nhận tác vụ: Bạn có chắc chắn muốn xóa đơn hàng này không?');
+        if (confirmed) InvoiceService.instance.remove(data.timestamp);
     };
 
     return (
@@ -34,7 +36,7 @@ const InvoiceDetails = ({ onClose, className, data }: IProps): JSX.Element => {
         >
             <div className={styles.wrapper}>
                 <div className={styles.left}>
-                    <PaymentSummary cartItems={data.items} disabledUpdateCartItem/>
+                    <PaymentSummary cartItems={data.items} disabledUpdateCartItem />
                     <br />
                 </div>
 

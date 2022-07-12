@@ -7,6 +7,14 @@ export const colors: Record<string, IColor> = {
         label: 'Đen',
         value: '#000000',
     },
+    'brown': {
+        label: 'Nâu',
+        value: 'brown',
+    },
+    'brown2': {
+        label: 'Nâu',
+        value: '#994C00',
+    },
     'grey': {
         label: 'Xám',
         value: 'grey',
@@ -19,6 +27,10 @@ export const colors: Record<string, IColor> = {
         label: 'Vàng',
         value: 'yellow',
     },
+    'gold': {
+        label: 'Vàng Gold',
+        value: '#FFD700',
+    },
     'red': {
         label: 'Đỏ',
         value: 'red',
@@ -27,9 +39,17 @@ export const colors: Record<string, IColor> = {
         label: 'Xanh lá',
         value: 'green',
     },
+    'green2': {
+        label: 'Xanh lá',
+        value: '#00CC66',
+    },
     'blue': {
         label: 'Xanh dương',
         value: 'blue',
+    },
+    'blue2': {
+        label: 'Xanh dương',
+        value: '#0080FF',
     },
     'purple': {
         label: 'Tím',
