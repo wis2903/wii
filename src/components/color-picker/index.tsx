@@ -7,11 +7,12 @@ import styles from './styles.module.scss';
 interface IProps {
     className?: string,
     colors: IColor[],
+    initColor?: IColor,
     onChange?: (color: IColor) => void,
 }
 
-const ColorPicker = ({ colors, className, onChange }: IProps): JSX.Element => {
-    const [activeColor, setActiveColor] = React.useState<IColor>(colors[0]);
+const ColorPicker = ({ colors, initColor, className, onChange }: IProps): JSX.Element => {
+    const [activeColor, setActiveColor] = React.useState<IColor>(initColor || colors[0]);
 
     return (
         <div className={classname([styles.container, className])}>

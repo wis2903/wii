@@ -54,6 +54,11 @@ class ProductService {
     public delete = async (productId: string): Promise<void> => {
         await FirebaseService.instance.deleteDocument('products', productId);
     }
+
+    public update = async (product: IProduct): Promise<void> => {
+        const { id, ...rest } = product;
+        await FirebaseService.instance.updateDocument('products', String(id), Object(rest));
+    }
 }
 
 export default ProductService;

@@ -10,6 +10,7 @@ interface IProps {
     items: JSX.Element[],
     enableShadow?: boolean,
     autoPlay?: boolean,
+    loop?: boolean,
 }
 interface IIndexState {
     value: number,
@@ -17,8 +18,8 @@ interface IIndexState {
     animating: boolean,
 }
 
-const Slide = ({ className, indicatorLeftClassName, indicatorRightClassName, items, enableShadow, autoPlay }: IProps): JSX.Element => {
-    const [index, setIndex] = React.useState<IIndexState>({ value: 1, animation: true, animating: false });
+const Slide = ({ className, indicatorLeftClassName, indicatorRightClassName, items, enableShadow, autoPlay, loop }: IProps): JSX.Element => {
+    const [index, setIndex] = React.useState<IIndexState>({ value: loop ? 1 : 0, animation: true, animating: false });
     const indexRef = React.useRef<IIndexState>(index);
     const animatingTimeoutHandler = React.useRef<ReturnType<typeof setTimeout>>();
     const autoPlayTimeoutHandler = React.useRef<ReturnType<typeof setTimeout>>();
@@ -29,27 +30,51 @@ const Slide = ({ className, indicatorLeftClassName, indicatorRightClassName, ite
     };
 
     const handlePrev = (): void => {
-        if (indexRef.current.animating) return;
-        clearTimeoutHandler();
-        const nextIndex = indexRef.current.value - 1;
-        setIndex({ value: nextIndex, animation: true, animating: true });
-        animatingTimeoutHandler.current = setTimeout(() => {
-            if (nextIndex === 0) setIndex({ value: items.length, animation: false, animating: false });
-            else setIndex(current => ({ ...current, animating: false }));
-            handleAutoPlay();
-        }, 350);
+        if (loop) {
+            if (indexRef.current.animating) return;
+            clearTimeoutHandler();
+            const nextIndex = indexRef.current.value - 1;
+            setIndex({ value: nextIndex, animation: true, animating: true });
+            animatingTimeoutHandler.current = setTimeout(() => {
+                if (nextIndex === 0) setIndex({ value: items.length, animation: false, animating: false });
+                else setIndex(current => ({ ...current, animating: false }));
+                handleAutoPlay();
+            }, 350);
+        } else {
+            if (index.value <= 0) return;
+            else {
+                clearTimeoutHandler();
+                setIndex(current => ({
+                    ...current,
+                    value: index.value - 1
+                }));
+                handleAutoPlay();
+            }
+        }
     };
 
     const handleNext = (): void => {
-        if (indexRef.current.animating) return;
-        clearTimeoutHandler();
-        const nextIndex = indexRef.current.value + 1;
-        setIndex({ value: nextIndex, animation: true, animating: true });
-        animatingTimeoutHandler.current = setTimeout(() => {
-            if (nextIndex === items.length + 1) setIndex({ value: 1, animation: false, animating: false });
-            else setIndex(current => ({ ...current, animating: false }));
-            handleAutoPlay();
-        }, 350);
+        if (loop) {
+            if (indexRef.current.animating) return;
+            clearTimeoutHandler();
+            const nextIndex = indexRef.current.value + 1;
+            setIndex({ value: nextIndex, animation: true, animating: true });
+            animatingTimeoutHandler.current = setTimeout(() => {
+                if (nextIndex === items.length + 1) setIndex({ value: 1, animation: false, animating: false });
+                else setIndex(current => ({ ...current, animating: false }));
+                handleAutoPlay();
+            }, 350);
+        } else {
+            if (index.value >= items.length - 1) return;
+            else {
+                clearTimeoutHandler();
+                setIndex(current => ({
+                    ...current,
+                    value: index.value + 1,
+                }));
+                handleAutoPlay();
+            }
+        }
     };
 
     const handleAutoPlay = (): void => {
@@ -58,6 +83,29 @@ const Slide = ({ className, indicatorLeftClassName, indicatorRightClassName, ite
                 handleNext();
             }, 2500);
         }
+    };
+
+    const generateIndicatorButtons = (): JSX.Element | undefined => {
+        if (loop && items.length > 1) return (
+            <>
+                <Button label='' className={classname([styles.indicator, indicatorLeftClassName, styles.prev])} onClick={handlePrev} />
+                <Button label='' className={classname([styles.indicator, indicatorRightClassName, styles.nxt])} onClick={handleNext} />
+            </>
+
+        );
+
+        return (
+            <>
+                {
+                    index.value > 0
+                    && <Button label='' className={classname([styles.indicator, indicatorLeftClassName, styles.prev])} onClick={handlePrev} />
+                }
+                {
+                    index.value < items.length - 1
+                    && <Button label='' className={classname([styles.indicator, indicatorRightClassName, styles.nxt])} onClick={handleNext} />
+                }
+            </>
+        );
     };
 
     React.useEffect(() => {
@@ -69,34 +117,35 @@ const Slide = ({ className, indicatorLeftClassName, indicatorRightClassName, ite
         indexRef.current = index;
     }, [index]);
 
+    const totalSlideItemsLength = loop ? items.length + 2 : items.length;
+
     return (
         <div className={classname([styles.container, className, enableShadow && styles.hasShadow])}>
-            {
-                items.length > 1
-                &&
-                <>
-                    <Button label='' className={classname([styles.indicator, indicatorLeftClassName, styles.prev])} onClick={handlePrev} />
-                    <Button label='' className={classname([styles.indicator, indicatorRightClassName, styles.nxt])} onClick={handleNext} />
-                </>
-            }
+            {generateIndicatorButtons()}
             <div className={styles.wrapper}>
                 <div className={classname([styles.mainContent, index.animation && styles.animation])} style={{
-                    width: `${(items.length + 2) * 100}%`,
+                    width: `${totalSlideItemsLength * 100}%`,
                     marginLeft: `${index.value * -100}%`
                 }}>
-                    <div style={{
-                        width: `${100 / (items.length + 2)}%`
-                    }}>{items[items.length - 1]}</div>
+                    {
+                        loop
+                        && <div style={{
+                            width: `${100 / totalSlideItemsLength}%`
+                        }}>{items[items.length - 1]}</div>
+                    }
                     {
                         items.map(item =>
                             <div key={item.key} style={{
-                                width: `${100 / (items.length + 2)}%`
+                                width: `${100 / totalSlideItemsLength}%`
                             }}>{item}</div>
                         )
                     }
-                    <div style={{
-                        width: `${100 / (items.length + 2)}%`
-                    }}>{items[0]}</div>
+                    {
+                        loop
+                        && <div style={{
+                            width: `${100 / totalSlideItemsLength}%`
+                        }}>{items[0]}</div>
+                    }
                 </div>
             </div>
         </div>

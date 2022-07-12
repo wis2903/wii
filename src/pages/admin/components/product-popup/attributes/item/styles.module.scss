@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 16px;
+    box-shadow: rgba(205, 216, 226, 0.6) 0px 8px 24px;
+    border-radius: 4px;
+
+    &:not(:first-child) {
+        margin: 4px 0 0;
+    }
+
+    .removeButton{
+        margin-top: 10px;
+    }
+
+    .mainContent {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        width: calc(100% - 60px);
+
+        .input {
+            width: calc(50% - 6px);
+        }
+    }
+}

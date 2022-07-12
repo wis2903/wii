@@ -1,4 +1,5 @@
 import React from 'react';
+import RemoveButton from '../../../../components/basic/remove-button';
 import Tooltip from '../../../../components/basic/tooltip';
 import Stars from '../../../../components/stars';
 import { formatNumber } from '../../../../helpers/utils.helper';
@@ -26,8 +27,10 @@ const ProductItem = ({ data, onDelete, onUpdate }: IProps): JSX.Element => {
         <div className={styles.container}>
             <div className={styles.left}>
                 <h3 className={styles.name}>{data.codeFromCompany} - {data.name}</h3>
-                <p className={styles.description}>{data.description}</p>
-                <Stars rate={data.rating} />
+                <div className={styles.ratingWrapper}>
+                    <Stars rate={data.rating} />
+                    <span className={styles.buyers}>{data.buyersNumber} người mua</span>
+                </div>
                 <div className={styles.price}>
                     <span>Giá gốc: <span>{formatNumber(data.priceFromCompany)} VND</span></span>
                     <span>Giá bán: <span>{formatNumber(data.price)} VND</span></span>
@@ -41,13 +44,13 @@ const ProductItem = ({ data, onDelete, onUpdate }: IProps): JSX.Element => {
                         <span className='fa fa-eye' />
                     </button>
                 </Tooltip>
-                {/* <Tooltip text='Sửa'>
+                <Tooltip text='Sửa'>
                     <button className={styles.viewButton} onClick={onUpdate}>
                         <span className='fa fa-pen' />
                     </button>
-                </Tooltip> */}
+                </Tooltip>
                 <Tooltip text='Xóa'>
-                    <button className={styles.removeButton} onClick={handleDeleteProduct} />
+                    <RemoveButton className={styles.removeButton} onClick={handleDeleteProduct} />
                 </Tooltip>
             </div>
         </div>

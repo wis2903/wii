@@ -21,6 +21,18 @@
     .description {
         color: #666666;
         margin: 0 0 6px;
+        line-height: 24px;
+    }
+
+    .ratingWrapper{
+        display: flex;
+        align-items: center;
+
+        .buyers{
+            font-size: 14px;
+            color: #666666;
+            margin: 4px 0 0 12px;
+        }
     }
 
     .price {
@@ -53,27 +65,6 @@
     .action{
         display: flex;
         align-items: center;
-    }
-
-    .removeButton {
-        font-size: 14px;
-        height: 28px;
-        width: 28px;
-        border-radius: 50%;
-        padding: 0;
-        position: relative;
-        border: 1px solid #e5e5e5;
-
-        &::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 40%;
-            height: 2px;
-            background-color: #222222;
-        }
     }
 
     .viewButton {

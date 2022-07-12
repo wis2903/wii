@@ -57,7 +57,7 @@ const Cart = ({ className, onClose }: IProps): JSX.Element => {
             {
                 cartItems.map(item =>
                     <CartItem
-                        key={`${item.product.id}-${item.color}`}
+                        key={`${item.product.id}-${item.color.value}`}
                         data={item}
                     />
                 )

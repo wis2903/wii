@@ -1,0 +1,21 @@
+.container {
+    .input {
+        margin: 0 0 16px;
+    }
+
+    .title {
+        font-size: 17px;
+        margin: 0 0 28px;
+    }
+
+    .price {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+
+        .input {
+            width: calc(50% - 6px);
+            margin: 0;
+        }
+    }
+}

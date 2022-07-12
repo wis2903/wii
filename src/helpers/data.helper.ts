@@ -25,6 +25,13 @@ export const parseColorData = (data: Record<string, unknown>): IColor => {
     };
 };
 
+export const parseProductAttributeData = (data: Record<string, unknown>): IProductAttribute => {
+    return {
+        key: String(data.key),
+        value: String(data.value),
+    };
+};
+
 export const parseProductData = (data: Record<string, unknown>): IProduct => {
     return {
         id: String(data.id),
@@ -39,6 +46,7 @@ export const parseProductData = (data: Record<string, unknown>): IProduct => {
         buyersNumber: Number(data.buyersNumber),
         colors: data.colors instanceof Array ? data.colors.map(item => parseColorData(Object(item))) : [],
         timestamp: Number(data.timestamp),
+        attributes: data.attributes instanceof Array ? data.attributes.map(item => parseProductAttributeData(item)): undefined,
     };
 };
 

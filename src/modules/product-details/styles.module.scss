@@ -41,7 +41,7 @@
             }
 
             .info {
-                margin: 0 0 24px;
+                margin: 0 0 20px;
 
                 .name {
                     font-weight: 600;
@@ -68,7 +68,12 @@
                 }
 
                 .attributes{
-                    margin: 12px 0 0;
+                    margin: 20px 0 0;
+                    background-color: #f8f8f8;
+                    border-radius: 4px;
+                    padding: 16px;
+                    border: 1px solid #e5e5e5;
+                    box-shadow: rgb(0 0 0 / 12%) 0px 6px 16px;;
 
                     .item{
                         &:not(:first-child){
@@ -79,7 +84,7 @@
                             font-size: 16px;
 
                             &.label{    
-                                color: #888888;
+                                color: #666666;
                                 font-weight: 400;
                                 margin: 0 8px 0 0;
                             }

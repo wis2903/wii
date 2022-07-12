@@ -48,25 +48,21 @@ const ProductDetails = ({ className, onClose, data }: IProps): JSX.Element => {
                             <Stars rate={data.rating} />
                             <span className={styles.buyers}>{data.buyersNumber} người mua</span>
                         </div>
-                        <p className={styles.description}>{data.description}</p>
-                        <div className={styles.attributes}>
-                            <div className={styles.item}>
-                                <span className={styles.label}>- Xuất xứ:</span>
-                                <span>Trung Quốc</span>
+                        {/* <p className={styles.description}>{data.description}</p> */}
+                        {
+                            data.attributes
+                            &&
+                            <div className={styles.attributes}>
+                                {
+                                    data.attributes.map((item, i) =>
+                                        <div className={styles.item} key={`attr-${item.key}-${i}`}>
+                                            <span className={styles.label}>- {upperCaseFirstLetter(item.key)}:</span>
+                                            <span>{upperCaseFirstLetter(item.value)}</span>
+                                        </div>
+                                    )
+                                }
                             </div>
-                            <div className={styles.item}>
-                                <span className={styles.label}>- Kích thước:</span>
-                                <span>25 x 15 x 7 (cm)</span>
-                            </div>
-                            <div className={styles.item}>
-                                <span className={styles.label}>- Chất liệu:</span>
-                                <span>Da bò thật</span>
-                            </div>
-                            <div className={styles.item}>
-                                <span className={styles.label}>- Trọng lượng:</span>
-                                <span>1.2 kg</span>
-                            </div>
-                        </div>
+                        }
                     </div>
                     <ProductActions className={styles.productActions} product={data} onColorChange={(c): void => {
                         setActiveColor(c);

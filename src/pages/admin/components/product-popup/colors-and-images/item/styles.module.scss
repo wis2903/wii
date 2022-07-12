@@ -1,0 +1,61 @@
+.container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 16px;
+    box-shadow: rgba(205, 216, 226, 0.6) 0px 8px 24px;
+    border-radius: 4px;
+
+    &:not(:first-child) {
+        margin: 20px 0 0;
+    }
+
+    .mainContent {
+        width: calc(100% - 60px);
+
+        .imageUpload {
+            margin: 16px 0 0;
+        }
+
+        .images {
+            padding: 10px 0;
+            display: flex;
+            flex-wrap: wrap;
+            margin: -8px;
+
+            .imagePreview {
+                padding-top: 50%;
+                width: calc(50% - 16px);
+                margin: 8px;
+                border-radius: 4px;
+                background-color: #e5e5e5;
+                background-size: cover;
+                background-position: center;
+                border: 1px solid #e5e5e5;
+                position: relative;
+
+                button{
+                    font-size: 14px;
+                    height: 30px;
+                    position: absolute;
+                    top: 8px;
+                    right: 8px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    box-shadow: rgba(205, 216, 226, 0.6) 0px 8px 24px;
+                }
+
+                &.active{
+                    border-width: 2px;
+                    border-color: #de3b3b;
+                }
+            }
+        }
+    }
+
+    .colorPicker{
+        > div {
+            margin: 2px;
+        }
+    }
+}

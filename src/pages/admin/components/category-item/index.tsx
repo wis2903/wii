@@ -135,6 +135,9 @@ const CategoryItem = ({ data }: IProps): JSX.Element => {
                             ...current,
                         ]));
                     }}
+                    onUpdated={(product): void => {
+                        setProducts(current => current.map(item => item.id === product.id ? product : item));
+                    }}
                 />
             }
         </>
