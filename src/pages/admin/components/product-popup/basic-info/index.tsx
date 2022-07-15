@@ -6,6 +6,7 @@ import styles from './styles.module.scss';
 
 interface IProps {
     product?: IProduct,
+    disabled?: boolean,
     onChange?: (data: IProductBasicInfo) => void,
     validation?: (func: () => boolean) => void,
 }
@@ -22,7 +23,7 @@ interface IInputState {
     error?: string,
 }
 
-const ProductBasicInfo = ({ product, onChange, validation }: IProps): JSX.Element => {
+const ProductBasicInfo = ({ product, disabled, onChange, validation }: IProps): JSX.Element => {
     const [info, setInfo] = React.useState<IProductBasicInfoState>({
         name: { value: product?.name || '' },
         description: { value: product?.description || '' },
@@ -122,6 +123,7 @@ const ProductBasicInfo = ({ product, onChange, validation }: IProps): JSX.Elemen
             <h3 className={styles.title}>Thông tin cơ bản về sản phẩm</h3>
             <Input
                 required
+                disabled={disabled}
                 className={styles.input}
                 error={info.name.error}
                 label='Tên sản phẩm'
@@ -135,6 +137,7 @@ const ProductBasicInfo = ({ product, onChange, validation }: IProps): JSX.Elemen
             />
             <Textbox
                 required
+                disabled={disabled}
                 className={styles.input}
                 error={info.description.error}
                 label='Mô tả sản phẩm'
@@ -146,11 +149,12 @@ const ProductBasicInfo = ({ product, onChange, validation }: IProps): JSX.Elemen
                     }));
                 }}
             />
-            <Input
+            <Textbox
                 required
+                disabled={disabled}
                 className={styles.input}
                 error={info.codeFromCompany.error}
-                label='Mã sản phẩm từ xưởng (Code)'
+                label='Mã sản phẩm tại xưởng'
                 initValue={product?.codeFromCompany}
                 onValueChange={(value): void => {
                     setInfo(current => ({
@@ -159,34 +163,38 @@ const ProductBasicInfo = ({ product, onChange, validation }: IProps): JSX.Elemen
                     }));
                 }}
             />
-            <div className={styles.price}>
-                <Input
-                    required
-                    className={styles.input}
-                    error={info.priceFromCompany.error}
-                    label='Giá gốc (VND)'
-                    initValue={product?.priceFromCompany}
-                    onValueChange={(value): void => {
-                        setInfo(current => ({
-                            ...current,
-                            priceFromCompany: { value },
-                        }));
-                    }}
-                />
-                <Input
-                    required
-                    className={styles.input}
-                    error={info.price.error}
-                    label='Giá bán (VND)'
-                    initValue={product?.price}
-                    onValueChange={(value): void => {
-                        setInfo(current => ({
-                            ...current,
-                            price: { value },
-                        }));
-                    }}
-                />
-            </div>
+            {
+                !disabled
+                &&
+                <div className={styles.price}>
+                    <Input
+                        required
+                        className={styles.input}
+                        error={info.priceFromCompany.error}
+                        label='Giá gốc (VND)'
+                        initValue={product?.priceFromCompany}
+                        onValueChange={(value): void => {
+                            setInfo(current => ({
+                                ...current,
+                                priceFromCompany: { value },
+                            }));
+                        }}
+                    />
+                    <Input
+                        required
+                        className={styles.input}
+                        error={info.price.error}
+                        label='Giá bán (VND)'
+                        initValue={product?.price}
+                        onValueChange={(value): void => {
+                            setInfo(current => ({
+                                ...current,
+                                price: { value },
+                            }));
+                        }}
+                    />
+                </div>
+            }
         </div>
     );
 };

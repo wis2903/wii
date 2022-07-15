@@ -20,14 +20,14 @@ const ProductActions = ({ className, product, onColorChange }: IProps): JSX.Elem
 
     const handleAddProductToCart = async (): Promise<void> => {
         CartService.instance.add({
-            product,
+            productId: product.id,
             amount,
             color,
         });
     };
     const handleBuyNow = (): void => {
         EventService.instance.onRequestShowPayment.trigger([{
-            product,
+            productId: product.id,
             amount,
             color,
         }]);

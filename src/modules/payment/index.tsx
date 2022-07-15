@@ -24,6 +24,7 @@ interface IBuyerInfoState {
 }
 
 const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
+    const [isProcessing, setIsProcessing] = React.useState<boolean>(false);
     const [finalItems, setFinalItems] = React.useState<ICartItem[]>(items);
     const [isRememberBuyerInfo, setIsRememberBuyInfo] = React.useState<boolean>(false);
     const [buyerInfo, setBuyerInfo] = React.useState<IBuyerInfoState>({
@@ -33,14 +34,14 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
 
     const handleOnAmountChange = (productId: IObjectId, color: string, amount: number): void => {
         const tmp = [...finalItems];
-        const itm = tmp.find(item => item.product.id === productId && item.color.value === color);
+        const itm = tmp.find(item => item.productId === productId && item.color.value === color);
         if (itm) itm.amount = amount;
         setFinalItems(tmp);
     };
 
     const handleOnRemoveCartItem = (cartItem: ICartItem): void => {
         setFinalItems(current => current.filter(item => {
-            if (item.product.id !== cartItem.product.id) return true;
+            if (item.productId !== cartItem.productId) return true;
             return item.color.value !== cartItem.color.value;
         }));
     };
@@ -59,10 +60,7 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
             error.phoneNumber = 'Số điện thoại không đúng, vui lòng kiểm tra lại';
             flag = false;
         }
-        if (!buyerInfo.data.email) {
-            error.email = 'Vui lòng nhập email';
-            flag = false;
-        } else if (!emailRegex.test(buyerInfo.data.email)) {
+        if (buyerInfo.data.email && !emailRegex.test(buyerInfo.data.email)) {
             error.email = 'Email không đúng, vui lòng kiểm tra lại';
             flag = false;
         }
@@ -80,18 +78,12 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
 
     const handlePayment = async (): Promise<void> => {
         if (!finalItems.length) {
-            UtilsService.instance.alert('Không thể tiến hành  đặt hàng vì đơn hàng không có sản phẩm nào. Vui lòng chọn ít nhất 1 sản phẩm.');
+            UtilsService.instance.alert('Không thể tiến hành đặt hàng vì đơn hàng không có sản phẩm nào. Vui lòng chọn ít nhất 1 sản phẩm.');
             return;
         }
-
-        if (!validate()) return;
-
-        await CartService.instance.removeMultipleItems(finalItems.map(item => ({
-            productId: item.product.id,
-            color: item.color.value,
-        })));
-        if (onClose) onClose();
-        await InvoiceService.instance.add({
+        if (isProcessing || !validate()) return;
+        setIsProcessing(true);
+        const invoiceData = {
             items: finalItems,
             buyer: {
                 name: buyerInfo.data.name,
@@ -99,7 +91,28 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
                 phoneNumber: hideSensitiveInformation(buyerInfo.data.phoneNumber),
             },
             timestamp: +new Date(),
+        };
+        const success = await PaymentService.instance.createOrder({
+            ...invoiceData,
+            buyer: {
+                name: buyerInfo.data.name,
+                email: buyerInfo.data.email,
+                phoneNumber: buyerInfo.data.phoneNumber,
+                address: buyerInfo.data.address
+            },
         });
+        if (!success) {
+            UtilsService.instance.alert('Rất tiếc chúng tôi không thể xử lý đơn hàng của bạn vì có lỗi xảy ra. Xin vui lòng thử lại.');
+            setIsProcessing(false);
+            return;
+        }
+        await InvoiceService.instance.add(invoiceData);
+        await CartService.instance.removeMultipleItems(finalItems.map(item => ({
+            productId: item.productId,
+            color: item.color.value,
+        })));
+        setIsProcessing(false);
+        if (onClose) onClose();
         if (isRememberBuyerInfo) PaymentService.instance.setCachedBuyerInfo(buyerInfo.data);
         else PaymentService.instance.removeCachedBuyerInfo();
         EventService.instance.onPaymentSuccess.trigger();
@@ -158,7 +171,11 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
                         }}
                     />
                     <div className={styles.action}>
-                        <Button primary label='Tiến hành đặt hàng' onClick={handlePayment} />
+                        <Button
+                            primary
+                            label={isProcessing ? 'Đang xử lý...' : 'Tiến hành đặt hàng'}
+                            onClick={handlePayment}
+                        />
                     </div>
                 </div>
             </div>

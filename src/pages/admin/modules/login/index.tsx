@@ -1,9 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Blank from '../../../../components/basic/blank';
 import Button from '../../../../components/basic/button';
+import Checkbox from '../../../../components/basic/checkbox';
 import Input from '../../../../components/basic/input';
 import PopupWrapper from '../../../../components/popup/popup-wrapper';
+import { LocalStorageKeyEnum } from '../../../../resources/constants/enum';
 import AuthService from '../../../../services/auth.service';
+import StorageService from '../../../../services/storage.service';
 import UtilsService from '../../../../services/utils.service';
 import styles from './styles.module.scss';
 
@@ -18,8 +22,9 @@ interface IInputState {
 
 const Login = ({ onSuccess }: IProps): JSX.Element => {
     const navigate = useNavigate();
+    const [isCheckingExistedSession, setIsCheckingExistedSession] = React.useState<boolean>(true);
     const [isProcessing, setIsProcessing] = React.useState<boolean>(false);
-    // const [isRememberAccount, setIsRememberAccount] = React.useState<boolean>(false);
+    const [isRememberAccount, setIsRememberAccount] = React.useState<boolean>(false);
     const [username, setUsername] = React.useState<IInputState>({ value: '' });
     const [password, setPassword] = React.useState<IInputState>({ value: '' });
 
@@ -45,15 +50,35 @@ const Login = ({ onSuccess }: IProps): JSX.Element => {
     const handleLogin = async (): Promise<void> => {
         if (isProcessing || !validate()) return;
         setIsProcessing(true);
-        const success = await AuthService.instance.requestSignInAsAdmin(username.value, password.value);
-        if (!success) {
+        const user = await AuthService.instance.requestSignInAsAdmin(username.value, password.value);
+        if (!user) {
             UtilsService.instance.alert('Đăng nhập không thành công. Vui lòng kiểm tra lại tên đăng nhập hoặc mật khẩu.');
             setIsProcessing(false);
-        } else{
+        } else {
+            if (isRememberAccount) StorageService.instance.set(LocalStorageKeyEnum.cachedAdminAccount, user);
+            else StorageService.instance.remove(LocalStorageKeyEnum.cachedAdminAccount);
             if (onSuccess) onSuccess();
-        } 
+        }
     };
 
+    const handleRestoreSession = async (): Promise<void> => {
+        const cachedAdminAccount = await StorageService.instance.get(LocalStorageKeyEnum.cachedAdminAccount);
+        if (cachedAdminAccount) {
+            const user = await AuthService.instance.requestRestoreSession(String(cachedAdminAccount.username), String(cachedAdminAccount.hash));
+            if (user && onSuccess) {
+                onSuccess();
+                return;
+            }
+        }
+
+        setIsCheckingExistedSession(false);
+    };
+
+    React.useEffect(() => {
+        handleRestoreSession();
+    }, []);
+
+    if (isCheckingExistedSession) return <Blank />;
     return (
         <PopupWrapper
             className={styles.container}
@@ -85,7 +110,7 @@ const Login = ({ onSuccess }: IProps): JSX.Element => {
                     }}
                     onEnter={handleLogin}
                 />
-                {/* <Checkbox
+                <Checkbox
                     className={styles.checkbox}
                     label='Ghi nhớ tài khoản'
                     onChecked={(): void => {
@@ -94,7 +119,7 @@ const Login = ({ onSuccess }: IProps): JSX.Element => {
                     onUnchecked={(): void => {
                         setIsRememberAccount(false);
                     }}
-                /> */}
+                />
                 <Button
                     primary
                     label={isProcessing ? 'Đang tải...' : 'Đăng nhập'}

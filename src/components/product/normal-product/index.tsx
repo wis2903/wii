@@ -37,7 +37,7 @@ const Product = ({ data, className }: IProps): JSX.Element => {
             </div>
             <div className={styles.info}>
                 <ProductWrapper product={data} className={styles.name}>
-                    {data.codeFromCompany} - {upperCaseFirstLetter(data.name)}
+                    {upperCaseFirstLetter(data.name)}
                 </ProductWrapper>
                 <div className={styles.rating}>
                     <Stars rate={data.rating} />

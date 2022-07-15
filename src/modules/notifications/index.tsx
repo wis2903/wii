@@ -23,18 +23,20 @@ const Notifications = (): JSX.Element => {
 
     return (
         <div className={styles.container}>
-            {
-                !invoices.length
-                    ? <span className={styles.empty}>Bạn chưa đặt đơn hàng nào</span>
-                    :
-                    <div className={styles.list}>
-                        {
-                            invoices.map((item, i) =>
-                                <InvoiceItem data={item} key={`invoice-item-${i}-${item.timestamp}`} />
-                            )
-                        }
-                    </div>
-            }
+            <div className={styles.wrapper}>
+                {
+                    !invoices.length
+                        ? <span className={styles.empty}>Bạn chưa đặt đơn hàng nào</span>
+                        :
+                        <div className={styles.list}>
+                            {
+                                invoices.map((item, i) =>
+                                    <InvoiceItem data={item} key={`invoice-item-${i}-${item.timestamp}`} />
+                                )
+                            }
+                        </div>
+                }
+            </div>
         </div>
     );
 };

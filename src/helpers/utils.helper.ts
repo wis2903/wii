@@ -15,7 +15,7 @@ export const formatNumber = (num: number): string => {
 export const getTotalProductsNumberFromCartItems = (cartItems: ICartItem[]): number => {
     let totalNumber = 0;
     cartItems.forEach(item => {
-        totalNumber += item.amount;
+        totalNumber += Number(item.amount);
     });
     return totalNumber;
 };

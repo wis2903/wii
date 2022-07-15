@@ -27,8 +27,30 @@
         overflow: auto;
         @include disable-scrollbar;
 
-        &.hasTitle{
+        &.hasTitle {
             max-height: calc(90vh - 70px);
+
+            &.hasFooter {
+                max-height: calc(90vh - 150px);
+            }
+        }
+
+
+        &.hasFooter {
+            max-height: calc(90vh - 80px);
+        }
+    }
+
+    .footer {
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        >button {
+            &:not(:last-child) {
+                margin-right: 12px;
+            }
         }
     }
 }

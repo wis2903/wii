@@ -1,5 +1,7 @@
+import { SortEnum } from '../resources/constants/enum';
 import EventService from './event.service';
 import FirebaseService from './firebase.service';
+import ProductService from './product.service';
 
 class CategoryService {
     private static inst?: CategoryService;
@@ -16,7 +18,7 @@ class CategoryService {
     }
 
     public list = async (): Promise<ICategory[]> => {
-        const docs = await FirebaseService.instance.getDocuments('categories');
+        const docs = await FirebaseService.instance.getDocuments('categories', undefined, true);
         const res: ICategory[] = docs.map(item => ({
             id: item.id,
             name: item.data.name,
@@ -35,6 +37,10 @@ class CategoryService {
         const success = await FirebaseService.instance.deleteDocument('categories', String(id));
         if (success) {
             this.categories = this.categories.filter(item => item.id !== id);
+            const productsIncategory = await ProductService.instance.list({ categoryId: String(id), sort: SortEnum.newest });
+            for (let i = 0; i < productsIncategory.length; i++) {
+                await ProductService.instance.delete(String(productsIncategory[i].id));
+            }
             EventService.instance.onCategoriesLoaded.trigger();
         }
     }

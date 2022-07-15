@@ -24,6 +24,10 @@
             font-size: 11px;
         }
 
+        .noValue{
+            color: #de3b3b;
+        }
+
         &::before {
             content: "";
             position: absolute;
@@ -49,11 +53,17 @@
         border: 1px solid #b7b7b7;
         z-index: 4;
 
+        &.top {
+            top: auto;
+            bottom: calc(100% + 8px);
+        }
+
         button {
             width: 100%;
             text-align: left;
             padding: 10px 10px;
             background-color: #ffffff;
+            font-size: 16px;
 
             &:first-child {
                 border-top-left-radius: 4px;

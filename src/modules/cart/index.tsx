@@ -1,11 +1,11 @@
 import React from 'react';
 import PopupWrapper from '../../components/popup/popup-wrapper';
-import { classname } from '../../helpers/utils.helper';
-import CartItem from '../../components/cart-item';
 import styles from './styles.module.scss';
 import Button from '../../components/basic/button';
 import CartService from '../../services/cart.service';
 import EventService from '../../services/event.service';
+import CartItems from '../../components/cart-items';
+import { classname } from '../../helpers/utils.helper';
 
 interface IProps {
     className?: string,
@@ -50,17 +50,8 @@ const Cart = ({ className, onClose }: IProps): JSX.Element => {
         >
             {
                 !cartItems.length
-                &&
-                <div className={styles.empty}>Giỏ hàng của bạn chưa có sản phẩm nào.</div>
-            }
-
-            {
-                cartItems.map(item =>
-                    <CartItem
-                        key={`${item.product.id}-${item.color.value}`}
-                        data={item}
-                    />
-                )
+                ? <div className={styles.empty}>Giỏ hàng của bạn chưa có sản phẩm nào.</div>
+                : <CartItems data={cartItems} />
             }
 
             {

@@ -11,17 +11,23 @@
 
     .left {
         width: 70%;
+        overflow: hidden;
     }
 
     .name {
         font-size: 17px;
         margin: 0 0 6px;
-    }
-
-    .description {
-        color: #666666;
-        margin: 0 0 6px;
-        line-height: 24px;
+        display: flex;
+        align-items: center;
+    
+        span{
+            display: inline-flex;
+            margin: 0 6px 0 0;
+            background-color: #de3b3b;
+            color: #ffffff;
+            border-radius: 4px;
+            padding: 4px 8px;
+        }
     }
 
     .ratingWrapper{
@@ -29,14 +35,14 @@
         align-items: center;
 
         .buyers{
-            font-size: 14px;
+            font-size: 15px;
             color: #666666;
             margin: 4px 0 0 12px;
         }
     }
 
     .price {
-        margin: 10px 0 0;
+        margin: 8px 0 0;
 
         span {
             &:not(:first-child) {
@@ -54,10 +60,6 @@
                     background: #222222;
                     transform: translateY(-50%);
                 }
-            }
-
-            span {
-                font-weight: 600;
             }
         }
     }

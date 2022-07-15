@@ -52,7 +52,7 @@ const NotificationButton = ({ className }: IProps): JSX.Element => {
                 {
                     isShowNotification
                     &&
-                    <span className={styles.notification}>Đơn hàng đã được xử lý</span>
+                    <span className={styles.notification}>Đơn hàng của bạn đã được xử lý</span>
                 }
             </div>
 

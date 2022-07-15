@@ -5,6 +5,7 @@ import styles from './styles.module.scss';
 
 interface IProps {
     product?: IProduct,
+    disabled?: boolean,
     onChange?: (data: IProductAttribute[]) => void,
     validation?: (func: () => boolean) => void,
 }
@@ -14,7 +15,7 @@ interface IProductAttributeState extends IProductAttribute {
     removed?: boolean,
 }
 
-const ProductAttributes = ({ product, onChange, validation }: IProps): JSX.Element => {
+const ProductAttributes = ({ product, disabled, onChange, validation }: IProps): JSX.Element => {
     const getDefaultAttributesFromProduct = (): IProductAttributeState[] => {
         const res: IProductAttributeState[] = [
             {
@@ -32,11 +33,6 @@ const ProductAttributes = ({ product, onChange, validation }: IProps): JSX.Eleme
                 value: '',
                 required: true,
             },
-            {
-                key: 'Trọng lượng',
-                value: '',
-                required: true,
-            },
         ];
         if (!product || !product.attributes) return res;
 
@@ -45,7 +41,6 @@ const ProductAttributes = ({ product, onChange, validation }: IProps): JSX.Eleme
                 item.key === 'Nguồn gốc xuất xứ'
                 || item.key === 'Chất liệu'
                 || item.key === 'Kích thước'
-                || item.key === 'Trọng lượng'
             ) {
                 const attr = res.find(c => c.key === item.key);
                 if (attr) attr.value = item.value;
@@ -88,27 +83,32 @@ const ProductAttributes = ({ product, onChange, validation }: IProps): JSX.Eleme
         <div className={styles.container}>
             <div className={styles.head}>
                 <h3 className={styles.title}>Thuộc tính sản phẩm</h3>
-                <Button
-                    icon={{
-                        type: 'fa',
-                        value: 'fa fa-plus',
-                    }}
-                    tabIndex={-1}
-                    label='Thêm'
-                    onClick={(): void => {
-                        attributes.current.push({
-                            key: '',
-                            value: '',
-                        });
-                        setToggle(!toggle);
-                    }}
-                />
+                {
+                    !disabled
+                    &&
+                    <Button
+                        icon={{
+                            type: 'fa',
+                            value: 'fa fa-plus',
+                        }}
+                        tabIndex={-1}
+                        label='Thêm'
+                        onClick={(): void => {
+                            attributes.current.push({
+                                key: '',
+                                value: '',
+                            });
+                            setToggle(!toggle);
+                        }}
+                    />
+                }
             </div>
             <div>
                 {
                     attributes.current.map((item, i) =>
                         <ProductAttribute
                             key={`product-attr-${i}`}
+                            disabled={disabled}
                             required={item.required}
                             title={item.key}
                             initValue={item.value}

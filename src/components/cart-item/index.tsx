@@ -12,15 +12,15 @@ import { getProductThumbnail } from '../../helpers/data.helper';
 interface IProps {
     className?: string,
     data: ICartItem,
-    smallProductTitle?: boolean,
-    onAmountChange?: (value: number) => void,
+    product: IProduct,
     disabled?: boolean,
+    onAmountChange?: (value: number) => void,
     onRemove?: () => void,
 }
 
-const CartItem = ({ className, data, smallProductTitle, disabled, onAmountChange, onRemove }: IProps): JSX.Element => {
+const CartItem = ({ className, data, product, disabled, onAmountChange, onRemove }: IProps): JSX.Element => {
     const handleRemoveItemFromCart = async (): Promise<void> => {
-        CartService.instance.remove({ productId: data.product.id, color: data.color.value });
+        CartService.instance.remove({ productId: data.productId, color: data.color.value });
         if (onRemove) onRemove();
     };
     const handleUpdateItemFromCart = async (value: number): Promise<void> => {
@@ -31,7 +31,7 @@ const CartItem = ({ className, data, smallProductTitle, disabled, onAmountChange
         if (onAmountChange) onAmountChange(value);
     };
     const handleShowProductDetails = (): void => {
-        EventService.instance.onRequestShowProductDetails.trigger(data.product);
+        EventService.instance.onRequestShowProductDetails.trigger(product);
     };
 
     return (
@@ -39,13 +39,13 @@ const CartItem = ({ className, data, smallProductTitle, disabled, onAmountChange
             <div
                 className={styles.thumbnail}
                 style={{
-                    backgroundImage: `url(${getProductThumbnail(data.product, data.color)})`
+                    backgroundImage: `url(${getProductThumbnail(product, data.color)})`
                 }}
             />
             <div className={styles.info}>
                 <Button
-                    className={classname([styles.name, smallProductTitle && styles.small])}
-                    label={`${data.product.codeFromCompany} - ${upperCaseFirstLetter(data.product.name)}`}
+                    className={classname([styles.name])}
+                    label={`${upperCaseFirstLetter(product.name)}`}
                     onClick={handleShowProductDetails}
                 />
                 <div className={classname([styles.color, disabled && styles.smallMargin])}>Màu sắc: {data.color.label}</div>
@@ -56,7 +56,7 @@ const CartItem = ({ className, data, smallProductTitle, disabled, onAmountChange
                             : <span className={styles.amountDisabled}>Số lượng: {data.amount}</span>
 
                     }
-                    <Price className={styles.price} value={data.product.price * data.amount} />
+                    <Price className={styles.price} value={product.price * data.amount} />
                 </div>
 
                 {

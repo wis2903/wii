@@ -23,5 +23,9 @@
         .input {
             width: calc(50% - 6px);
         }
+
+        &.disabled{
+            width: 100%;
+        }
     }
 }

@@ -15,11 +15,11 @@ const Contact = ({ className }: IProps): JSX.Element => {
             <h3 className={styles.label}>Liên hệ với chúng tôi</h3>
 
             <div className={styles.item}>
-                Email: <span>example@email.com</span>
+                Email: <span>sonicacustomer@email.com</span>
             </div>
 
             <div className={styles.item}>
-                Hotline: <span>09xx.xxx.xxx</span>
+                Hotline: <span>0973.987.047</span>
             </div>
 
             <div className={styles.form}>

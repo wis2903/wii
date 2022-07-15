@@ -11,9 +11,10 @@ interface IProps {
     onClose?: VoidFunction,
     children: React.ReactNode,
     title?: IPopupTitleComponentProps,
+    footer?: React.ReactNode,
 }
 
-const PopupWrapper = ({ className, bodyClassName, children, onClose, title }: IProps): JSX.Element => {
+const PopupWrapper = ({ className, bodyClassName, children, onClose, title, footer }: IProps): JSX.Element => {
     React.useEffect(() => {
         disableScroll();
 
@@ -31,9 +32,17 @@ const PopupWrapper = ({ className, bodyClassName, children, onClose, title }: IP
                     &&
                     <PopupTitle data={title} />
                 }
-                <div className={classname(['popup-body-main-content', styles.mainContent, !!title && styles.hasTitle])}>
+                <div className={classname(['popup-body-main-content', styles.mainContent, !!title && styles.hasTitle, !!footer && styles.hasFooter])}>
                     {children}
                 </div>
+
+                {
+                    !!footer
+                    &&
+                    <div className={styles.footer}>
+                        {footer}
+                    </div>
+                }
             </PopupBody>
         </div>
     );

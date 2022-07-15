@@ -30,6 +30,7 @@ interface IShoppingCartState {
 interface IInvoiceDetailsPopupState {
     isShown: boolean,
     invoice?: IInvoiceItem,
+    isFromAdmin?: boolean,
 }
 interface IConfirmationPopupState {
     isShown: boolean,
@@ -65,7 +66,8 @@ const Layout = ({ children, className, isAdminLayout, ...rest }: IProps): JSX.El
     const handleOnRequestShowInvoiceDetails = (data: unknown): void => {
         setInvoiceDetailsPopup({
             isShown: true,
-            invoice: data as IInvoiceItem,
+            invoice: Object(data).invoice as IInvoiceItem,
+            isFromAdmin: Boolean(Object(data).isFromAdmin),
         });
     };
     const handleOnRequestShowConfirmation = (data: unknown): void => {
@@ -135,7 +137,7 @@ const Layout = ({ children, className, isAdminLayout, ...rest }: IProps): JSX.El
             {
                 invoiceDetailsPopup.isShown && invoiceDetailsPopup.invoice
                 &&
-                <InvoiceDetails data={invoiceDetailsPopup.invoice} onClose={(): void => {
+                <InvoiceDetails data={invoiceDetailsPopup.invoice} isFromAdmin={invoiceDetailsPopup.isFromAdmin} onClose={(): void => {
                     setInvoiceDetailsPopup({ isShown: false });
                 }} />
             }

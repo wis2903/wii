@@ -6,6 +6,7 @@ import AuthService from '../../../services/auth.service';
 import AdminHeader from '../components/header';
 import CategoriesManagement from '../modules/categories';
 import Login from '../modules/login';
+import OrdersManagement from '../modules/orders';
 import styles from './styles.module.scss';
 
 const AdminMainPage = (): JSX.Element => {
@@ -16,6 +17,11 @@ const AdminMainPage = (): JSX.Element => {
         if (menu.id === AdminHeaderMenuEnum.products) return (
             <Layout key={2} isAdminLayout className={styles.container}>
                 <CategoriesManagement />
+            </Layout>
+        );
+        if (menu.id === AdminHeaderMenuEnum.orders) return (
+            <Layout key={3} isAdminLayout className={styles.container}>
+                <OrdersManagement />
             </Layout>
         );
     };

@@ -68,20 +68,19 @@ const ShippingInfo = ({ className, onChange, onRememberBuyerInfoChange, error }:
                 initValue={cachedBuyerInfo.data?.name}
             />
             <Input
+                className={styles.input}
+                label='Email người nhận (không bắt buộc)'
+                error={error.email}
+                onValueChange={handleOnEmailChange}
+                initValue={cachedBuyerInfo.data?.email}
+            />
+            <Input
                 required
                 className={styles.input}
                 label='Số điện thoại người nhận'
                 error={error.phoneNumber}
                 onValueChange={handleOnPhoneNumberChange}
                 initValue={cachedBuyerInfo.data?.phoneNumber}
-            />
-            <Input
-                required
-                className={styles.input}
-                label='Email người nhận'
-                error={error.email}
-                onValueChange={handleOnEmailChange}
-                initValue={cachedBuyerInfo.data?.email}
             />
             <Textbox
                 required
@@ -92,7 +91,7 @@ const ShippingInfo = ({ className, onChange, onRememberBuyerInfoChange, error }:
                 initValue={cachedBuyerInfo.data?.address}
             />
             <Checkbox
-                label='Ghi nhớ thông tin người nhận hàng'
+                label='Ghi nhớ cho lần đặt sau'
                 checked={isRememberBuyerInfo}
                 className={styles.checkbox}
                 onChecked={(): void => {

@@ -17,7 +17,7 @@ declare global {
         price: number,
     }
 
-    interface IProducWithoutId extends IProductBasicInfo{
+    interface IProducWithoutId extends IProductBasicInfo {
         categoryId: string | number,
         rating: number,
         buyersNumber: number,
@@ -40,7 +40,7 @@ declare global {
 
     interface ICartItem {
         amount: number,
-        product: IProduct,
+        productId: IObjectId,
         color: IColor,
     }
 
@@ -48,5 +48,15 @@ declare global {
         items: ICartItem[],
         buyer: Partial<IBuyer>,
         timestamp: number,
+    }
+
+    interface IOrderItemWithoutId extends IInvoiceItem {
+        phoneNumber: string,
+        status: OrderStatusEnum,
+        extraInfo?: Record<string, unknown>,
+    }
+
+    interface IOrderItem extends IOrderItemWithoutId {
+        id: string,
     }
 }

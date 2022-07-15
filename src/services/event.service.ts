@@ -33,6 +33,7 @@ class EventService {
     public onCategoriesLoaded: EventHandler;
     public onRequestShowConfirmation: EventHandler;
     public onAnswerTheConfirmation: EventHandler;
+    public onOrderItemUpdated: EventHandler;
 
     constructor() {
         this.onRequestShowProductDetails = new EventHandler('on-request-show-product-details');
@@ -44,6 +45,7 @@ class EventService {
         this.onCategoriesLoaded = new EventHandler('on-categories-loaded');
         this.onRequestShowConfirmation = new EventHandler('on-request-show-confirmation');
         this.onAnswerTheConfirmation = new EventHandler('on-answer-the-confirmation');
+        this.onOrderItemUpdated = new EventHandler('on-order-item-updated');
     }
 
     public static get instance(): EventService {

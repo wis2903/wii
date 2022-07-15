@@ -10,11 +10,12 @@ import styles from './styles.module.scss';
 interface IProps {
     data: IColor,
     unremovable?: boolean,
+    disabled?: boolean,
     onDelete?: () => void,
     onUpdate?: (color: IColor, files: File[]) => void,
 }
 
-const ProductColor = ({ data, unremovable, onDelete, onUpdate }: IProps): JSX.Element => {
+const ProductColor = ({ data, unremovable, disabled, onDelete, onUpdate }: IProps): JSX.Element => {
     const [files, setFiles] = React.useState<File[]>([]);
     const [color, setColor] = React.useState<IColor>(data);
     const [thumbnail, setThumbnail] = React.useState<File | string | undefined>(data.images?.length ? data.images[0] : '');
@@ -67,6 +68,7 @@ const ProductColor = ({ data, unremovable, onDelete, onUpdate }: IProps): JSX.El
                     >
                         {
                             item !== thumbnail
+                            && !disabled
                             && <Button
                                 label='Đặt làm hình đại diện'
                                 onClick={(): void => {
@@ -102,16 +104,22 @@ const ProductColor = ({ data, unremovable, onDelete, onUpdate }: IProps): JSX.El
                     }}
                 />
                 {generateImagesPreview()}
-                <ImageUpload className={styles.imageUpload} onChange={(data): void => {
-                    setFiles(data);
-                    setThumbnail(data[0]);
-                }} />
+                {
+                    !disabled
+                    && <ImageUpload className={styles.imageUpload} onChange={(data): void => {
+                        setFiles(data);
+                        setThumbnail(data[0]);
+                    }} />
+                }
             </div>
-            <RemoveButton
-                onClick={handleDelete}
-                disabled={unremovable}
-                disabledAlertMessage='Không thể xóa vì yêu cầu phải có ít nhất 1 thuộc tính màu sắc và hình ảnh. Chỉ xóa được khi đã thêm màu sắc và hình ảnh khác.'
-            />
+            {
+                !disabled
+                && <RemoveButton
+                    onClick={handleDelete}
+                    disabled={unremovable}
+                    disabledAlertMessage='Không thể xóa vì yêu cầu phải có ít nhất 1 thuộc tính màu sắc và hình ảnh. Chỉ xóa được khi đã thêm màu sắc và hình ảnh khác.'
+                />
+            }
         </div>
     );
 };

@@ -13,6 +13,7 @@ import styles from './styles.module.scss';
 interface IProps {
     category: ICategory,
     product?: IProduct,
+    disabled?: boolean,
     onClose?: VoidFunction,
     onAdded?: (product: IProduct) => void,
     onUpdated?: (product: IProduct) => void,
@@ -23,7 +24,7 @@ export interface IProductColorState {
     files?: File[],
 }
 
-const ProductPopup = ({ category, product, onClose, onAdded, onUpdated }: IProps): JSX.Element => {
+const ProductPopup = ({ category, product, disabled, onClose, onAdded, onUpdated }: IProps): JSX.Element => {
     const [isProcessing, setIsProcessing] = React.useState<boolean>(false);
     const [basicInfo, setBasicInfo] = React.useState<Partial<IProductBasicInfo>>({});
     const [attributes, setAttributes] = React.useState<IProductAttribute[]>([]);
@@ -121,10 +122,21 @@ const ProductPopup = ({ category, product, onClose, onAdded, onUpdated }: IProps
                     value: product ? 'fa fa-pen' : 'fa fa-plus'
                 }
             }}
+            footer={!disabled && (
+                <>
+                    <Button label='Hủy' onClick={onClose} />
+                    {
+                        product
+                            ? <Button primary label={isProcessing ? 'Đang tải...' : 'Cập nhật'} onClick={handleUpdateProduct} />
+                            : <Button primary label={isProcessing ? 'Đang tải...' : 'Thêm'} onClick={handleAddProduct} />
+                    }
+                </>
+            )}
         >
             <div className={styles.mainContent}>
                 <div className={styles.left}>
                     <ProductBasicInfo
+                        disabled={disabled}
                         product={product}
                         onChange={(data): void => {
                             setBasicInfo(data);
@@ -134,6 +146,7 @@ const ProductPopup = ({ category, product, onClose, onAdded, onUpdated }: IProps
                         }}
                     />
                     <ProductAttributes
+                        disabled={disabled}
                         product={product}
                         onChange={(data): void => {
                             setAttributes(data);
@@ -145,21 +158,13 @@ const ProductPopup = ({ category, product, onClose, onAdded, onUpdated }: IProps
                 </div>
                 <div className={styles.right}>
                     <ProductColorsAndImages
+                        disabled={disabled}
                         product={product}
                         onChange={(data): void => {
                             setProductColors(data);
                         }}
                     />
                 </div>
-            </div>
-
-            <div className={styles.action}>
-                <Button label='Hủy' onClick={onClose} />
-                {
-                    product
-                        ? <Button primary label={isProcessing ? 'Đang tải...' : 'Cập nhật'} onClick={handleUpdateProduct} />
-                        : <Button primary label={isProcessing ? 'Đang tải...' : 'Thêm'} onClick={handleAddProduct} />
-                }
             </div>
         </PopupWrapper>
     );

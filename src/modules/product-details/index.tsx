@@ -42,19 +42,18 @@ const ProductDetails = ({ className, onClose, data }: IProps): JSX.Element => {
                 <div className={styles.right}>
                     <div className={styles.info}>
                         <h3 className={styles.name}>
-                            {data.codeFromCompany} - {upperCaseFirstLetter(data.name)}
+                            {upperCaseFirstLetter(data.name)}
                         </h3>
                         <div className={styles.rating}>
                             <Stars rate={data.rating} />
                             <span className={styles.buyers}>{data.buyersNumber} người mua</span>
                         </div>
-                        {/* <p className={styles.description}>{data.description}</p> */}
                         {
                             data.attributes
                             &&
                             <div className={styles.attributes}>
                                 {
-                                    data.attributes.map((item, i) =>
+                                    data.attributes.filter(item => !!item.value.trim() && item.value.trim() !== '-').map((item, i) =>
                                         <div className={styles.item} key={`attr-${item.key}-${i}`}>
                                             <span className={styles.label}>- {upperCaseFirstLetter(item.key)}:</span>
                                             <span>{upperCaseFirstLetter(item.value)}</span>

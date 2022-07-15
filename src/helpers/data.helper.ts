@@ -62,7 +62,7 @@ export const parseBuyerData = (data: Record<string, unknown>): IBuyer => {
 export const parseCartItemData = (data: Record<string, unknown>): ICartItem => {
     return {
         amount: Number(data.amount),
-        product: parseProductData(Object(data.product)),
+        productId: String(data.productId),
         color: parseColorData(Object(data.color)),
     };
 };
@@ -72,6 +72,16 @@ export const parseInvoiceData = (data: Record<string, unknown>): IInvoiceItem =>
         items: data.items instanceof Array ? data.items.map(item => parseCartItemData(Object(item))) : [],
         buyer: parseBuyerData(Object(data.buyer)),
         timestamp: Number(data.timestamp),
+    };
+};
+
+export const parseOrderData = (data: Record<string, unknown>): IOrderItem => {
+    return {
+        ...parseInvoiceData(data),
+        id: String(data.id),
+        phoneNumber: String(data.phoneNumber),
+        status: String(data.status),
+        extraInfo: Object(data.extraInfo),
     };
 };
 
@@ -88,6 +98,7 @@ export const filterProducts = (products: IProduct[], keyword: string): IProduct[
                     product.name.toLowerCase().indexOf(char) > -1
                     || (product.description || '').toLowerCase().indexOf(char) > -1
                     || product.codeFromCompany.toLowerCase().indexOf(char) > -1
+                    || String(product.timestamp).toLowerCase().indexOf(char) > -1
                 ) matchedCharsNumber += 1;
             }
             return matchedCharsNumber >= (keyword.length * 0.8);

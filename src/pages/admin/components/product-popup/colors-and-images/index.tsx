@@ -7,10 +7,11 @@ import styles from './styles.module.scss';
 
 interface IProps {
     product?: IProduct,
+    disabled?: boolean,
     onChange?: (data: IProductColorState[]) => void,
 }
 
-const ProductColorsAndImages = ({ product, onChange }: IProps): JSX.Element => {
+const ProductColorsAndImages = ({ product, disabled, onChange }: IProps): JSX.Element => {
     const getDefaultColorData = (): IProductColorState => {
         return {
             id: +new Date(),
@@ -38,20 +39,24 @@ const ProductColorsAndImages = ({ product, onChange }: IProps): JSX.Element => {
         <div className={styles.container}>
             <div className={styles.head}>
                 <h3 className={styles.title}>Màu sắc và hình ảnh</h3>
-                <Button
-                    icon={{
-                        type: 'fa',
-                        value: 'fa fa-plus',
-                    }}
-                    label='Thêm'
-                    tabIndex={-1}
-                    onClick={(): void => {
-                        setProductColors(current => ([
-                            ...current,
-                            getDefaultColorData(),
-                        ]));
-                    }}
-                />
+                {
+                    !disabled
+                    &&
+                    <Button
+                        icon={{
+                            type: 'fa',
+                            value: 'fa fa-plus',
+                        }}
+                        label='Thêm'
+                        tabIndex={-1}
+                        onClick={(): void => {
+                            setProductColors(current => ([
+                                ...current,
+                                getDefaultColorData(),
+                            ]));
+                        }}
+                    />
+                }
             </div>
 
             <div>
@@ -59,6 +64,7 @@ const ProductColorsAndImages = ({ product, onChange }: IProps): JSX.Element => {
                     productColors.map(item =>
                         <ProductColor
                             key={item.id}
+                            disabled={disabled}
                             unremovable={productColors.length <= 1}
                             data={item.color}
                             onDelete={(): void => {

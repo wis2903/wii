@@ -2,6 +2,7 @@ import React from 'react';
 import Blank from '../../../../../../components/basic/blank';
 import Input from '../../../../../../components/basic/input';
 import RemoveButton from '../../../../../../components/basic/remove-button';
+import { classname } from '../../../../../../helpers/utils.helper';
 import styles from './styles.module.scss';
 
 interface IProps {
@@ -9,6 +10,7 @@ interface IProps {
     initValue?: string,
     required?: boolean,
     hidden?: boolean,
+    disabled?: boolean,
     onChange?: (key: string, value: string, validation: () => boolean) => void,
     onDelete?: VoidFunction,
 }
@@ -17,7 +19,7 @@ interface IInputState {
     error?: string,
 }
 
-const ProductAttribute = ({ title, initValue, hidden, required, onChange, onDelete }: IProps): JSX.Element => {
+const ProductAttribute = ({ title, initValue, hidden, disabled, required, onChange, onDelete }: IProps): JSX.Element => {
     const [key, setKey] = React.useState<IInputState>({ value: title || '' });
     const [value, setValue] = React.useState<IInputState>({ value: initValue || '' });
 
@@ -52,12 +54,12 @@ const ProductAttribute = ({ title, initValue, hidden, required, onChange, onDele
 
     return (
         <div className={styles.container}>
-            <div className={styles.mainContent}>
+            <div className={classname([styles.mainContent, disabled && styles.disabled])}>
                 <Input
                     className={styles.input}
                     label='Tiêu đề'
                     initValue={title}
-                    disabled={required}
+                    disabled={required || disabled}
                     required={required}
                     error={key.error}
                     onValueChange={(val): void => {
@@ -69,6 +71,7 @@ const ProductAttribute = ({ title, initValue, hidden, required, onChange, onDele
                     label='Nội dung'
                     initValue={initValue}
                     required={required}
+                    disabled={disabled}
                     error={value.error}
                     onValueChange={(val): void => {
                         setValue({ value: val });
@@ -76,12 +79,16 @@ const ProductAttribute = ({ title, initValue, hidden, required, onChange, onDele
                 />
             </div>
 
-            <RemoveButton
-                className={styles.removeButton}
-                disabled={required}
-                disabledAlertMessage={`Không thể xóa thuộc tính này, thuộc tính '${title}' bắt buộc phải có cho từng sản phẩm.`}
-                onClick={onDelete}
-            />
+            {
+                !disabled
+                &&
+                <RemoveButton
+                    className={styles.removeButton}
+                    disabled={required}
+                    disabledAlertMessage={`Không thể xóa thuộc tính này, thuộc tính '${title}' bắt buộc phải có cho từng sản phẩm.`}
+                    onClick={onDelete}
+                />
+            }
         </div>
     );
 };

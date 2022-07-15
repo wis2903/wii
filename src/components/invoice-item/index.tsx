@@ -11,7 +11,7 @@ interface IProps {
 
 const InvoiceItem = ({ data }: IProps): JSX.Element => {
     const handleShowInvoieDetails = (): void => {
-        EventService.instance.onRequestShowInvoiceDetails.trigger(data);
+        EventService.instance.onRequestShowInvoiceDetails.trigger({ invoice: data });
     };
 
     return (

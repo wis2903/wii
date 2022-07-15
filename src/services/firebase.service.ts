@@ -42,22 +42,30 @@ class FirebaseService {
         return FirebaseService.inst;
     }
 
-    public getDocuments = async (collectionName: string, constraint?: QueryConstraint): Promise<{ id: string, data: DocumentData }[]> => {
-        try {
-            const querySnapshot = constraint ? await getDocs(query(collection(this.db, collectionName), constraint)) : await getDocs(collection(this.db, collectionName));
-            const documents: { id: string, data: DocumentData }[] = [];
-            querySnapshot.forEach((doc) => {
-                documents.push({
-                    id: doc.id,
-                    data: doc.data(),
+    public getDocuments = async (collectionName: string, constraint?: QueryConstraint, noDebouce?: boolean): Promise<{ id: string, data: DocumentData }[]> => {
+        return new Promise(resolve => {
+            try {
+                const q = constraint ? query(collection(this.db, collectionName), constraint) : collection(this.db, collectionName);
+                const documents: { id: string, data: DocumentData }[] = [];
+                getDocs(q).then(querySnapshot => {
+                    querySnapshot.forEach((doc) => {
+                        documents.push({
+                            id: doc.id,
+                            data: doc.data(),
+                        });
+                    });
+                    if (noDebouce) {
+                        resolve(documents);
+                    } else {
+                        setTimeout(() => {
+                            resolve(documents);
+                        }, 500);
+                    }
                 });
-            });
-            return documents;
-        } catch (e) {
-            // handle error
-        }
-
-        return [];
+            } catch (e) {
+                resolve([]);
+            }
+        });
     }
 
     public deleteDocument = async (collectionName: string, docId: string): Promise<boolean> => {

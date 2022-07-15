@@ -14,3 +14,11 @@ export enum AdminHeaderMenuEnum {
     products = 'products',
     orders = 'orders',
 }
+export enum OrderStatusEnum {
+    open = 'open',
+    checked = 'checked',
+    processing = 'processing',
+    processed = 'processed',
+    shipped = 'shipped',
+    returned = 'returned',
+}

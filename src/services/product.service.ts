@@ -1,4 +1,4 @@
-import { where } from 'firebase/firestore';
+import { documentId, where } from 'firebase/firestore';
 import { filterProducts, parseProductData, sortProducts } from '../helpers/data.helper';
 import { SortEnum } from '../resources/constants/enum';
 import FirebaseService from './firebase.service';
@@ -58,6 +58,26 @@ class ProductService {
     public update = async (product: IProduct): Promise<void> => {
         const { id, ...rest } = product;
         await FirebaseService.instance.updateDocument('products', String(id), Object(rest));
+    }
+
+    public getById = async (productId: string): Promise<IProduct | undefined> => {
+        const res = await FirebaseService.instance.getDocuments('products', where(documentId(), '==', productId));
+        if (res.length) {
+            return {
+                ...parseProductData(res[0].data),
+                id: res[0].id,
+            };
+        }
+        return undefined;
+    }
+
+    public getByIds = async (productIds: string[]): Promise<IProduct[]> => {
+        const res = await FirebaseService.instance.getDocuments('products', where(documentId(), 'in', productIds));
+        if (!res.length) return [];
+        return res.map(item => ({
+            ...parseProductData(item.data),
+            id: item.id,
+        }));
     }
 }
 

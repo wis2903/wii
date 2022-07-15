@@ -7,10 +7,12 @@ interface IProps {
     label: string,
     className?: string,
     options: ISelectOption[],
+    dropdownDir?: 'top',
     onChange?: (option: ISelectOption) => void,
+    placeholder?: string,
 }
 
-const Select = ({ className, label, options, onChange }: IProps): JSX.Element => {
+const Select = ({ className, dropdownDir, placeholder, label, options, onChange }: IProps): JSX.Element => {
     const [selectedOption, setSelectedOption] = React.useState<ISelectOption | undefined>(options.find(item => item.selected));
     const [isShowDropdown, setIsShowDropdown] = React.useState<boolean>(false);
     const triggerRef = React.useRef<HTMLButtonElement>(null);
@@ -48,13 +50,13 @@ const Select = ({ className, label, options, onChange }: IProps): JSX.Element =>
         <div className={classname([styles.container, className, isShowDropdown && styles.open])}>
             <button className={styles.trigger} onClick={handleToggleDropdown} ref={triggerRef}>
                 <span className={styles.label}>{label}</span>
-                <span>{selectedOption?.label || 'Select an option'}</span>
+                <span className={classname([!selectedOption?.label && styles.noValue])}>{selectedOption?.label || placeholder || 'Select an option'}</span>
             </button>
 
             {
                 isShowDropdown
                 &&
-                <div className={styles.dropdown} ref={dropdownRef}>
+                <div className={classname([styles.dropdown, dropdownDir && styles[dropdownDir]])} ref={dropdownRef}>
                     {
                         options.map(item =>
                             <button key={item.value} className={classname([item.value === selectedOption?.value && styles.active])} onClick={(): void => {

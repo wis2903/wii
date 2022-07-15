@@ -22,18 +22,18 @@ class CartService {
         return res.map(item => parseCartItemData(Object(item)));
     }
 
-    public add = async ({ product, color, amount }: ICartItem): Promise<void> => {
+    public add = async ({ productId, color, amount }: ICartItem): Promise<void> => {
         let allCartItems = await this.list();
-        const existedItem = allCartItems.find(item => item.product.id === product.id && item.color.value === color.value);
+        const existedItem = allCartItems.find(item => item.productId === productId && item.color.value === color.value);
         if (existedItem) existedItem.amount += amount;
-        else allCartItems = [{ product, amount, color }, ...allCartItems];
+        else allCartItems = [{ productId, amount, color }, ...allCartItems];
         await StorageService.instance.set(LocalStorageKeyEnum.cart, allCartItems);
         EventService.instance.onShoppingCartItemsUpdated.trigger();
     }
 
-    public update = async ({ product, color, amount }: ICartItem): Promise<void> => {
+    public update = async ({ productId, color, amount }: ICartItem): Promise<void> => {
         const allCartItems = await this.list();
-        const existedItem = allCartItems.find(item => item.product.id === product.id && item.color.value === color.value);
+        const existedItem = allCartItems.find(item => item.productId === productId && item.color.value === color.value);
         if (!existedItem) return;
         existedItem.amount = amount;
         await StorageService.instance.set(LocalStorageKeyEnum.cart, allCartItems);
@@ -43,7 +43,7 @@ class CartService {
     public remove = async ({ productId, color }: IRemoveItemRequestParams): Promise<void> => {
         let allCartItems = await this.list();
         allCartItems = allCartItems.filter(item => {
-            if (item.product.id !== productId) return true;
+            if (item.productId !== productId) return true;
             return item.color.value !== color;
         });
         await StorageService.instance.set(LocalStorageKeyEnum.cart, allCartItems);
@@ -53,7 +53,7 @@ class CartService {
     public removeMultipleItems = async (params: IRemoveItemRequestParams[]): Promise<void> => {
         let allCartItems = await this.list();
         allCartItems = allCartItems.filter(item => {
-            if (!params.find(param => param.productId === item.product.id)) return true;
+            if (!params.find(param => param.productId === item.productId)) return true;
             return !params.find(param => param.color === item.color.value);
         });
         await StorageService.instance.set(LocalStorageKeyEnum.cart, allCartItems);

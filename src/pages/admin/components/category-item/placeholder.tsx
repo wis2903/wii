@@ -16,6 +16,8 @@ const CategoryPlaceholder = (): JSX.Element => {
             <div className={styles.body}>
                 <div className={styles.content} />
                 <div className={styles.content} />
+                <div className={styles.content} />
+                <div className={styles.content} />
             </div>
         </div>
     );

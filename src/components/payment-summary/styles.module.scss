@@ -1,6 +1,6 @@
 .container {
     .title {
-        font-size: 19px;
+        font-size: 20px;
         font-weight: 500;
         margin: 0 0 20px;
     }
@@ -8,6 +8,16 @@
     .empty{
         color: #666666;
         font-size: 16px;
+    }
+
+    .cartIems{
+        border-bottom: 1px solid #e5e5e5;
+        padding-bottom: 16px;
+        margin-bottom: 26px;
+    }
+
+    .cartItem{
+        border: 0;
     }
 
     .item {
@@ -18,7 +28,7 @@
         .label {
             display: block;
             width: 40%;
-            font-size: 16px;
+            font-size: 17px;
             color: #666666;
         }
 
@@ -26,33 +36,27 @@
             display: block;
             width: 60%;
             font-weight: 400;
-            font-size: 16px;
-            color: #666666;
+            font-size: 17px;
+            color: #000000;
             line-height: 24px;
             text-align: right;
 
             &.highlight{
-                color: #000000;
                 font-weight: 600;
             }
         }
 
         &:not(:last-child) {
-            margin: 0 0 16px;
+            margin: 0 0 12px;
         }
 
         &:last-child {
             border-top: 1px solid #e5e5e5;
             padding-top: 16px;
 
-            .label {
-                font-size: 18px;
-            }
-
             .value {
                 color: #000000;
                 font-weight: 600;
-                font-size: 18px;
             }
         }
     }

@@ -1,4 +1,4 @@
-import { AdminHeaderMenuEnum, SortEnum } from './enum';
+import { AdminHeaderMenuEnum, OrderStatusEnum, SortEnum } from './enum';
 
 export const sorts: ISelectOption[] = [
     {
@@ -34,5 +34,32 @@ export const adminHeaderMenu: IAdminHeaderMenuItem[] = [
     {
         label: 'Quản lý đơn hàng',
         id: AdminHeaderMenuEnum.orders,
+    },
+];
+
+export const orderStatuses = [
+    {
+        title: 'Chưa xử lý',
+        value: OrderStatusEnum.open,
+    },
+    {
+        title: 'Đã xác nhận thông tin',
+        value: OrderStatusEnum.checked,
+    },
+    {
+        title: 'Đang đặt hàng',
+        value: OrderStatusEnum.processing,
+    },
+    {
+        title: 'Đã đặt hàng',
+        value: OrderStatusEnum.processed,
+    },
+    {
+        title: 'Đã giao hàng',
+        value: OrderStatusEnum.shipped,
+    },
+    {
+        title: 'Khách trả lại hàng',
+        value: OrderStatusEnum.returned,
     },
 ];

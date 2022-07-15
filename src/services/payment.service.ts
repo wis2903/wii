@@ -1,5 +1,7 @@
-import { parseBuyerData } from '../helpers/data.helper';
-import { LocalStorageKeyEnum } from '../resources/constants/enum';
+import { parseBuyerData, parseOrderData } from '../helpers/data.helper';
+import { LocalStorageKeyEnum, OrderStatusEnum } from '../resources/constants/enum';
+import FirebaseService from './firebase.service';
+import ProductService from './product.service';
 import StorageService from './storage.service';
 
 class PaymentService {
@@ -22,6 +24,37 @@ class PaymentService {
 
     public removeCachedBuyerInfo = async (): Promise<void> => {
         StorageService.instance.remove(LocalStorageKeyEnum.cachedBuyInfo);
+    }
+
+    public createOrder = async (data: IInvoiceItem): Promise<boolean> => {
+        try {
+            await FirebaseService.instance.addDocument('orders', Object({
+                ...data,
+                status: OrderStatusEnum.open,
+                phoneNumber: String(data.buyer.phoneNumber),
+            }));
+            data.items.forEach(async (item) => {
+                const product = await ProductService.instance.getById(String(item.productId));
+                if (product) ProductService.instance.update({ ...product, buyersNumber: product.buyersNumber + 1 });
+            });
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    public getOrders = async (): Promise<IOrderItem[]> => {
+        const orders = (await FirebaseService.instance.getDocuments('orders')).sort((a, b) => a.data.timestamp > b.data.timestamp ? -1 : 1);
+        return orders.map(item => ({
+            ...parseOrderData(Object(item.data)),
+            id: item.id,
+        }));
+    }
+
+    public updateOrder = async (order: IOrderItem): Promise<boolean> => {
+        const { id, ...rest } = order;
+        const res = await FirebaseService.instance.updateDocument('orders', id, Object(rest));
+        return res;
     }
 }
 
