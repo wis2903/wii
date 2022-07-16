@@ -26,7 +26,9 @@ const ProductItem = ({ data, onDelete, onUpdate }: IProps): JSX.Element => {
     return (
         <div className={styles.container}>
             <div className={styles.left}>
-                <h3 className={styles.name}><span>Mã sản phẩm: {data.timestamp}</span>{data.name}</h3>
+                <h3 className={styles.name}><span>Mã sản phẩm: {data.timestamp}</span>
+                    {data.name}
+                </h3>
                 <div className={styles.ratingWrapper}>
                     <Stars rate={data.rating} />
                     <span className={styles.buyers}>{data.buyersNumber} người mua</span>

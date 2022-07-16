@@ -22,11 +22,16 @@ interface IBuyerInfoState {
     data: IBuyer,
     error: IBuyerInfoValidationError,
 }
+interface IProductsState {
+    isLoading: boolean,
+    data: IProduct[],
+}
 
 const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
     const [isProcessing, setIsProcessing] = React.useState<boolean>(false);
     const [finalItems, setFinalItems] = React.useState<ICartItem[]>(items);
     const [isRememberBuyerInfo, setIsRememberBuyInfo] = React.useState<boolean>(false);
+    const [products, setProducts] = React.useState<IProductsState>({ isLoading: true, data: [] });
     const [buyerInfo, setBuyerInfo] = React.useState<IBuyerInfoState>({
         data: { ...emptyBuyerInfo },
         error: {},
@@ -77,14 +82,31 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
     };
 
     const handlePayment = async (): Promise<void> => {
+        if (products.isLoading) return;
+        if (!products.data.length) {
+            UtilsService.instance.alert('Không thể tiến hành đặt hàng do không tìm thấy thông tin sản phẩm. Xin vui lòng thử lại.');
+            return;
+        }
         if (!finalItems.length) {
             UtilsService.instance.alert('Không thể tiến hành đặt hàng vì đơn hàng không có sản phẩm nào. Vui lòng chọn ít nhất 1 sản phẩm.');
             return;
         }
         if (isProcessing || !validate()) return;
         setIsProcessing(true);
+        const invoiceCartItems: ICartItemWithExtraProductData[] = [];
+        finalItems.forEach(item => {
+            invoiceCartItems.push({
+                amount: item.amount,
+                productId: item.productId,
+                productPrice: products.data.find(p => p.id === item.productId)?.price || 0,
+                color: {
+                    ...item.color,
+                    images: item.color.images && item.color.images.length ? [item.color.images[0]] : [],
+                },
+            });
+        });
         const invoiceData = {
-            items: finalItems,
+            items: invoiceCartItems,
             buyer: {
                 name: buyerInfo.data.name,
                 email: hideSensitiveInformation(buyerInfo.data.email),
@@ -153,6 +175,9 @@ const Payment = ({ onClose, className, items }: IProps): JSX.Element => {
                         cartItems={finalItems}
                         onCartItemAmountChange={handleOnAmountChange}
                         onRemoveCartItem={handleOnRemoveCartItem}
+                        onProductsLoaded={(prds): void => {
+                            setProducts({ isLoading: false, data: prds });
+                        }}
                     />
                     <br />
                 </div>

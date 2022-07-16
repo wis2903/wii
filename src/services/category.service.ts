@@ -34,34 +34,66 @@ class CategoryService {
     }
 
     public delete = async (id: IObjectId): Promise<void> => {
-        const success = await FirebaseService.instance.deleteDocument('categories', String(id));
-        if (success) {
-            this.categories = this.categories.filter(item => item.id !== id);
-            const productsIncategory = await ProductService.instance.list({ categoryId: String(id), sort: SortEnum.newest });
-            for (let i = 0; i < productsIncategory.length; i++) {
-                await ProductService.instance.delete(String(productsIncategory[i].id));
-            }
-            EventService.instance.onCategoriesLoaded.trigger();
-        }
+        return new Promise(resolve => {
+            const exec = async (): Promise<void> => {
+                EventService.instance.onRequestShowLoader.trigger(true);
+                const success = await FirebaseService.instance.deleteDocument('categories', String(id));
+                if (success) {
+                    this.categories = this.categories.filter(item => item.id !== id);
+                    const productsIncategory = await ProductService.instance.list({ categoryId: String(id), sort: SortEnum.newest });
+                    for (let i = 0; i < productsIncategory.length; i++) {
+                        await ProductService.instance.delete(String(productsIncategory[i].id));
+                    }
+                }
+                setTimeout(() => {
+                    EventService.instance.onRequestShowLoader.trigger(false);
+                    EventService.instance.onCategoriesLoaded.trigger();
+                    resolve();
+                }, 500);
+            };
+
+            exec();
+        });
     }
 
     public add = async (name: string, description?: string): Promise<void> => {
-        const id = await FirebaseService.instance.addDocument('categories', { name, description, timestamp: +new Date() });
-        if (id) {
-            this.categories.push({ id, name, description, timestamp: +new Date() });
-            EventService.instance.onCategoriesLoaded.trigger();
-        }
+        return new Promise(resolve => {
+            const exec = async (): Promise<void> => {
+                EventService.instance.onRequestShowLoader.trigger(true);
+                const id = await FirebaseService.instance.addDocument('categories', { name, description, timestamp: +new Date() });
+                if (id) {
+                    this.categories.push({ id, name, description, timestamp: +new Date() });
+                }
+                setTimeout(() => {
+                    EventService.instance.onRequestShowLoader.trigger(false);
+                    EventService.instance.onCategoriesLoaded.trigger();
+                    resolve();
+                }, 500);
+            };
+            exec();
+        });
     }
 
     public update = async (category: ICategory): Promise<void> => {
-        const success = await FirebaseService.instance.updateDocument('categories', String(category.id), {
-            name: category.name,
-            description: category.description,
+        return new Promise(resolve => {
+            const exec = async (): Promise<void> => {
+                EventService.instance.onRequestShowLoader.trigger(true);
+                const success = await FirebaseService.instance.updateDocument('categories', String(category.id), {
+                    name: category.name,
+                    description: category.description,
+                });
+                if (success) {
+                    this.categories = this.categories.map(item => item.id === category.id ? category : item);
+                }
+
+                setTimeout(() => {
+                    EventService.instance.onRequestShowLoader.trigger(false);
+                    EventService.instance.onCategoriesLoaded.trigger();
+                    resolve();
+                }, 500);
+            };
+            exec();
         });
-        if (success) {
-            this.categories = this.categories.map(item => item.id === category.id ? category : item);
-            EventService.instance.onCategoriesLoaded.trigger();
-        }
     }
 }
 

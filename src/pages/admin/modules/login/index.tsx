@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LocalStorageKeyEnum } from '../../../../resources/constants/enum';
 import Blank from '../../../../components/basic/blank';
 import Button from '../../../../components/basic/button';
 import Checkbox from '../../../../components/basic/checkbox';
 import Input from '../../../../components/basic/input';
 import PopupWrapper from '../../../../components/popup/popup-wrapper';
-import { LocalStorageKeyEnum } from '../../../../resources/constants/enum';
 import AuthService from '../../../../services/auth.service';
 import StorageService from '../../../../services/storage.service';
 import UtilsService from '../../../../services/utils.service';
@@ -24,7 +24,7 @@ const Login = ({ onSuccess }: IProps): JSX.Element => {
     const navigate = useNavigate();
     const [isCheckingExistedSession, setIsCheckingExistedSession] = React.useState<boolean>(true);
     const [isProcessing, setIsProcessing] = React.useState<boolean>(false);
-    const [isRememberAccount, setIsRememberAccount] = React.useState<boolean>(false);
+    const [isRememberAccount, setIsRememberAccount] = React.useState<boolean>(true);
     const [username, setUsername] = React.useState<IInputState>({ value: '' });
     const [password, setPassword] = React.useState<IInputState>({ value: '' });
 
@@ -111,6 +111,7 @@ const Login = ({ onSuccess }: IProps): JSX.Element => {
                     onEnter={handleLogin}
                 />
                 <Checkbox
+                    checked
                     className={styles.checkbox}
                     label='Ghi nhớ tài khoản'
                     onChecked={(): void => {

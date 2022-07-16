@@ -10,7 +10,7 @@
     }
 
     .left {
-        width: 70%;
+        width: calc(100% - 200px);
         overflow: hidden;
     }
 
@@ -19,6 +19,9 @@
         margin: 0 0 6px;
         display: flex;
         align-items: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     
         span{
             display: inline-flex;

@@ -2,7 +2,7 @@ import React from 'react';
 import { classname } from '../../../helpers/utils.helper';
 import styles from './styles.module.scss';
 
-const Input = ({ className, label, icon, required, disabled, error, initValue, inputRef, onValueChange, onEnter, ...rest }: IInputComponentProps): JSX.Element => {
+const Input = ({ className, label, icon, required, disabled, error, initValue, inputRef, onValueChange, onEnter, clear, ...rest }: IInputComponentProps): JSX.Element => {
     const [value, setValue] = React.useState<string>(initValue ? String(initValue) : '');
     const [isFocusing, setIsFocusing] = React.useState<boolean>(false);
 
@@ -38,6 +38,12 @@ const Input = ({ className, label, icon, required, disabled, error, initValue, i
 
         return ico;
     };
+
+    React.useEffect(() => {
+        if(clear) clear(() => {
+            setValue('');
+        });
+    });
 
     return (
         <div className={classname([styles.container, className])}>

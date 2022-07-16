@@ -1,7 +1,6 @@
 import React from 'react';
 import { classname } from '../../helpers/utils.helper';
 import ProductService from '../../services/product.service';
-import Blank from '../basic/blank';
 import CartItem from '../cart-item';
 import CartItemPlaceholder from '../cart-item/placeholder';
 import styles from './styles.module.scss';
@@ -9,7 +8,7 @@ import styles from './styles.module.scss';
 interface IProps {
     className?: string,
     itemClassName?: string,
-    data: ICartItem[],
+    data: ICartItem[] | ICartItemWithExtraProductData[],
     disabledUpdateCartItem?: boolean,
     onRemove?: (item: ICartItem) => void,
     onUpdateAmount?: (item: ICartItem, amount: number) => void,
@@ -24,8 +23,20 @@ const CartItems = ({ className, itemClassName, data, disabledUpdateCartItem, onP
     const [products, setProducts] = React.useState<IProductsState>({ isLoading: true, data: [] });
 
     const generateCartItem = (item: ICartItem): JSX.Element => {
-        const product = products.data.find(p => p.id === item.productId);
-        if (!product) return <Blank />;
+        let product = products.data.find(p => p.id === item.productId);
+        if (!product) product = {
+            id: '',
+            name: 'Không tìm thấy thông tin sản phẩm',
+            codeFromCompany: '',
+            code: '',
+            priceFromCompany: 0,
+            price: 0,
+            categoryId: -1,
+            rating: 0,
+            buyersNumber: 0,
+            colors: [],
+            timestamp: 0,
+        };
         return <CartItem
             disabled={disabledUpdateCartItem}
             className={classname([itemClassName])}
@@ -43,9 +54,7 @@ const CartItems = ({ className, itemClassName, data, disabledUpdateCartItem, onP
     const generateContent = (): JSX.Element => {
         if (products.isLoading) return (
             <div>
-                <CartItemPlaceholder />
-                <CartItemPlaceholder />
-                <CartItemPlaceholder />
+                <CartItemPlaceholder className={classname([itemClassName])} />
             </div>
         );
 

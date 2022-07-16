@@ -7,11 +7,12 @@ interface IProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
     required?: boolean,
     label: string,
     error?: string,
-    onValueChange?: (value: string) => void,
     initValue?: string,
+    onValueChange?: (value: string) => void,
+    clear?: (func: VoidFunction) => void,
 }
 
-const Textbox = ({ className, label, required, disabled, error, onValueChange, initValue, ...rest }: IProps): JSX.Element => {
+const Textbox = ({ className, label, required, disabled, error, initValue, onValueChange, clear, ...rest }: IProps): JSX.Element => {
     const [value, setValue] = React.useState<string>(initValue ? String(initValue) : '');
     const [isFocusing, setIsFocusing] = React.useState<boolean>(false);
 
@@ -30,6 +31,12 @@ const Textbox = ({ className, label, required, disabled, error, onValueChange, i
         setIsFocusing(false);
         if (rest.onBlur) rest.onBlur(e);
     };
+
+    React.useEffect(() => {
+        if (clear) clear(() => {
+            setValue('');
+        });
+    }, []);
 
     return (
         <div className={classname([styles.container, className,])}>

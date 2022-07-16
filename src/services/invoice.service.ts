@@ -12,7 +12,7 @@ class InvoiceService {
 
     public list = async (): Promise<IInvoiceItem[]> => {
         const res = await StorageService.instance.get(LocalStorageKeyEnum.invoice);
-        if (res instanceof Array) return res.map(item => parseInvoiceData(Object(item)));
+        if (res instanceof Array) return [...res.map(item => parseInvoiceData(Object(item)))].slice(0, 10);
         return [];
     }
 

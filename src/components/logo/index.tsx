@@ -18,6 +18,7 @@ const Logo = ({ className }: IProps): JSX.Element => {
         }}>
             <img src={Icon} alt='icon' />
             Sonica
+            <span>Market</span> 
         </Button>
     );
 };

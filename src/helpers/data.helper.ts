@@ -67,9 +67,16 @@ export const parseCartItemData = (data: Record<string, unknown>): ICartItem => {
     };
 };
 
+export const parseCartItemWithExtraProductData = (data: Record<string, unknown>): ICartItemWithExtraProductData => {
+    return {
+        ...parseCartItemData(data),
+        productPrice: Number(data.productPrice),
+    };
+};
+
 export const parseInvoiceData = (data: Record<string, unknown>): IInvoiceItem => {
     return {
-        items: data.items instanceof Array ? data.items.map(item => parseCartItemData(Object(item))) : [],
+        items: data.items instanceof Array ? data.items.map(item => parseCartItemWithExtraProductData(Object(item))) : [],
         buyer: parseBuyerData(Object(data.buyer)),
         timestamp: Number(data.timestamp),
     };
@@ -85,23 +92,54 @@ export const parseOrderData = (data: Record<string, unknown>): IOrderItem => {
     };
 };
 
+export const toLowerCaseNonAccentVietnamese = (text: string): string => {
+    let str = text.toLowerCase();
+    str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
+    str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e');
+    str = str.replace(/ì|í|ị|ỉ|ĩ/g, 'i');
+    str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, 'o');
+    str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u');
+    str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y');
+    str = str.replace(/đ/g, 'd');
+    str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ''); // Huyền sắc hỏi ngã nặng 
+    str = str.replace(/\u02C6|\u0306|\u031B/g, ''); // Â, Ê, Ă, Ơ, Ư
+    return str;
+};
+
 export const filterProducts = (products: IProduct[], keyword: string): IProduct[] => {
     if (!keyword) return products;
 
     try {
-        const kwrd = keyword.toLowerCase();
-        const isProductMatchKeyword = (product: IProduct): boolean => {
+        const wordsFromKeyword = toLowerCaseNonAccentVietnamese(keyword.toLowerCase()).split(' ');
+
+        const isWordMatchWord = (word1: string, word2: string): boolean => {
             let matchedCharsNumber = 0;
-            for (let i = 0; i < kwrd.length; i++) {
-                const char = kwrd[i];
+
+            for (let i = 0; i < word1.length; i++) {
+                const char = word1[i];
                 if (
-                    product.name.toLowerCase().indexOf(char) > -1
-                    || (product.description || '').toLowerCase().indexOf(char) > -1
-                    || product.codeFromCompany.toLowerCase().indexOf(char) > -1
-                    || String(product.timestamp).toLowerCase().indexOf(char) > -1
+                    word2.toLowerCase().indexOf(char) > -1
                 ) matchedCharsNumber += 1;
             }
-            return matchedCharsNumber >= (keyword.length * 0.8);
+            return matchedCharsNumber >= (word1.length * 0.8);
+        };
+
+        const isProductMatchKeyword = (product: IProduct): boolean => {
+            if (String(product.timestamp).indexOf(keyword.toLowerCase()) > -1) return true;
+
+            const wordsFromName = toLowerCaseNonAccentVietnamese(product.name.toLowerCase()).split(' ');
+            let numberOfWordFromNameThatIncludedInKeyword = 0;
+            wordsFromName.forEach(word1 => {
+                let isIncludedInKeyword = false;
+                wordsFromKeyword.forEach(word2 => {
+                    if (isWordMatchWord(word1, word2)) {
+                        isIncludedInKeyword = true;
+                    }
+                });
+                if (isIncludedInKeyword) numberOfWordFromNameThatIncludedInKeyword += 1;
+            });
+
+            return numberOfWordFromNameThatIncludedInKeyword >= wordsFromKeyword.length * 0.5;
         };
 
         return products.filter(item => isProductMatchKeyword(item));
@@ -110,7 +148,7 @@ export const filterProducts = (products: IProduct[], keyword: string): IProduct[
     }
 };
 
-export const sortProducts = (products: IProduct[], sort: SortEnum): IProduct[] => {
+export const sortProducts = (products: IProduct[], sort: SortEnum | string): IProduct[] => {
     return products.sort((a, b) => {
         switch (sort) {
             case SortEnum.newest:
@@ -121,6 +159,8 @@ export const sortProducts = (products: IProduct[], sort: SortEnum): IProduct[] =
                 return a.price > b.price ? -1 : 1;
             case SortEnum.priceAsc:
                 return a.price < b.price ? -1 : 1;
+            case 'rating':
+                return a.rating > b.rating ? -1 : 1;
             default: return -1;
         }
     });

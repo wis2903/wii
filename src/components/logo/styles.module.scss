@@ -6,9 +6,20 @@
     font-weight: 600;
     font-size: 24px;
     text-transform: uppercase;
+    position: relative;
+    padding-right: 52px;
 
     img{
         width: 26px;
         margin: 0 12px -4px 0;
+    }
+
+    span{
+        font-size: 15px;
+        position: absolute;
+        right: 0;
+        top: 6px;
+        font-weight: 400;
+        text-transform: capitalize;
     }
 }

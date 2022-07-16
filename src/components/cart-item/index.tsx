@@ -1,5 +1,5 @@
 import React from 'react';
-import { classname, upperCaseFirstLetter } from '../../helpers/utils.helper';
+import { classname, formatNumber, upperCaseFirstLetter } from '../../helpers/utils.helper';
 import CartService from '../../services/cart.service';
 import EventService from '../../services/event.service';
 import AmountPicker from '../amount-picker';
@@ -11,7 +11,7 @@ import { getProductThumbnail } from '../../helpers/data.helper';
 
 interface IProps {
     className?: string,
-    data: ICartItem,
+    data: ICartItem | ICartItemWithExtraProductData,
     product: IProduct,
     disabled?: boolean,
     onAmountChange?: (value: number) => void,
@@ -31,7 +31,7 @@ const CartItem = ({ className, data, product, disabled, onAmountChange, onRemove
         if (onAmountChange) onAmountChange(value);
     };
     const handleShowProductDetails = (): void => {
-        EventService.instance.onRequestShowProductDetails.trigger(product);
+        if (product.id) EventService.instance.onRequestShowProductDetails.trigger(product);
     };
 
     return (
@@ -48,6 +48,13 @@ const CartItem = ({ className, data, product, disabled, onAmountChange, onRemove
                     label={`${upperCaseFirstLetter(product.name)}`}
                     onClick={handleShowProductDetails}
                 />
+                {
+                    Object(data).productPrice
+                    &&
+                    <div className={styles.priceAlt}>
+                        (Giá tại thời điểm đặt: {formatNumber(Number(Object(data).productPrice))} VND / sản phẩm)
+                    </div>
+                }
                 <div className={classname([styles.color, disabled && styles.smallMargin])}>Màu sắc: {data.color.label}</div>
                 <div className={styles.amountWrapper}>
                     {
@@ -56,7 +63,14 @@ const CartItem = ({ className, data, product, disabled, onAmountChange, onRemove
                             : <span className={styles.amountDisabled}>Số lượng: {data.amount}</span>
 
                     }
-                    <Price className={styles.price} value={product.price * data.amount} />
+                    <Price
+                        className={styles.price}
+                        value={
+                            Object(data).productPrice
+                                ? (Number(Object(data).productPrice) * data.amount)
+                                : (product.price * data.amount)
+                        }
+                    />
                 </div>
 
                 {

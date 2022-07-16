@@ -1,9 +1,14 @@
 import React from 'react';
+import { classname } from '../../helpers/utils.helper';
 import styles from './styles.module.scss';
 
-const CartItemPlaceholder = (): JSX.Element => {
+interface IProps {
+    className?: string,
+}
+
+const CartItemPlaceholder = ({ className }: IProps): JSX.Element => {
     return (
-        <div className={styles.placeholder}>
+        <div className={classname([styles.placeholder, className])}>
             <div className={styles.thumbnail} />
             <div className={styles.info}>
                 <div>

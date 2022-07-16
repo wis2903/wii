@@ -1,6 +1,7 @@
 import React from 'react';
 import { disableScroll, enableScroll } from '../../../helpers/dom.helpers';
 import { classname } from '../../../helpers/utils.helper';
+import UtilsService from '../../../services/utils.service';
 import PopupBody from '../popup-body';
 import PopupTitle from '../popup-title';
 import styles from './styles.module.scss';
@@ -16,10 +17,13 @@ interface IProps {
 
 const PopupWrapper = ({ className, bodyClassName, children, onClose, title, footer }: IProps): JSX.Element => {
     React.useEffect(() => {
+        const popupId = `${+new Date()}`;
         disableScroll();
+        UtilsService.instance.isShownPopupIds.push(popupId);
 
         return (): void => {
-            enableScroll();
+            UtilsService.instance.isShownPopupIds = UtilsService.instance.isShownPopupIds.filter(item => item !== popupId);
+            if (!UtilsService.instance.isShownPopupIds.length) enableScroll();
         };
     }, []);
 

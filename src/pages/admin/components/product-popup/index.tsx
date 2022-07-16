@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '../../../../components/basic/button';
 import PopupWrapper from '../../../../components/popup/popup-wrapper';
 import { getRandomNumber } from '../../../../helpers/utils.helper';
+import EventService from '../../../../services/event.service';
 import FirebaseService from '../../../../services/firebase.service';
 import ProductService from '../../../../services/product.service';
 import UtilsService from '../../../../services/utils.service';
@@ -77,6 +78,7 @@ const ProductPopup = ({ category, product, disabled, onClose, onAdded, onUpdated
     const handleUpdateProduct = async (): Promise<void> => {
         if (!product || isProcessing || !validate()) return;
         setIsProcessing(true);
+        EventService.instance.onRequestShowLoader.trigger(true);
         const cs = await handleProcessColorImages();
         const newProductData: IProduct = {
             ...product,
@@ -88,11 +90,13 @@ const ProductPopup = ({ category, product, disabled, onClose, onAdded, onUpdated
         setIsProcessing(false);
         if (onUpdated) onUpdated(newProductData);
         if (onClose) onClose();
+        EventService.instance.onRequestShowLoader.trigger(false);
     };
 
     const handleAddProduct = async (): Promise<void> => {
         if (isProcessing || !validate()) return;
         setIsProcessing(true);
+        EventService.instance.onRequestShowLoader.trigger(true);
         const cs = await handleProcessColorImages();
         const newProductData: IProducWithoutId = {
             ...basicInfo as IProductBasicInfo,
@@ -108,6 +112,7 @@ const ProductPopup = ({ category, product, disabled, onClose, onAdded, onUpdated
         setIsProcessing(false);
         if (id && onAdded) onAdded({ ...newProductData, id });
         if (onClose) onClose();
+        EventService.instance.onRequestShowLoader.trigger(false);
     };
 
     return (

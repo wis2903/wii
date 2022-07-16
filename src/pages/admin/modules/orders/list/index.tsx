@@ -3,6 +3,7 @@ import { IOrdersState } from '..';
 import Select from '../../../../../components/basic/select';
 import { OrderStatusEnum } from '../../../../../resources/constants/enum';
 import { orderStatuses } from '../../../../../resources/constants/utils';
+import EventService from '../../../../../services/event.service';
 import PaymentService from '../../../../../services/payment.service';
 import OrderItem from '../../../components/order-item';
 import Empty from '../empty';
@@ -67,15 +68,19 @@ const List = ({ orders, onUpdated }: IProps): JSX.Element => {
                                 value: item.value,
                             }))}
                         onChange={async (opt): Promise<void> => {
+                            EventService.instance.onRequestShowLoader.trigger(true);
                             for (let i = 0; i < checkedOrders.length; i++) {
                                 await PaymentService.instance.updateOrder({
                                     ...checkedOrders[i],
                                     status: opt.value,
                                 });
                             }
-                            uncheckOrderItemFunctions.current.forEach(func => { func(); });
-                            setCheckedOrders([]);
-                            if (onUpdated) onUpdated();
+                            setTimeout(() => {
+                                EventService.instance.onRequestShowLoader.trigger(false);
+                                uncheckOrderItemFunctions.current.forEach(func => { func(); });
+                                setCheckedOrders([]);
+                                if (onUpdated) onUpdated();
+                            }, 500);
                         }}
                     />
                 </>

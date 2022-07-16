@@ -11,6 +11,7 @@ import CategoryService from '../../services/category.service';
 import Header from '../header';
 import Footer from '../footer';
 import Confirmation from '../../components/confirmation';
+import Loader from '../../components/basic/loader';
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     className?: string,
@@ -44,6 +45,7 @@ const Layout = ({ children, className, isAdminLayout, ...rest }: IProps): JSX.El
     const [productDetailsPopup, setProductDetailsPopup] = React.useState<IProductDetailsPopupState>({ isShown: false });
     const [invoiceDetailsPopup, setInvoiceDetailsPopup] = React.useState<IInvoiceDetailsPopupState>({ isShown: false });
     const [confirmationPopup, setConfirmationPopup] = React.useState<IConfirmationPopupState>({ isShown: false });
+    const [isShowLoader, setIsShowLoader] = React.useState<boolean>(false);
 
     const handleOnRequestShowPayment = (data: unknown): void => {
         if (!data) return;
@@ -76,7 +78,10 @@ const Layout = ({ children, className, isAdminLayout, ...rest }: IProps): JSX.El
             message: String(Object(data).message),
             isAlert: Boolean(Object(data).alert)
         });
-        setPaymentPopup({ isShown: false });
+    };
+
+    const handleOnRequestShowLoader = (data: unknown): void => {
+        setIsShowLoader(Boolean(data));
     };
 
     React.useEffect(() => {
@@ -93,6 +98,7 @@ const Layout = ({ children, className, isAdminLayout, ...rest }: IProps): JSX.El
         EventService.instance.onRequestShowShoppingCart.addEventListener(handleOnRequestShowShoppingCart);
         EventService.instance.onRequestShowInvoiceDetails.addEventListener(handleOnRequestShowInvoiceDetails);
         EventService.instance.onRequestShowConfirmation.addEventListener(handleOnRequestShowConfirmation);
+        EventService.instance.onRequestShowLoader.addEventListener(handleOnRequestShowLoader);
 
         return (): void => {
             EventService.instance.onRequestShowPayment.removeEventListener(handleOnRequestShowPayment);
@@ -100,6 +106,7 @@ const Layout = ({ children, className, isAdminLayout, ...rest }: IProps): JSX.El
             EventService.instance.onRequestShowShoppingCart.removeEventListener(handleOnRequestShowShoppingCart);
             EventService.instance.onRequestShowInvoiceDetails.removeEventListener(handleOnRequestShowInvoiceDetails);
             EventService.instance.onRequestShowConfirmation.removeEventListener(handleOnRequestShowConfirmation);
+            EventService.instance.onRequestShowLoader.removeEventListener(handleOnRequestShowLoader);
         };
     }, []);
 
@@ -158,6 +165,11 @@ const Layout = ({ children, className, isAdminLayout, ...rest }: IProps): JSX.El
                         setConfirmationPopup({ isShown: false });
                     }}
                 />
+            }
+            {
+                isShowLoader
+                &&
+                <Loader />
             }
         </>
     );

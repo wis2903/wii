@@ -29,8 +29,14 @@
             transform: translateX(-50%);
             width: 1024px;
             max-width: 100%;
+            min-width: 980px;
             z-index: 88;
             background-color: #ffffff;
+
+            @media screen and (max-width: 980px) {
+                left: 0;
+                transform: none;
+            }
 
             .head{
                 padding: 12px 28px;

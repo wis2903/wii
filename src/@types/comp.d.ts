@@ -16,6 +16,7 @@ declare global {
         inputRef?: React.LegacyRef<HTMLInputElement>,
         onValueChange?: (value: string) => void,
         onEnter?: VoidFunction,
+        clear?: (func: VoidFunction) => void,
     }
     interface IPopupTitleComponentProps {
         text: string,

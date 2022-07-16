@@ -3,6 +3,12 @@ import EventService from './event.service';
 class UtilsService {
     private static inst?: UtilsService;
 
+    public isShownPopupIds: string[];
+
+    constructor() {
+        this.isShownPopupIds = [];
+    }
+
     public static get instance(): UtilsService {
         if (!UtilsService.inst) UtilsService.inst = new UtilsService();
         return UtilsService.inst;

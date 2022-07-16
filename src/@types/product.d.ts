@@ -44,8 +44,12 @@ declare global {
         color: IColor,
     }
 
+    interface ICartItemWithExtraProductData extends ICartItem {
+        productPrice: number,
+    }
+
     interface IInvoiceItem {
-        items: ICartItem[],
+        items: ICartItemWithExtraProductData[],
         buyer: Partial<IBuyer>,
         timestamp: number,
     }

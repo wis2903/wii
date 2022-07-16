@@ -1,6 +1,7 @@
 import { documentId, where } from 'firebase/firestore';
 import { filterProducts, parseProductData, sortProducts } from '../helpers/data.helper';
 import { SortEnum } from '../resources/constants/enum';
+import EventService from './event.service';
 import FirebaseService from './firebase.service';
 
 interface IGetProductsListRequestParams {
@@ -34,7 +35,8 @@ class ProductService {
             ...parseProductData(item.data),
             id: item.id,
         }));
-        return sortProducts(products, sort);
+        if (categoryId !== 'best-seller') return sortProducts(products, sort);
+        return sortProducts(products, sort).filter(item => item.buyersNumber >= 100);
     }
 
     public filter = async ({ keyword, sort }: IFilterProductsRequestParams): Promise<IProduct[]> => {
@@ -47,17 +49,32 @@ class ProductService {
     }
 
     public add = async (product: IProducWithoutId): Promise<string | undefined> => {
-        const id = await FirebaseService.instance.addDocument('products', { ...product });
-        return id;
+        return new Promise(resolve => {
+            FirebaseService.instance.addDocument('products', { ...product }).then(id => {
+                resolve(id);
+            });
+        });
     }
 
     public delete = async (productId: string): Promise<void> => {
-        await FirebaseService.instance.deleteDocument('products', productId);
+        return new Promise(resolve => {
+            EventService.instance.onRequestShowLoader.trigger(true);
+            FirebaseService.instance.deleteDocument('products', productId).then(() => {
+                setTimeout(() => {
+                    EventService.instance.onRequestShowLoader.trigger(false);
+                    resolve();
+                }, 500);
+            });
+        });
     }
 
     public update = async (product: IProduct): Promise<void> => {
-        const { id, ...rest } = product;
-        await FirebaseService.instance.updateDocument('products', String(id), Object(rest));
+        return new Promise(resolve => {
+            const { id, ...rest } = product;
+            FirebaseService.instance.updateDocument('products', String(id), Object(rest)).then(() => {
+                resolve();
+            });
+        });
     }
 
     public getById = async (productId: string): Promise<IProduct | undefined> => {

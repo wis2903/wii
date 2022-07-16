@@ -5,20 +5,25 @@ import styles from './styles.module.scss';
 
 interface IProps {
     className?: string,
-    cartItems: ICartItem[],
+    cartItems: ICartItem[] | ICartItemWithExtraProductData[],
     disabledUpdateCartItem?: boolean,
     onCartItemAmountChange?: (productId: IObjectId, color: string, amount: number) => void,
     onRemoveCartItem?: (cartItem: ICartItem) => void,
+    onProductsLoaded?: (products: IProduct[]) => void,
 }
 
-const PaymentSummary = ({ className, cartItems, disabledUpdateCartItem, onCartItemAmountChange, onRemoveCartItem }: IProps): JSX.Element => {
+const PaymentSummary = ({ className, cartItems, disabledUpdateCartItem, onCartItemAmountChange, onRemoveCartItem, onProductsLoaded }: IProps): JSX.Element => {
     const [products, setProducts] = React.useState<IProduct[]>([]);
 
     const getTotalMoney = (): number => {
         let res = 0;
         cartItems.forEach(item => {
-            const prd = products.find(p => p.id === item.productId);
-            res += (prd?.price || 0) * item.amount;
+            if (Object(item).productPrice) {
+                res += Number(Object(item).productPrice) * item.amount;
+            } else {
+                const prd = products.find(p => p.id === item.productId);
+                res += (prd?.price || 0) * item.amount;
+            }
         });
         return res;
     };
@@ -32,11 +37,12 @@ const PaymentSummary = ({ className, cartItems, disabledUpdateCartItem, onCartIt
                     !cartItems.length
                         ? <div className={styles.empty}>Bạn chưa lựa chọn sản phẩm nào</div>
                         : <CartItems
-                            disabledUpdateCartItem
+                            disabledUpdateCartItem={disabledUpdateCartItem}
                             itemClassName={styles.cartItem}
                             data={cartItems}
                             onProductsLoaded={(prds): void => {
                                 setProducts(prds);
+                                if (onProductsLoaded) onProductsLoaded(prds);
                             }}
                             onRemove={(item): void => {
                                 if (onRemoveCartItem) onRemoveCartItem(item);

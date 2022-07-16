@@ -41,8 +41,15 @@
             margin: 0 0 16px;
 
             &.smallMargin {
-                margin: 6px 0 12px;
+                margin: 0 0 6px;
             }
+        }
+
+        .priceAlt{
+            font-size: 14px;
+            color: #888888;
+            font-style: italic;
+            margin: 2px 0 10px;
         }
 
         .amountWrapper {
