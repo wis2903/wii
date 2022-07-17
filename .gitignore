@@ -2,6 +2,7 @@
 
 /build
 /server/build
+/server/storage
 
 # dependencies
 /node_modules
