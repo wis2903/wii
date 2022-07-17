@@ -40,7 +40,7 @@ app.get('/api/categories', (req, res) => {
             id: item.id,
         }));
         res.status(200).json({
-            data: docs,
+            data: categories,
         });
     });
 })

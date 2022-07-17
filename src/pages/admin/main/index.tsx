@@ -27,11 +27,9 @@ const AdminMainPage = (): JSX.Element => {
     };
 
     if (!AuthService.instance.isSignedInAsAdmin) return (
-        <Layout key={1} isAdminLayout className={styles.container}>
-            <Login onSuccess={(): void => {
-                setToggle(!toggle);
-            }} />
-        </Layout>
+        <Login onSuccess={(): void => {
+            setToggle(!toggle);
+        }} />
     );
 
     return (

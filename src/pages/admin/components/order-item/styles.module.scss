@@ -37,6 +37,14 @@
         }
     }
 
+    &.processed {
+        .mainContent {
+            >div.status {
+                color: #00c3ff;
+            }
+        }
+    }
+
     .mainContent {
         width: calc(100% - 120px);
         overflow: hidden;
@@ -69,6 +77,7 @@
             &.status {
                 font-size: 16px;
                 font-weight: 400;
+                color: #666666;
 
                 span{
                     font-weight: 400;
