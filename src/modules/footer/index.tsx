@@ -8,7 +8,6 @@ import Logo from '../../components/logo';
 import CategoryService from '../../services/category.service';
 import EventService from '../../services/event.service';
 import { useNavigate } from 'react-router-dom';
-import { animateScroll } from '../../helpers/dom.helpers';
 
 interface IProps {
     reference?: React.LegacyRef<HTMLDivElement>,
@@ -27,16 +26,11 @@ const Footer = ({ reference }: IProps): JSX.Element => {
     };
 
     const handleNavigateToAdmin = (): void => {
-        navigate('/admin');
+        window.location.href = '/admin';
     };
 
     const handleNavigateToHomePage = (): void => {
-        animateScroll({
-            initialPosition: window.scrollY,
-            targetPosition: 0,
-            duration: 1000,
-        });
-        navigate('/');
+        window.location.href = '/';
     };
 
     React.useEffect(() => {

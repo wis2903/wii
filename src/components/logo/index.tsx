@@ -2,7 +2,6 @@ import React from 'react';
 import { classname } from '../../helpers/utils.helper';
 import Button from '../basic/button';
 import styles from './styles.module.scss';
-import { useNavigate } from 'react-router-dom';
 import Icon from '../../resources/images/puzzle.png';
 
 interface IProps {
@@ -10,15 +9,13 @@ interface IProps {
 }
 
 const Logo = ({ className }: IProps): JSX.Element => {
-    const navigate = useNavigate();
-
     return (
         <Button className={classname([styles.container, className])} label="" onClick={(): void => {
-            navigate('/');
+            window.location.href = '/';
         }}>
             <img src={Icon} alt='icon' />
             Sonica
-            <span>Market</span> 
+            <span>Market</span>
         </Button>
     );
 };

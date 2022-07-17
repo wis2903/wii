@@ -68,7 +68,7 @@ const Products = ({ className, data, children }: IProps): JSX.Element => {
             {children}
 
             {
-                displayedProducts.products?.length
+                !!displayedProducts.products?.length
                 && (displayedProducts.products?.length || 0) <= (data.products?.length || 0)
                 &&
                 <Pagination
