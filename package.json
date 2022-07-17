@@ -30,7 +30,7 @@
   "scripts": {
     "dev": "react-scripts start",
     "build:client": "react-scripts build",
-    "build:server": "cpx ./server/dist.js ./server/build && cpx ./server/routes.json ./server/build && cpx ./build/** ./server/build",
+    "build:server": "cpx ./server/* ./build-server && cpx ./build/** ./build-server",
     "build": "yarn build:client && yarn build:server"
   },
   "eslintConfig": {

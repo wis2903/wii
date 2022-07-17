@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/static/css/main.cf1a6b26.chunk.css",
-    "main.js": "/static/js/main.588dc98d.chunk.js",
-    "main.js.map": "/static/js/main.588dc98d.chunk.js.map",
+    "main.js": "/static/js/main.f793421e.chunk.js",
+    "main.js.map": "/static/js/main.f793421e.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.d27b409d.js",
     "runtime-main.js.map": "/static/js/runtime-main.d27b409d.js.map",
-    "static/js/2.895f6603.chunk.js": "/static/js/2.895f6603.chunk.js",
-    "static/js/2.895f6603.chunk.js.map": "/static/js/2.895f6603.chunk.js.map",
+    "static/js/2.f65a153f.chunk.js": "/static/js/2.f65a153f.chunk.js",
+    "static/js/2.f65a153f.chunk.js.map": "/static/js/2.f65a153f.chunk.js.map",
     "index.html": "/index.html",
     "static/css/main.cf1a6b26.chunk.css.map": "/static/css/main.cf1a6b26.chunk.css.map",
-    "static/js/2.895f6603.chunk.js.LICENSE.txt": "/static/js/2.895f6603.chunk.js.LICENSE.txt",
+    "static/js/2.f65a153f.chunk.js.LICENSE.txt": "/static/js/2.f65a153f.chunk.js.LICENSE.txt",
     "static/media/index.scss": "/static/media/OpenSans-Bold.6b965b74.woff",
     "static/media/sakura.c4aaaad1.png": "/static/media/sakura.c4aaaad1.png"
   },
   "entrypoints": [
     "static/js/runtime-main.d27b409d.js",
-    "static/js/2.895f6603.chunk.js",
+    "static/js/2.f65a153f.chunk.js",
     "static/css/main.cf1a6b26.chunk.css",
-    "static/js/main.588dc98d.chunk.js"
+    "static/js/main.f793421e.chunk.js"
   ]
 }

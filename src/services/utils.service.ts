@@ -1,3 +1,4 @@
+import axios from 'axios';
 import EventService from './event.service';
 
 class UtilsService {
@@ -33,6 +34,21 @@ class UtilsService {
             message,
             alert: true,
         });
+    }
+
+    public uploadFile = async (file: File): Promise<string> => {
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+            const res = await axios.post('/upload-file', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            return String(res.data);
+        } catch (e) {
+            return '';
+        }
     }
 }
 

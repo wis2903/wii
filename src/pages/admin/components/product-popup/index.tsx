@@ -1,15 +1,14 @@
 import React from 'react';
 import Button from '../../../../components/basic/button';
 import PopupWrapper from '../../../../components/popup/popup-wrapper';
-import { getRandomNumber } from '../../../../helpers/utils.helper';
 import EventService from '../../../../services/event.service';
-import FirebaseService from '../../../../services/firebase.service';
 import ProductService from '../../../../services/product.service';
 import UtilsService from '../../../../services/utils.service';
 import ProductAttributes from './attributes';
 import ProductBasicInfo from './basic-info';
 import ProductColorsAndImages from './colors-and-images';
 import styles from './styles.module.scss';
+import { getRandomNumber } from '../../../../helpers/utils.helper';
 
 interface IProps {
     category: ICategory,
@@ -62,7 +61,7 @@ const ProductPopup = ({ category, product, disabled, onClose, onAdded, onUpdated
             if (item.files?.length) {
                 imageUrls = [];
                 for (let j = 0; j < item.files.length; j++) {
-                    const url = await FirebaseService.instance.uploadFile(item.files[j]);
+                    const url = await UtilsService.instance.uploadFile(item.files[i]);
                     imageUrls.push(url);
                 }
             }

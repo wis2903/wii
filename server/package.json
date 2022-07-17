@@ -1,0 +1,13 @@
+{
+    "name": "sonica",
+    "version": "0.0.1",
+    "license": "BSD-3-Clause",
+    "dependencies": {
+        "body-parser": "^1.20.0",
+        "cors": "^2.8.5",
+        "express": "^4.18.1",
+        "fs": "0.0.1-security",
+        "multer": "^1.4.5-lts.1",
+        "path": "0.12.7"
+    }
+}
