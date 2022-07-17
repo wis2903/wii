@@ -39,3 +39,7 @@ export const hideSensitiveInformation = (str: string): string => {
         return str;
     }
 };
+
+export const getAPIBaseUrl = (): string => {
+    return process.env.REACT_APP_MODE === 'develop' ? 'http://localhost:8000/api' : '/api';
+};

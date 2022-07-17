@@ -1,17 +1,21 @@
-const routes = require('./routes.json');
 const fs = require('fs')
 const express = require("express")
 const path = require("path")
 const app = express()
 const bodyParser = require('body-parser')
-const cors = require('cors');
-const multer = require('multer');
+const cors = require('cors')
+const multer = require('multer')
+const config = require('./config.json')
+const firebase = require('./firebase');
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors());
 
-var storage = multer.diskStorage(
+let products = [];
+let categories = [];
+
+const storage = multer.diskStorage(
     {
         destination: './storage/',
         filename: function (req, file, cb) {
@@ -19,12 +23,81 @@ var storage = multer.diskStorage(
         }
     }
 );
-var upload = multer({ storage: storage });
+const upload = multer({ storage: storage });
 
-app.get('/health', (req, res) => {
+app.get('/api/health', (req, res) => {
     res.status(200).send('Good');
 })
-app.post("/upload-file", upload.single('file'), (req, res, next) => {
+
+// categories
+app.get('/api/categories', (req, res) => {
+    if (categories.length) res.status(200).json({
+        data: categories,
+    })
+    else firebase.getDocuments('categories', undefined, true).then(docs => {
+        categories = docs.map(item => ({
+            ...item.data,
+            id: item.id,
+        }));
+        res.status(200).json({
+            data: docs,
+        });
+    });
+})
+app.post('/api/category', (req, res) => {
+    const { name, description, timestamp } = req.body;
+    firebase.addDocument('categories', { name, description, timestamp }).then(id => {
+        if (id) categories.push({
+            id,
+            name,
+            description,
+            timestamp,
+        });
+        res.status(200).json({
+            data: id,
+        });
+    });
+})
+app.put('/api/category', (req, res) => {
+    const { id, name, description } = req.body;
+    if (!id || typeof id !== 'string') res.status(200).json({
+        data: false,
+    })
+    else {
+        firebase.updateDocument('categories', id, {
+            name,
+            description,
+        }).then(success => {
+            if (success) {
+                const cat = categories.find(item => item.id === id);
+                if (cat) {
+                    cat.name = name;
+                    cat.description = description;
+                }
+            }
+            res.status(200).json({
+                data: success,
+            })
+        });
+    }
+})
+app.delete('/api/category', (req, res) => {
+    const { id } = req.query;
+    if (!id || typeof id !== 'string') res.status(200).json({
+        data: false,
+    })
+    else {
+        firebase.deleteDocument('categories', id).then(success => {
+            if (success) categories = categories.filter(item => item.id !== id);
+            res.status(200).json({
+                data: success,
+            })
+        });
+    }
+})
+// end of categories
+
+app.post("/api/upload-file", upload.single('file'), (req, res, next) => {
     const file = req.file
     if (!file) {
         const error = new Error('Please upload a file')
@@ -47,8 +120,8 @@ app.get("*", (req, res, next) => {
                 const path = req.path;
                 try {
                     const name = `/${path.split('/')[1]}`;
-                    const route = Object.keys(routes).find(key => routes[key].path === name);
-                    if (route) return routes[route].title;
+                    const route = Object.keys(config.routes).find(key => config.routes[key].path === name);
+                    if (route) return config.routes[route].title;
                     return '';
                 } catch (e) {
                     return '';

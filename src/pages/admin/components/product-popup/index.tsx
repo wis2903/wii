@@ -61,7 +61,7 @@ const ProductPopup = ({ category, product, disabled, onClose, onAdded, onUpdated
             if (item.files?.length) {
                 imageUrls = [];
                 for (let j = 0; j < item.files.length; j++) {
-                    const url = await UtilsService.instance.uploadFile(item.files[i]);
+                    const url = await UtilsService.instance.uploadFile(item.files[j]);
                     imageUrls.push(url);
                 }
             }

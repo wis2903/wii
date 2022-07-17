@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getAPIBaseUrl } from '../helpers/utils.helper';
 import EventService from './event.service';
 
 class UtilsService {
@@ -40,11 +41,11 @@ class UtilsService {
         const formData = new FormData();
         formData.append('file', file);
         try {
-            const res = await axios.post('/upload-file', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
+            const res = await axios.post(
+                `${getAPIBaseUrl()}/upload-file`,
+                formData,
+                { headers: { 'Content-Type': 'multipart/form-data' } }
+            );
             return String(res.data);
         } catch (e) {
             return '';

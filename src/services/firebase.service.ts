@@ -1,5 +1,6 @@
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import config from '../config.json';
 import {
     collection,
     deleteDoc,
@@ -22,18 +23,7 @@ class FirebaseService {
     private db: Firestore;
 
     constructor() {
-        const firebaseConfig = {
-            apiKey: 'AIzaSyC6QJ-9WaSt8YzQ29OrhnJ1Xe77uwSEF7c',
-            authDomain: 'wii-mall.firebaseapp.com',
-            projectId: 'wii-mall',
-            storageBucket: 'wii-mall.appspot.com',
-            messagingSenderId: '140373026632',
-            appId: '1:140373026632:web:ca4d658b7f45690b44357d',
-            measurementId: 'G-TDV6N92YWY'
-        };
-
-        // Initialize Firebase
-        this.app = initializeApp(firebaseConfig);
+        this.app = initializeApp(config.firebase);
         this.db = getFirestore(this.app);
     }
 

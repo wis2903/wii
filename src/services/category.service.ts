@@ -1,6 +1,8 @@
+import axios from 'axios';
+import { parseCategoryData } from '../helpers/data.helper';
+import { getAPIBaseUrl } from '../helpers/utils.helper';
 import { SortEnum } from '../resources/constants/enum';
 import EventService from './event.service';
-import FirebaseService from './firebase.service';
 import ProductService from './product.service';
 
 class CategoryService {
@@ -18,17 +20,16 @@ class CategoryService {
     }
 
     public list = async (): Promise<ICategory[]> => {
-        const docs = await FirebaseService.instance.getDocuments('categories', undefined, true);
-        const res: ICategory[] = docs.map(item => ({
-            id: item.id,
-            name: item.data.name,
-            description: item.data.description,
-            timestamp: Number(item.data.timestamp || 0),
-        }));
-        this.categories = res.sort((a, b) => {
-            if (a.timestamp < b.timestamp) return -1;
-            return 1;
-        });
+        if (this.categories.length) {
+            EventService.instance.onCategoriesLoaded.trigger();
+            return this.categories;
+        }
+
+        const response = await axios.get(`${getAPIBaseUrl()}/categories`);
+        const docs = response.data.data;
+        if (!(docs instanceof Array)) return [];
+        const res: ICategory[] = docs.map(item => parseCategoryData(item));
+        this.categories = res.sort((a, b) => a.timestamp < b.timestamp ? -1 : 1);
         EventService.instance.onCategoriesLoaded.trigger();
         return this.categories;
     }
@@ -37,7 +38,7 @@ class CategoryService {
         return new Promise(resolve => {
             const exec = async (): Promise<void> => {
                 EventService.instance.onRequestShowLoader.trigger(true);
-                const success = await FirebaseService.instance.deleteDocument('categories', String(id));
+                const success = await axios.delete(`${getAPIBaseUrl()}/category?id=${String(id)}`);
                 if (success) {
                     this.categories = this.categories.filter(item => item.id !== id);
                     const productsIncategory = await ProductService.instance.list({ categoryId: String(id), sort: SortEnum.newest });
@@ -60,10 +61,13 @@ class CategoryService {
         return new Promise(resolve => {
             const exec = async (): Promise<void> => {
                 EventService.instance.onRequestShowLoader.trigger(true);
-                const id = await FirebaseService.instance.addDocument('categories', { name, description, timestamp: +new Date() });
-                if (id) {
-                    this.categories.push({ id, name, description, timestamp: +new Date() });
-                }
+                const response = await axios.post(`${getAPIBaseUrl()}/category`, {
+                    name,
+                    description,
+                    timestamp: +new Date(),
+                });
+                const id = response.data.data;
+                if (id) this.categories.push({ id, name, description, timestamp: +new Date() });
                 setTimeout(() => {
                     EventService.instance.onRequestShowLoader.trigger(false);
                     EventService.instance.onCategoriesLoaded.trigger();
@@ -78,13 +82,10 @@ class CategoryService {
         return new Promise(resolve => {
             const exec = async (): Promise<void> => {
                 EventService.instance.onRequestShowLoader.trigger(true);
-                const success = await FirebaseService.instance.updateDocument('categories', String(category.id), {
-                    name: category.name,
-                    description: category.description,
-                });
-                if (success) {
-                    this.categories = this.categories.map(item => item.id === category.id ? category : item);
-                }
+                const { id, name, description } = category;
+                const response = await axios.put(`${getAPIBaseUrl()}/category`, { id, name, description });
+                const success = response.data.data;
+                if (success) this.categories = this.categories.map(item => item.id === category.id ? category : item);
 
                 setTimeout(() => {
                     EventService.instance.onRequestShowLoader.trigger(false);

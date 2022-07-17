@@ -3,7 +3,7 @@ import BackToTop from './components/basic/back-to-top-button';
 import HomePage from './pages/home';
 import SearchPage from './pages/search';
 import AdminMainPage from './pages/admin/main';
-import routes from './routes.json';
+import config from './config.json';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const App = (): JSX.Element => {
@@ -11,9 +11,9 @@ const App = (): JSX.Element => {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path={routes.home.path} element={<HomePage />} />
-          <Route path={`${routes.search.path}/:keyword`} element={<SearchPage />} />
-          <Route path={routes.admin.path} element={<AdminMainPage />} />
+          <Route path={config.routes.home.path} element={<HomePage />} />
+          <Route path={`${config.routes.search.path}/:keyword`} element={<SearchPage />} />
+          <Route path={config.routes.admin.path} element={<AdminMainPage />} />
         </Routes>
       </BrowserRouter>
       <BackToTop />
