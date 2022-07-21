@@ -36,6 +36,7 @@ declare global {
     }
     type IAdminHeaderMenuItem = {
         label: string,
-        id: string
+        id: string,
+        admin?: boolean,
     }
 }

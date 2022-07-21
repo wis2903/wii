@@ -21,5 +21,26 @@
         "messagingSenderId": "140373026632",
         "appId": "1:140373026632:web:ca4d658b7f45690b44357d",
         "measurementId": "G-TDV6N92YWY"
-    }
+    },
+    "passwordCryptoSecretkey": "sonica2022@!jqk",
+    "users": [
+        {
+            "username": "whiskey",
+            "hash": "ca5f9922b579335a445f6478a7615ac9e0d7f998",
+            "role": "admin"
+        },
+        {
+            "username": "hien",
+            "hash": "ca5f9922b579335a445f6478a7615ac9e0d7f998",
+            "role": "admin"
+        },
+        {
+            "username": "kiet",
+            "hash": "2fa2f244c4308df85c9c4a62d99acb49b35dc022"
+        },
+        {
+            "username": "hoang",
+            "hash": "2fa2f244c4308df85c9c4a62d99acb49b35dc022"
+        }
+    ]
 }

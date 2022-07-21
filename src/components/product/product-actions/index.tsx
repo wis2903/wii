@@ -41,13 +41,17 @@ const ProductActions = ({ className, product, onColorChange }: IProps): JSX.Elem
                 <div className={styles.shipping}>Thanh toán khi nhận hàng</div>
             </div>
 
-            <div className={styles.colorWrapper}>
-                <h4 className={styles.catLabel}>Màu sắc sản phẩm: {color.label}</h4>
-                <ColorPicker colors={product.colors} onChange={(c): void => {
-                    if (onColorChange) onColorChange(c);
-                    setColor(c);
-                }} />
-            </div>
+            {
+                product.colors.length > 1
+                &&
+                <div className={styles.colorWrapper}>
+                    <h4 className={styles.catLabel}>Màu sắc sản phẩm: {color.label}</h4>
+                    <ColorPicker colors={product.colors} onChange={(c): void => {
+                        if (onColorChange) onColorChange(c);
+                        setColor(c);
+                    }} />
+                </div>
+            }
 
             <h4 className={styles.catLabel}>Số lượng sản phẩm</h4>
             <div className={styles.amountWrapper}>

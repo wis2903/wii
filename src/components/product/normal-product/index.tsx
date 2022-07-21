@@ -16,6 +16,7 @@ const Product = ({ data, className }: IProps): JSX.Element => {
     data.colors.forEach(c => {
         images = images.concat(c.images || []);
     });
+    const [activeIndex, setActiveIndex] = React.useState<number>(0);
 
     return (
         <div className={classname([styles.container, className])}>
@@ -23,16 +24,19 @@ const Product = ({ data, className }: IProps): JSX.Element => {
                 <Slide
                     indicatorLeftClassName={styles.slideIndicatorLeft}
                     indicatorRightClassName={styles.slideIndicatorRight}
-                    items={images.map((item) =>
+                    items={images.map((item, i) =>
                         <ProductWrapper
                             key={`${item}`}
                             product={data}
                             className={styles.thumbnail}
                             style={{
-                                backgroundImage: `url(${item})`
+                                backgroundImage: i === activeIndex ? `url(${item})` : ''
                             }}
                         />
                     )}
+                    onChange={(ix): void => {
+                        setActiveIndex(ix);
+                    }}
                 />
             </div>
             <div className={styles.info}>

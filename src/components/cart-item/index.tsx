@@ -55,7 +55,9 @@ const CartItem = ({ className, data, product, disabled, onAmountChange, onRemove
                         (Giá tại thời điểm đặt: {formatNumber(Number(Object(data).productPrice))} VND / sản phẩm)
                     </div>
                 }
-                <div className={classname([styles.color, disabled && styles.smallMargin])}>Màu sắc: {data.color.label}</div>
+                <div className={classname([styles.color, disabled && styles.smallMargin])}>
+                    Màu sắc: {product.colors.length > 1 ? data.color.label : '-'}
+                </div>
                 <div className={styles.amountWrapper}>
                     {
                         !disabled

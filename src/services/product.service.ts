@@ -1,5 +1,6 @@
-import { documentId, where } from 'firebase/firestore';
+import axios from 'axios';
 import { filterProducts, parseProductData, sortProducts } from '../helpers/data.helper';
+import { getAPIBaseUrl } from '../helpers/utils.helper';
 import { SortEnum } from '../resources/constants/enum';
 import EventService from './event.service';
 import FirebaseService from './firebase.service';
@@ -7,6 +8,7 @@ import FirebaseService from './firebase.service';
 interface IGetProductsListRequestParams {
     categoryId: IObjectId,
     sort: SortEnum,
+    passwordHash?: string,
 }
 interface IFilterProductsRequestParams {
     keyword: string,
@@ -21,30 +23,24 @@ class ProductService {
         return ProductService.inst;
     }
 
-    public list = async ({ categoryId, sort }: IGetProductsListRequestParams): Promise<IProduct[]> => {
-        let docs = [];
-        if (categoryId === 'best-seller') {
-            docs = await FirebaseService.instance.getDocuments('products');
-        } else {
-            docs = await FirebaseService.instance.getDocuments(
-                'products',
-                where('categoryId', '==', categoryId)
-            );
+    public list = async ({ categoryId, sort, passwordHash }: IGetProductsListRequestParams): Promise<IProduct[]> => {
+        try {
+            let url = `${getAPIBaseUrl()}/products?category=${categoryId}`;
+            if (passwordHash) url += `&hash=${passwordHash}`;
+            const prdsResponse = await axios.get(url);
+            if (prdsResponse.data.data instanceof Array) {
+                const prds = (prdsResponse.data.data as Record<string, unknown>[]).map(item => parseProductData(item));
+                return sortProducts(prds, sort);
+            } else {
+                return [];
+            }
+        } catch (e) {
+            return [];
         }
-        const products = docs.map(item => ({
-            ...parseProductData(item.data),
-            id: item.id,
-        }));
-        if (categoryId !== 'best-seller') return sortProducts(products, sort);
-        return sortProducts(products, sort).filter(item => item.buyersNumber >= 100);
     }
 
     public filter = async ({ keyword, sort }: IFilterProductsRequestParams): Promise<IProduct[]> => {
-        const docs = await FirebaseService.instance.getDocuments('products');
-        const products = docs.map(item => ({
-            ...parseProductData(item.data),
-            id: item.id,
-        }));
+        const products = await this.list({ categoryId: '', sort: SortEnum.buyersDesc });
         return sortProducts(filterProducts(products, keyword), sort);
     }
 
@@ -77,24 +73,15 @@ class ProductService {
         });
     }
 
-    public getById = async (productId: string): Promise<IProduct | undefined> => {
-        const res = await FirebaseService.instance.getDocuments('products', where(documentId(), '==', productId));
-        if (res.length) {
-            return {
-                ...parseProductData(res[0].data),
-                id: res[0].id,
-            };
-        }
-        return undefined;
+    public getByIds = async (productIds: string[]): Promise<IProduct[]> => {
+        const res = await axios.get(`${getAPIBaseUrl()}/products?id=${productIds.join(',')}`);
+        if (!(res.data.data instanceof Array)) return [];
+        return (res.data.data as Record<string, unknown>[]).map(item => parseProductData(item));
     }
 
-    public getByIds = async (productIds: string[]): Promise<IProduct[]> => {
-        const res = await FirebaseService.instance.getDocuments('products', where(documentId(), 'in', productIds));
-        if (!res.length) return [];
-        return res.map(item => ({
-            ...parseProductData(item.data),
-            id: item.id,
-        }));
+    public getById = async (productId: string): Promise<IProduct | undefined> => {
+        const products = await this.getByIds([productId]);
+        return products[0];
     }
 }
 

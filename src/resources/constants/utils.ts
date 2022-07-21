@@ -2,12 +2,12 @@ import { AdminHeaderMenuEnum, OrderStatusEnum, SortEnum } from './enum';
 
 export const sorts: ISelectOption[] = [
     {
-        label: 'Mới nhất',
-        value: SortEnum.newest,
-    },
-    {
         label: 'Bán chạy',
         value: SortEnum.buyersDesc,
+    },
+    {
+        label: 'Mới nhất',
+        value: SortEnum.newest,
     },
     {
         label: 'Giá giảm dần',
@@ -28,12 +28,14 @@ export const emptyBuyerInfo = {
 
 export const adminHeaderMenu: IAdminHeaderMenuItem[] = [
     {
-        label: 'Quản lý sản phẩm',
-        id: AdminHeaderMenuEnum.products,
-    },
-    {
         label: 'Quản lý đơn hàng',
         id: AdminHeaderMenuEnum.orders,
+    },
+    {
+        label: 'Quản lý sản phẩm',
+        id: AdminHeaderMenuEnum.products,
+        admin: true,
+
     },
 ];
 

@@ -25,8 +25,51 @@ const storage = multer.diskStorage(
 );
 const upload = multer({ storage: storage });
 
+const getProductsByIds = (ids) => {
+    return products.filter(item => !!ids.find(id => id === item.id));
+}
+
+const getProductsByCategoryId = (categoryId, passwordHash) => {
+    let prds = [];
+    if (!categoryId || !categoryId.trim().length) prds = [...products];
+    else if (categoryId === 'best-seller') prds = products.filter(item => item.buyersNumber > 150);
+    else prds = products.filter(item => item.categoryId === categoryId);
+
+    if (passwordHash) {
+        const user = config.users.find(item => item.hash === passwordHash);
+        if (user && user.role === 'admin') return prds;
+    }
+
+    return prds.map(item => ({
+        ...item,
+        priceFromCompany: 0,
+        codeFromCompany: '',
+    }))
+}
+
 app.get('/api/health', (req, res) => {
     res.status(200).send('Good');
+})
+
+//products
+app.get('/api/products', (req, res) => {
+    const { id, category, hash } = req.query;
+
+    if (!products.length) {
+        firebase.getDocuments('products', undefined, true).then(data => {
+            products = data.map(item => ({
+                ...item.data,
+                id: item.id,
+            }))
+            res.status(200).json({
+                data: id ? getProductsByIds(id.split(',')) : getProductsByCategoryId(category, hash),
+            });
+        })
+    } else {
+        res.status(200).json({
+            data: id ? getProductsByIds(id.split(',')) : getProductsByCategoryId(category, hash),
+        });
+    }
 })
 
 // categories
@@ -43,57 +86,6 @@ app.get('/api/categories', (req, res) => {
             data: categories,
         });
     });
-})
-app.post('/api/category', (req, res) => {
-    const { name, description, timestamp } = req.body;
-    firebase.addDocument('categories', { name, description, timestamp }).then(id => {
-        if (id) categories.push({
-            id,
-            name,
-            description,
-            timestamp,
-        });
-        res.status(200).json({
-            data: id,
-        });
-    });
-})
-app.put('/api/category', (req, res) => {
-    const { id, name, description } = req.body;
-    if (!id || typeof id !== 'string') res.status(200).json({
-        data: false,
-    })
-    else {
-        firebase.updateDocument('categories', id, {
-            name,
-            description,
-        }).then(success => {
-            if (success) {
-                const cat = categories.find(item => item.id === id);
-                if (cat) {
-                    cat.name = name;
-                    cat.description = description;
-                }
-            }
-            res.status(200).json({
-                data: success,
-            })
-        });
-    }
-})
-app.delete('/api/category', (req, res) => {
-    const { id } = req.query;
-    if (!id || typeof id !== 'string') res.status(200).json({
-        data: false,
-    })
-    else {
-        firebase.deleteDocument('categories', id).then(success => {
-            if (success) categories = categories.filter(item => item.id !== id);
-            res.status(200).json({
-                data: success,
-            })
-        });
-    }
 })
 // end of categories
 

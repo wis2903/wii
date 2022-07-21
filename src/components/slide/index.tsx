@@ -11,6 +11,7 @@ interface IProps {
     enableShadow?: boolean,
     autoPlay?: boolean,
     loop?: boolean,
+    onChange?: (index: number) => void,
 }
 interface IIndexState {
     value: number,
@@ -18,7 +19,7 @@ interface IIndexState {
     animating: boolean,
 }
 
-const Slide = ({ className, indicatorLeftClassName, indicatorRightClassName, items, enableShadow, autoPlay, loop }: IProps): JSX.Element => {
+const Slide = ({ className, indicatorLeftClassName, indicatorRightClassName, items, enableShadow, autoPlay, loop, onChange }: IProps): JSX.Element => {
     const [index, setIndex] = React.useState<IIndexState>({ value: loop ? 1 : 0, animation: true, animating: false });
     const indexRef = React.useRef<IIndexState>(index);
     const animatingTimeoutHandler = React.useRef<ReturnType<typeof setTimeout>>();
@@ -49,6 +50,7 @@ const Slide = ({ className, indicatorLeftClassName, indicatorRightClassName, ite
                     value: index.value - 1
                 }));
                 handleAutoPlay();
+                if(onChange) onChange(index.value - 1);
             }
         }
     };
@@ -73,6 +75,7 @@ const Slide = ({ className, indicatorLeftClassName, indicatorRightClassName, ite
                     value: index.value + 1,
                 }));
                 handleAutoPlay();
+                if(onChange) onChange(index.value + 1);
             }
         }
     };

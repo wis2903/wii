@@ -26,7 +26,7 @@ const AdminMainPage = (): JSX.Element => {
         );
     };
 
-    if (!AuthService.instance.isSignedInAsAdmin) return (
+    if (!AuthService.instance.user) return (
         <Login onSuccess={(): void => {
             setToggle(!toggle);
         }} />

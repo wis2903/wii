@@ -21,29 +21,41 @@ const AdminHeader = ({ onMenuChange }: IProps): JSX.Element => {
         navigate('/');
     };
 
+    const getMenuItems = (): IAdminHeaderMenuItem[] => {
+        if (AuthService.instance.user?.role === 'admin') {
+            return adminHeaderMenu;
+        }
+        return adminHeaderMenu.filter(item => !item.admin);
+    };
+    const menuItems = getMenuItems();
+
     return (
         <div className={styles.container}>
             <Wrapper className={styles.wrapper}>
                 <Logo />
 
                 <div className={styles.right}>
-                    <div className={styles.menu}>
-                        {
-                            adminHeaderMenu.map(item =>
-                                <Button
-                                    key={item.id}
-                                    label={item.label}
-                                    className={classname([item.id === activeMenu.id && styles.active])}
-                                    onClick={(): void => {
-                                        setActiveMenu(item);
-                                        if (item !== activeMenu && onMenuChange) onMenuChange(item);
-                                    }}
-                                />
-                            )
-                        }
-                    </div>
+                    {
+                        menuItems.length > 1
+                        &&
+                        <div className={styles.menu}>
+                            {
+                                menuItems.map(item =>
+                                    <Button
+                                        key={item.id}
+                                        label={item.label}
+                                        className={classname([item.id === activeMenu.id && styles.active])}
+                                        onClick={(): void => {
+                                            setActiveMenu(item);
+                                            if (item !== activeMenu && onMenuChange) onMenuChange(item);
+                                        }}
+                                    />
+                                )
+                            }
+                        </div>
+                    }
                     <div className={styles.userSettings}>
-                        Chào, {upperCaseFirstLetter(AuthService.instance.signedInUsername || '')}!
+                        Chào, {upperCaseFirstLetter(AuthService.instance.user?.username || '')}!
                         <Button label='Đăng xuất' onClick={handleLogOut} />
                     </div>
                 </div>

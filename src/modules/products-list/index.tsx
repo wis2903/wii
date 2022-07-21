@@ -32,7 +32,7 @@ const ProductList = ({ className }: IProps): JSX.Element => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const [categories, setCategories] = React.useState<ICategoriesState>({ isLoading: true, cat: [], activeId: searchParams.get('category-id') || defaultCategoryId });
-    const [sort, setSort] = React.useState<SortEnum>(SortEnum.newest);
+    const [sort, setSort] = React.useState<SortEnum>(SortEnum.buyersDesc);
     const containerRef = React.useRef<HTMLDivElement>(null);
     const categoriesRef = React.useRef<ICategoriesState>(categories);
 

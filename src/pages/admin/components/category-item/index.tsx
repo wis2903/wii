@@ -3,6 +3,7 @@ import Button from '../../../../components/basic/button';
 import { filterProducts } from '../../../../helpers/data.helper';
 import { upperCaseFirstLetter } from '../../../../helpers/utils.helper';
 import { SortEnum } from '../../../../resources/constants/enum';
+import AuthService from '../../../../services/auth.service';
 import CategoryService from '../../../../services/category.service';
 import ProductService from '../../../../services/product.service';
 import UtilsService from '../../../../services/utils.service';
@@ -37,7 +38,7 @@ const CategoryItem = ({ data, keyword }: IProps): JSX.Element => {
     };
 
     React.useEffect(() => {
-        ProductService.instance.list({ categoryId: data.id, sort: SortEnum.newest }).then(res => {
+        ProductService.instance.list({ categoryId: data.id, sort: SortEnum.newest, passwordHash: AuthService.instance.user?.hash }).then(res => {
             setProducts(res);
         });
     }, []);
